@@ -1,7 +1,7 @@
 #Ignore
 *.js
 *.js.map
-*.ts
+*.d.ts
 
 #Allow
 !declarations.d.ts
