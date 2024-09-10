@@ -4,11 +4,13 @@ import {
     SurahInListProps,
     AyahInsideSurahViewProps,
     SurahViewProps,
+} from "./interfaces/surah";
+import {
     TranslatorInsideTranslationProps,
     TranslationInListProps,
     AyahInsideTranslationViewProps,
     TranslationViewProps,
-} from "./interface";
+} from "./interfaces/translation";
 
 export { type LangCodeType };
 
