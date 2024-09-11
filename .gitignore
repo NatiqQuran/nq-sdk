@@ -5,3 +5,4 @@
 
 #Allow
 !declarations.d.ts
+!environment.d.ts

@@ -1,16 +1,16 @@
-import { LangCodeType } from "./langCode";
+import { LangCodeType } from "./src/assets/langCode";
 
 import {
     SurahInListProps,
     AyahInsideSurahViewProps,
     SurahViewProps,
-} from "./interfaces/surah";
+} from "./src/interfaces/surah";
 import {
     TranslatorInsideTranslationProps,
     TranslationInListProps,
     AyahInsideTranslationViewProps,
     TranslationViewProps,
-} from "./interfaces/translation";
+} from "./src/interfaces/translation";
 
 export { type LangCodeType };
 
