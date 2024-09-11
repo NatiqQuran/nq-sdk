@@ -6,15 +6,16 @@ interface SurahName {
     translation: string | null;
 }
 //Surah List
-export interface SurahInListProps {
+interface SurahInListProps {
     uuid: string;
     number: number;
     period: "makki" | "madani" | null;
     number_of_ayahs: number;
     name: SurahName[];
 }
+export type SurahListProps = SurahInListProps[];
 //Surah View
-export interface AyahInsideSurahViewProps {
+interface AyahInsideSurahViewProps {
     number: number;
     uuid: string;
     sajdeh: null | "vajib" | "mustahab";
