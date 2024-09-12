@@ -1,14 +1,14 @@
 import { LangCodeType } from "../assets/langCode";
 
 //Translation
-export interface TranslatorInsideTranslationProps {
+interface TranslatorInsideTranslationProps {
     account_uuid: string;
     username: string;
     first_name: string | null;
     last_name: string | null;
 }
 //Translation List
-export interface TranslationInListProps {
+interface TranslationInListProps {
     uuid: string;
     language: LangCodeType;
     release_date: string | null;
@@ -17,8 +17,9 @@ export interface TranslationInListProps {
     bismillah_text: string;
     translator: TranslatorInsideTranslationProps;
 }
+export type TranslationListProps = TranslationInListProps[];
 //Translation View
-export interface AyahInsideTranslationViewProps {
+interface AyahInsideTranslationViewProps {
     uuid: string;
     text_uuid: string;
     number: number;
