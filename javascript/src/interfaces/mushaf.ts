@@ -1,6 +1,6 @@
 //Mushaf
 //Mushaf List
-export interface MushafInListProps {
+interface MushafInListProps {
     uuid: string;
     creator_user_id: number;
     short_name: string;
@@ -8,6 +8,7 @@ export interface MushafInListProps {
     source: string;
     bismillah_text: string;
 }
+export type MushafListProps = MushafInListProps[];
 //Mushaf View
 export interface MushafViewProps {
     uuid: string;
