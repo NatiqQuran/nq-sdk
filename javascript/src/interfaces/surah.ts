@@ -21,7 +21,7 @@ interface AyahInsideSurahViewProps {
     sajdeh: null | "vajib" | "mustahab";
     text: string;
 }
-export interface SurahViewProps {
+export interface Surah {
     uuid: string;
     mushaf_uuid: string;
     mushaf_name: string;
