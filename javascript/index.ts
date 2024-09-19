@@ -1,6 +1,7 @@
-import { getSurahList, getSurah } from "./src/fetch/surah";
-import { getTranslationList, getTranslation } from "./src/fetch/translation";
-import { getLangNameFromCode } from "./src/assets/langCode";
+import { Connection } from "./src/connection";
+import { SurahController } from "./src/controllers/surah";
 
-export { getSurahList, getSurah, getTranslationList, getTranslation };
-export { getLangNameFromCode };
+export {
+    Connection,
+    SurahController
+}
