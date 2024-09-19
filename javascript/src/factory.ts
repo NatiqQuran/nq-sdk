@@ -1,16 +1,16 @@
-import { NQConnection } from "./connection";
+import { Connection } from "./connection";
 import Controller, { ActionStatus } from "./controller";
 
 export function buildController<T>(controller: string) {
     return class implements Controller<T> {
-        readonly conn: NQConnection;
+        readonly conn: Connection;
 
-        constructor(connection: NQConnection) {
+        constructor(connection: Connection) {
             this.conn = connection;
         }
 
         async view<Target = string>(target: Target, params: any): Promise<T> {
-            return (await this.conn.axios.get(this.conn.generate_full_path(`/${controller}/${target}`),
+            return (await this.conn.axios.get(`/${controller}/${target}`,
                 {
                     params: params
                 }
@@ -18,7 +18,7 @@ export function buildController<T>(controller: string) {
         }
 
         async list(params: any): Promise<T[]> {
-            return (await this.conn.axios.get(this.conn.generate_full_path(`/${controller}`),
+            return (await this.conn.axios.get(`/${controller}`,
                 {
                     params: params
                 }
@@ -26,15 +26,15 @@ export function buildController<T>(controller: string) {
         }
 
         async add(value: T): Promise<ActionStatus<T>> {
-            return (await this.conn.axios.post(this.conn.generate_full_path(`/${controller}`), value)).status;
+            return (await this.conn.axios.post(`/${controller}`, value)).status;
         }
 
         async edit<Target = string>(target: Target, value: T): Promise<ActionStatus<T>> {
-            return (await this.conn.axios.post(this.conn.generate_full_path(`/${controller}/${target}`), value)).data;
+            return (await this.conn.axios.post(`/${controller}/${target}`, value)).data;
         }
 
-        async remove<Target = string>(target: Target): Promise<ActionStatus<T>> {
-            return (await this.conn.axios.delete(this.conn.generate_full_path(`/${controller}/${target}`))).data;
+        async delete<Target = string>(target: Target): Promise<ActionStatus<T>> {
+            return (await this.conn.axios.delete(`/${controller}/${target}`)).data;
         }
     }
 }
