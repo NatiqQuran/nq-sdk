@@ -1,4 +1,4 @@
-import { LangCodeType } from "../assets/langCode";
+import { LangCodeType } from "../langCode";
 
 //Translation
 interface TranslatorInsideTranslationProps {
