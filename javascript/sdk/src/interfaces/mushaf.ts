@@ -1,4 +1,7 @@
 //Mushaf
+
+import Filter from "./filter";
+
 //Mushaf List
 interface MushafInListProps {
     uuid: string;
@@ -18,3 +21,12 @@ export interface MushafViewProps {
     source: string;
     bismillah_text: string;
 }
+
+export interface MushafPlain {
+    short_name: string;
+    name: string;
+    source: string;
+    bismillah_text: string;
+}
+
+export interface MushafListParam extends Filter {}
