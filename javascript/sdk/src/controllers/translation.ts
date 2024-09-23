@@ -22,11 +22,52 @@ export class ControllerTranslation implements Controller {
     }
 
     async edit<T = TranslationPlain, Target = string>(target: Target, value: T): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.post(`/translation/${target}`, value)).data;
+        return (await this.conn.axios.post(`/translation/${target}`, value)).status;
     }
 
     async delete<Target = string>(target: Target): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.delete(`/translation/${target}`)).data;
+        return (await this.conn.axios.delete(`/translation/${target}`)).status;
+    }
+
+    /**
+        * @description `/translation/text`
+    */
+    text(): Controller {
+        return new ControllerTranslationText(this.conn);
     }
 }
+
+// TODO: not defined some how fix
+class ControllerTranslationText implements Controller {
+    readonly conn: Connection;
+
+    constructor(connection: Connection) {
+        this.conn = connection;
+    }
+
+    async view<R = TranslationViewProps, Target = string, P = { ayah_uuid: string }>(target: Target, params: P): Promise<R> {
+        return (await this.conn.axios.get(`/translation/text/${target}`, { params: params })).data;
+    }
+
+    async list<R = TranslationListProps, P = TranslationListParam>(_params: P): Promise<R[]> {
+        throw new Error("Not defined!");
+    }
+
+    async add<T = TranslationPlain>(_value: T): Promise<ActionStatus<number>> {
+        throw new Error("Not defined!");
+    }
+
+    /**
+        * @description Modify Translation Text
+        * @param target Translation UUID
+    */
+    async edit<T = { text: string }, Target = string>(target: Target, value: T): Promise<ActionStatus<number>> {
+        return (await this.conn.axios.post(`/translation/text/${target}`, value)).status;
+    }
+
+    async delete<Target = string>(target: Target): Promise<ActionStatus<number>> {
+        return (await this.conn.axios.delete(`/translation/text/${target}`)).status;
+    }
+}
+
 

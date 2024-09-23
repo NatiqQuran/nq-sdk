@@ -22,11 +22,11 @@ export class ControllerSurah implements Controller {
     }
 
     async edit<T = SurahPlain, Target = string>(target: Target, value: T): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.post(`/surah/${target}`, value)).data;
+        return (await this.conn.axios.post(`/surah/${target}`, value)).status;
     }
 
     async delete<Target = string>(target: Target): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.delete(`/surah/${target}`)).data;
+        return (await this.conn.axios.delete(`/surah/${target}`)).status;
     }
 }
 

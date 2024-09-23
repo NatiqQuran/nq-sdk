@@ -22,11 +22,11 @@ export class ControllerMushaf implements Controller {
     }
 
     async edit<T = MushafPlain, Target = string>(target: Target, value: T): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.post(`/mushaf/${target}`, value)).data;
+        return (await this.conn.axios.post(`/mushaf/${target}`, value)).status;
     }
 
     async delete<Target = string>(target: Target): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.delete(`/mushaf/${target}`)).data;
+        return (await this.conn.axios.delete(`/mushaf/${target}`)).status;
     }
 }
 
