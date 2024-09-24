@@ -1,4 +1,5 @@
 import { LangCodeType } from "../langCode";
+import Filter from "./filter";
 
 //Translation
 interface TranslatorInsideTranslationProps {
@@ -28,11 +29,28 @@ interface AyahInsideTranslationViewProps {
 }
 export interface TranslationViewProps {
     mushaf_uuid: string;
-    language: string;
+    language: LangCodeType;
     release_date: string | null;
     source: string;
     status: string;
     bismillah_text: string;
     translator: TranslatorInsideTranslationProps;
     ayahs: AyahInsideTranslationViewProps[];
+}
+
+export interface TranslationViewParam {
+    surah_uuid: string;
+}
+
+export interface TranslationListParam extends Filter {
+    language: LangCodeType;
+    mushaf: string;
+    translator_account?: string;
+}
+
+export interface TranslationPlain {
+    translator_account_uuid?: string;
+    language: LangCodeType;
+    release_date?: string;// TODO: Date
+    source?: string;
 }
