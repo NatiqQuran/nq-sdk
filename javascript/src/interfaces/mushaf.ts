@@ -3,7 +3,7 @@
 import Filter from "./filter";
 
 //Mushaf List
-interface MushafInListProps {
+export interface MushafListItemProps {
     uuid: string;
     creator_user_id: number;
     short_name: string;
@@ -11,7 +11,7 @@ interface MushafInListProps {
     source: string;
     bismillah_text: string;
 }
-export type MushafListProps = MushafInListProps[];
+export type MushafListProps = MushafListItemProps[];
 //Mushaf View
 export interface MushafViewProps {
     uuid: string;

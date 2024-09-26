@@ -2,23 +2,23 @@ import { LangCodeType } from "../langCode";
 import Filter from "./filter";
 
 //Translation
-interface TranslatorInsideTranslationProps {
+interface TranslatorDataProps {
     account_uuid: string;
     username: string;
     first_name: string | null;
     last_name: string | null;
 }
 //Translation List
-interface TranslationInListProps {
+export interface TranslationListItemProps {
     uuid: string;
     language: LangCodeType;
     release_date: string | null;
     source: string;
     approved: boolean;
     bismillah_text: string;
-    translator: TranslatorInsideTranslationProps;
+    translator: TranslatorDataProps;
 }
-export type TranslationListProps = TranslationInListProps[];
+export type TranslationListProps = TranslationListItemProps[];
 //Translation View
 interface AyahInsideTranslationViewProps {
     uuid: string;
@@ -34,23 +34,19 @@ export interface TranslationViewProps {
     source: string;
     status: string;
     bismillah_text: string;
-    translator: TranslatorInsideTranslationProps;
+    translator: TranslatorDataProps;
     ayahs: AyahInsideTranslationViewProps[];
-}
-
-export interface TranslationViewParam {
-    surah_uuid: string;
 }
 
 export interface TranslationListParam extends Filter {
     language: LangCodeType;
     mushaf: string;
-    translator_account?: string;
+    translator_account: string | null;
 }
 
 export interface TranslationPlain {
-    translator_account_uuid?: string;
+    translator_account_uuid: string | null;
     language: LangCodeType;
-    release_date?: string;// TODO: Date
-    source?: string;
+    release_date: string | null;// TODO: Date
+    source: string | null;
 }

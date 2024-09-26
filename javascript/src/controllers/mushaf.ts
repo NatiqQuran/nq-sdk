@@ -1,6 +1,6 @@
 import { Connection } from "../connection";
 import Controller, { ActionStatus } from "../controller";
-import { MushafListParam, MushafListProps, MushafPlain, MushafViewProps } from "../interfaces/mushaf";
+import { MushafListItemProps, MushafListParam, MushafPlain, MushafViewProps } from "../interfaces/mushaf";
 
 export class ControllerMushaf implements Controller {
     readonly conn: Connection;
@@ -13,7 +13,7 @@ export class ControllerMushaf implements Controller {
         return (await this.conn.axios.get(`/mushaf/${target}`, { params: params })).data;
     }
 
-    async list<R = MushafListProps, P = MushafListParam>(params: P): Promise<R[]> {
+    async list<R = MushafListItemProps, P = MushafListParam>(params: P): Promise<R[]> {
         return (await this.conn.axios.get(`/mushaf`, { params: params })).data;
     }
 
