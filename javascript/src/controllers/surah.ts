@@ -1,6 +1,6 @@
 import { Connection } from "../connection";
 import Controller, { ActionStatus } from "../controller";
-import { SurahListParam, SurahListProps, SurahPlain, SurahViewParam, SurahViewProps } from "../interfaces/surah";
+import { SurahListItemProps, SurahListParam, SurahPlain, SurahViewParam, SurahViewProps } from "../interfaces/surah";
 
 export class ControllerSurah implements Controller {
     readonly conn: Connection;
@@ -13,7 +13,7 @@ export class ControllerSurah implements Controller {
         return (await this.conn.axios.get(`/surah/${target}`, { params: params })).data;
     }
 
-    async list<R = SurahListProps, P = SurahListParam>(params: P): Promise<R[]> {
+    async list<R = SurahListItemProps, P = SurahListParam>(params: P): Promise<R[]> {
         return (await this.conn.axios.get(`/surah`, { params: params })).data;
     }
 

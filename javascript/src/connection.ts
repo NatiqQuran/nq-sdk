@@ -1,9 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
 interface Server {
-    name: string;
     url: URL;
-    location: string; // ???
     health?: "Up" | "Down";
     ping?: number;
 }
@@ -13,9 +11,9 @@ export class Connection {
     private live: Server;
     private axios_instance: AxiosInstance;
 
-    constructor(servers: Server[], auth_token: string) {
-        this.servers = servers;
-        this.live = servers[0];
+    constructor(servers: URL[], auth_token: string) {
+        this.servers = servers.map(x => ({ url: x } as Server));
+        this.live = this.servers[0];
         // Create an instance of axios, so we don't have to include auth headers in every line
         this.axios_instance = axios.create({
             // default url like api.natiq.net

@@ -1,6 +1,6 @@
 import { Connection } from "../connection";
 import Controller, { ActionStatus } from "../controller";
-import { TranslationListParam, TranslationListProps, TranslationPlain, TranslationViewParam, TranslationViewProps } from "../interfaces/translation";
+import { TranslationListItemProps, TranslationListParam, TranslationPlain, TranslationViewProps } from "../interfaces/translation";
 
 export class ControllerTranslation implements Controller {
     readonly conn: Connection;
@@ -9,11 +9,11 @@ export class ControllerTranslation implements Controller {
         this.conn = connection;
     }
 
-    async view<R = TranslationViewProps, Target = string, P = TranslationViewParam>(target: Target, params: P): Promise<R> {
+    async view<R = TranslationViewProps, Target = string, P = { surah_uuid?: string }>(target: Target, params: P): Promise<R> {
         return (await this.conn.axios.get(`/translation/${target}`, { params: params })).data;
     }
 
-    async list<R = TranslationListProps, P = TranslationListParam>(params: P): Promise<R[]> {
+    async list<R = TranslationListItemProps, P = TranslationListParam>(params: P): Promise<R[]> {
         return (await this.conn.axios.get(`/translation`, { params: params })).data;
     }
 
@@ -45,15 +45,15 @@ class ControllerTranslationText implements Controller {
         this.conn = connection;
     }
 
-    async view<R = TranslationViewProps, Target = string, P = { ayah_uuid: string }>(target: Target, params: P): Promise<R> {
+    async view<R = { uuid: string, text: string }, Target = string, P = { ayah_uuid: string }>(target: Target, params: P): Promise<R> {
         return (await this.conn.axios.get(`/translation/text/${target}`, { params: params })).data;
     }
 
-    async list<R = TranslationListProps, P = TranslationListParam>(_params: P): Promise<R[]> {
+    async list<R, P>(_params: P): Promise<R[]> {
         throw new Error("Not defined!");
     }
 
-    async add<T = TranslationPlain>(_value: T): Promise<ActionStatus<number>> {
+    async add<T>(_value: T): Promise<ActionStatus<number>> {
         throw new Error("Not defined!");
     }
 
