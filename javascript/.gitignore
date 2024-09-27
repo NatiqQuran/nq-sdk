@@ -1,6 +1,6 @@
 #Ignore
 node_modules
-dist
+build
 
 #Allow
 !declarations.d.ts
