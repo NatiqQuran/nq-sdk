@@ -15,7 +15,7 @@ export interface TranslationListItemProps {
     release_date: string | null;
     source: string;
     approved: boolean;
-    bismillah_text: string;
+    bismillah: string;
     translator: TranslatorDataProps;
 }
 export type TranslationListProps = TranslationListItemProps[];
@@ -33,7 +33,7 @@ export interface TranslationViewProps {
     release_date: string | null;
     source: string;
     status: string;
-    bismillah_text: string;
+    bismillah: string;
     translator: TranslatorDataProps;
     ayahs: AyahInsideTranslationViewProps[];
 }

@@ -9,7 +9,6 @@ export interface MushafListItemProps {
     short_name: string;
     name: string;
     source: string;
-    bismillah_text: string;
 }
 export type MushafListProps = MushafListItemProps[];
 //Mushaf View

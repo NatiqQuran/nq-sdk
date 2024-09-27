@@ -7,6 +7,7 @@ interface SurahName {
     pronunciation: string | null;
     translation_phrase: string | null;
     translation: string | null;
+    transliteration: string | null;
 }
 //Surah List
 export interface SurahListItemProps {
@@ -26,8 +27,12 @@ interface AyahInsideSurahViewProps {
 }
 export interface SurahViewProps {
     uuid: string;
-    mushaf_uuid: string;
-    mushaf_name: string;
+    mushaf: {
+        uuid: string;
+        short_name: string | null;
+        name: string | null;
+        source: string | null;
+    }
     name: SurahName[];
     period: "makki" | "madani" | null;
     number: number;
