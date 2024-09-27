@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "noImplicitAny": true,
-        "outDir": "./dist/",
+        "outDir": "./build/",
         "module": "es2022",
         "target": "es2022",
         "allowJs": false,
