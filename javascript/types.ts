@@ -1,11 +1,11 @@
-import { LangCodeType } from "./langCode";
+import { LangCodeType } from "./src/langCode";
 
-import { MushafListProps, MushafViewProps } from "./interfaces/mushaf";
-import { SurahListProps, SurahViewProps } from "./interfaces/surah";
+import { MushafListProps, MushafViewProps } from "./src/interfaces/mushaf";
+import { SurahListProps, SurahViewProps } from "./src/interfaces/surah";
 import {
     TranslationListProps,
     TranslationViewProps,
-} from "./interfaces/translation";
+} from "./src/interfaces/translation";
 
 export { type LangCodeType };
 
