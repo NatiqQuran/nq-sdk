@@ -47,6 +47,6 @@ export interface TranslationListParam extends Filter {
 export interface TranslationPlain {
     translator_account_uuid: string | null;
     language: LangCodeType;
-    release_date: string | null;// TODO: Date
+    release_date: string | null; // TODO: Date
     source: string | null;
 }
