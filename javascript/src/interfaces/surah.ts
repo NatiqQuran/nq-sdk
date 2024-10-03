@@ -15,14 +15,14 @@ export interface SurahListItemProps {
     number: number;
     period: "makki" | "madani" | null;
     number_of_ayahs: number;
-    name: SurahName[];
+    names: SurahName[];
 }
 export type SurahListProps = SurahListItemProps[];
 //Surah Vew
 interface AyahInsideSurahViewProps {
     number: number;
     uuid: string;
-    sajdeh: "vajib" | "mustahab" | null;
+    sajdah: "vajib" | "mustahab" | null;
     text: string;
 }
 export interface SurahViewProps {
@@ -32,8 +32,8 @@ export interface SurahViewProps {
         short_name: string | null;
         name: string | null;
         source: string | null;
-    }
-    name: SurahName[];
+    };
+    names: SurahName[];
     period: "makki" | "madani" | null;
     number: number;
     bismillah_status: boolean;
@@ -52,13 +52,13 @@ export interface SurahListParam extends Filter {
 }
 
 export interface SurahPlain {
-    name: String,
-    name_pronunciation: string | null,
-    name_translation_phrase: string | null,
-    name_transliteration: string | null,
+    name: String;
+    name_pronunciation: string | null;
+    name_translation_phrase: string | null;
+    name_transliteration: string | null;
     period: "makki" | "madani" | null;
-    number: number,
-    bismillah_status: boolean,
-    bismillah_as_first_ayah: boolean,
-    mushaf_uuid: string,
+    number: number;
+    bismillah_status: boolean;
+    bismillah_as_first_ayah: boolean;
+    mushaf_uuid: string;
 }
