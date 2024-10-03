@@ -1,72 +1,60 @@
+import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import Controller, { ActionStatus } from "../controller";
 import { TranslationListItemProps, TranslationListParam, TranslationPlain, TranslationViewProps } from "../interfaces/translation";
+import { ErrorProps } from "../interfaces/error";
 
-export class ControllerTranslation implements Controller {
+export class ControllerTranslation {
     readonly conn: Connection;
 
     constructor(connection: Connection) {
         this.conn = connection;
     }
 
-    async view<R = TranslationViewProps, Target = string, P = { surah_uuid?: string }>(target: Target, params: P): Promise<R> {
-        return (await this.conn.axios.get(`/translation/${target}`, { params: params })).data;
+    view(target: string, params: { surah_uuid?: string }): Promise<AxiosResponse<TranslationViewProps | ErrorProps>> {
+        return this.conn.axios.get(`/translation/${target}`, { params: params });
     }
 
-    async list<R = TranslationListItemProps, P = TranslationListParam>(params: P): Promise<R[]> {
-        return (await this.conn.axios.get(`/translation`, { params: params })).data;
+    list(params: TranslationListParam): Promise<AxiosResponse<TranslationListItemProps[] | ErrorProps>> {
+        return this.conn.axios.get(`/translation`, { params: params });
     }
 
-    async add<T = TranslationPlain>(value: T): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.post(`/translation`, value)).status;
+    add(value: TranslationPlain): Promise<string | ErrorProps> {
+        return this.conn.axios.post(`/translation`, value);
     }
 
-    async edit<T = TranslationPlain, Target = string>(target: Target, value: T): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.post(`/translation/${target}`, value)).status;
+    edit(target: string, value: TranslationPlain): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.post(`/translation/${target}`, value);
     }
 
-    async delete<Target = string>(target: Target): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.delete(`/translation/${target}`)).status;
+    delete(target: string): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.delete(`/translation/${target}`);
     }
 
     /**
         * @description `/translation/text`
     */
-    text(): Controller {
-        return new ControllerTranslationText(this.conn);
+    text() {
+        return new ActionText(this.conn);
     }
 }
 
-// TODO: not defined some how fix
-class ControllerTranslationText implements Controller {
+class ActionText {
     readonly conn: Connection;
 
     constructor(connection: Connection) {
         this.conn = connection;
     }
 
-    async view<R = { uuid: string, text: string }, Target = string, P = { ayah_uuid: string }>(target: Target, params: P): Promise<R> {
-        return (await this.conn.axios.get(`/translation/text/${target}`, { params: params })).data;
+    view(target: string, params: { ayah_uuid: string }): Promise<AxiosResponse<{ uuid: string, text: string } | ErrorProps>> {
+        return this.conn.axios.get(`/translation/text/${target}`, { params: params });
     }
 
-    async list<R, P>(_params: P): Promise<R[]> {
-        throw new Error("Not defined!");
+    modify(target: string, value: { text: string }): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.post(`/translation/text/${target}`, value);
     }
 
-    async add<T>(_value: T): Promise<ActionStatus<number>> {
-        throw new Error("Not defined!");
-    }
-
-    /**
-        * @description Modify Translation Text
-        * @param target Translation UUID
-    */
-    async edit<T = { text: string }, Target = string>(target: Target, value: T): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.post(`/translation/text/${target}`, value)).status;
-    }
-
-    async delete<Target = string>(target: Target): Promise<ActionStatus<number>> {
-        return (await this.conn.axios.delete(`/translation/text/${target}`)).status;
+    delete(target: string): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.delete(`/translation/text/${target}`);
     }
 }
 
