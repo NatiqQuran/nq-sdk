@@ -11,7 +11,7 @@ export class Connection {
     private live: Server;
     private axios_instance: AxiosInstance;
 
-    constructor(servers: URL[], auth_token: string) {
+    constructor(servers: URL[], auth_token?: string) {
         this.servers = servers.map(x => ({ url: x } as Server));
         this.live = this.servers[0];
         // Create an instance of axios, so we don't have to include auth headers in every line
@@ -53,7 +53,7 @@ export class Connection {
         this.axios_instance.defaults.baseURL = this.live.url.toString()
     }
 
-    public changeToken(newToken: string) {
+    public setToken(newToken: string) {
         this.axios_instance.defaults.headers.common.Authorization = newToken;
     }
 
