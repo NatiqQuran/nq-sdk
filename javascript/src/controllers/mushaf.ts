@@ -1,7 +1,12 @@
+import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
+import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
-import { MushafListParam, MushafPlain, MushafViewProps } from "../interfaces/mushaf";
-import { AxiosResponse } from "axios"
+import {
+    MushafListParam,
+    MushafPlain,
+    MushafViewProps,
+} from "../interfaces/mushaf";
 
 export class ControllerMushaf {
     readonly conn: Connection;
@@ -10,24 +15,38 @@ export class ControllerMushaf {
         this.conn = connection;
     }
 
-    async view(target: string): Promise<AxiosResponse<MushafViewProps | ErrorProps>> {
-        return await this.conn.axios.get(`/mushaf/${target}`);
+    async list(
+        config: RequestConfig<MushafListParam>
+    ): Promise<AxiosResponse<MushafViewProps[] | ErrorProps>> {
+        return await this.conn.axios.get(`/mushaf`, config);
     }
 
-    async list(params: MushafListParam): Promise<AxiosResponse<MushafViewProps[] | ErrorProps>> {
-        return await this.conn.axios.get(`/mushaf`, { params: params });
+    async view(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<MushafViewProps | ErrorProps>> {
+        return await this.conn.axios.get(`/mushaf/${target}`, config);
     }
 
-    async add(value: MushafPlain): Promise<AxiosResponse<string | ErrorProps>> {
-        return await this.conn.axios.post(`/mushaf`, value);
+    async add(
+        data: MushafPlain,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return await this.conn.axios.post(`/mushaf`, data, config);
     }
 
-    async edit(target: string, value: MushafPlain): Promise<AxiosResponse<string | ErrorProps>> {
-        return await this.conn.axios.post(`/mushaf/${target}`, value);
+    async edit(
+        target: string,
+        data: MushafPlain,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return await this.conn.axios.post(`/mushaf/${target}`, data, config);
     }
 
-    async delete(target: string): Promise<AxiosResponse<string | ErrorProps>> {
-        return await this.conn.axios.delete(`/mushaf/${target}`);
+    async delete(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return await this.conn.axios.delete(`/mushaf/${target}`, config);
     }
 }
-

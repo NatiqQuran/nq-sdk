@@ -1,7 +1,14 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import { TranslationListItemProps, TranslationListParam, TranslationPlain, TranslationViewProps } from "../interfaces/translation";
+import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
+import {
+    TranslationListItemProps,
+    TranslationListParam,
+    TranslationPlain,
+    TranslationViewProps,
+} from "../interfaces/translation";
+import { config } from "process";
 
 export class ControllerTranslation {
     readonly conn: Connection;
@@ -10,29 +17,44 @@ export class ControllerTranslation {
         this.conn = connection;
     }
 
-    view(target: string, params: { surah_uuid?: string }): Promise<AxiosResponse<TranslationViewProps | ErrorProps>> {
-        return this.conn.axios.get(`/translation/${target}`, { params: params });
+    list(
+        config: RequestConfig<TranslationListParam>
+    ): Promise<AxiosResponse<TranslationListItemProps[] | ErrorProps>> {
+        return this.conn.axios.get(`/translation`, config);
     }
 
-    list(params: TranslationListParam): Promise<AxiosResponse<TranslationListItemProps[] | ErrorProps>> {
-        return this.conn.axios.get(`/translation`, { params: params });
+    view(
+        target: string,
+        config: RequestConfig<{ surah_uuid?: string }>
+    ): Promise<AxiosResponse<TranslationViewProps | ErrorProps>> {
+        return this.conn.axios.get(`/translation/${target}`, config);
     }
 
-    add(value: TranslationPlain): Promise<string | ErrorProps> {
-        return this.conn.axios.post(`/translation`, value);
+    add(
+        data: TranslationPlain,
+        config: RequestConfig
+    ): Promise<string | ErrorProps> {
+        return this.conn.axios.post(`/translation`, data, config);
     }
 
-    edit(target: string, value: TranslationPlain): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.post(`/translation/${target}`, value);
+    edit(
+        target: string,
+        data: TranslationPlain,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.post(`/translation/${target}`, data, config);
     }
 
-    delete(target: string): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.delete(`/translation/${target}`);
+    delete(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.delete(`/translation/${target}`, config);
     }
 
     /**
-        * @description `/translation/text`
-    */
+     * @description `/translation/text`
+     */
     text() {
         return new ActionText(this.conn);
     }
@@ -45,17 +67,29 @@ class ActionText {
         this.conn = connection;
     }
 
-    view(target: string, params: { ayah_uuid: string }): Promise<AxiosResponse<{ uuid: string, text: string } | ErrorProps>> {
-        return this.conn.axios.get(`/translation/text/${target}`, { params: params });
+    view(
+        target: string,
+        config: RequestConfig<{ ayah_uuid: string }>
+    ): Promise<AxiosResponse<{ uuid: string; text: string } | ErrorProps>> {
+        return this.conn.axios.get(`/translation/text/${target}`, config);
     }
 
-    modify(target: string, value: { text: string }): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.post(`/translation/text/${target}`, value);
+    modify(
+        target: string,
+        data: { text: string },
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.post(
+            `/translation/text/${target}`,
+            data,
+            config
+        );
     }
 
-    delete(target: string): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.delete(`/translation/text/${target}`);
+    delete(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string | ErrorProps>> {
+        return this.conn.axios.delete(`/translation/text/${target}`, config);
     }
 }
-
-
