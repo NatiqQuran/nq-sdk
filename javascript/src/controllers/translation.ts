@@ -19,21 +19,18 @@ export class ControllerTranslation {
 
     list(
         config: RequestConfig<TranslationListParam>
-    ): Promise<AxiosResponse<TranslationListItemProps[] | ErrorProps>> {
+    ): Promise<AxiosResponse<TranslationListItemProps[]>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
     view(
         target: string,
         config: RequestConfig<{ surah_uuid?: string }>
-    ): Promise<AxiosResponse<TranslationViewProps | ErrorProps>> {
+    ): Promise<AxiosResponse<TranslationViewProps>> {
         return this.conn.axios.get(`/translation/${target}`, config);
     }
 
-    add(
-        data: TranslationPlain,
-        config: RequestConfig
-    ): Promise<string | ErrorProps> {
+    add(data: TranslationPlain, config: RequestConfig): Promise<string> {
         return this.conn.axios.post(`/translation`, data, config);
     }
 
@@ -41,14 +38,14 @@ export class ControllerTranslation {
         target: string,
         data: TranslationPlain,
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(`/translation/${target}`, data, config);
     }
 
     delete(
         target: string,
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.delete(`/translation/${target}`, config);
     }
 
@@ -70,7 +67,7 @@ class ActionText {
     view(
         target: string,
         config: RequestConfig<{ ayah_uuid: string }>
-    ): Promise<AxiosResponse<{ uuid: string; text: string } | ErrorProps>> {
+    ): Promise<AxiosResponse<{ uuid: string; text: string }>> {
         return this.conn.axios.get(`/translation/text/${target}`, config);
     }
 
@@ -78,7 +75,7 @@ class ActionText {
         target: string,
         data: { text: string },
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(
             `/translation/text/${target}`,
             data,
@@ -89,7 +86,7 @@ class ActionText {
     delete(
         target: string,
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.delete(`/translation/text/${target}`, config);
     }
 }

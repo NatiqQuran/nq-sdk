@@ -19,21 +19,21 @@ export class ControllerSurah {
 
     list(
         config: RequestConfig<SurahListParam>
-    ): Promise<AxiosResponse<SurahListItemProps[] | ErrorProps>> {
+    ): Promise<AxiosResponse<SurahListItemProps[]>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
     view(
         target: string,
         config: RequestConfig<SurahViewParam>
-    ): Promise<AxiosResponse<SurahViewProps | ErrorProps>> {
+    ): Promise<AxiosResponse<SurahViewProps>> {
         return this.conn.axios.get(`/surah/${target}`, config);
     }
 
     add(
         data: SurahPlain,
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(`/surah`, data, config);
     }
 
@@ -41,14 +41,14 @@ export class ControllerSurah {
         target: string,
         data: SurahPlain,
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(`/surah/${target}`, data, config);
     }
 
     delete(
         target: string,
         config: RequestConfig
-    ): Promise<AxiosResponse<string | ErrorProps>> {
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.delete(`/surah/${target}`, config);
     }
 }
