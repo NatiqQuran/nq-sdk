@@ -39,9 +39,9 @@ export interface TranslationViewProps {
 }
 
 export interface TranslationListParam extends Filter {
-    language: LangCodeType;
     mushaf: string;
-    translator_account: string | null;
+    language?: LangCodeType;
+    translator_account?: string;
 }
 
 export interface TranslationPlain {

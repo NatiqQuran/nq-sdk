@@ -1,6 +1,13 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import { RequestConfig } from "../utils";
+import {
+    ListRequestConfig,
+    ViewRequestConfig,
+    AddRequestConfig,
+    EditRequestConfig,
+    ModifyRequestConfig,
+    DeleteRequestConfig,
+} from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
     TranslationListItemProps,
@@ -18,35 +25,33 @@ export class ControllerTranslation {
     }
 
     list(
-        config: RequestConfig<TranslationListParam>
+        config: ListRequestConfig<TranslationListParam>
     ): Promise<AxiosResponse<TranslationListItemProps[]>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<{ surah_uuid?: string }>
+        config: ViewRequestConfig<{ surah_uuid?: string }>
     ): Promise<AxiosResponse<TranslationViewProps>> {
-        return this.conn.axios.get(`/translation/${target}`, config);
+        return this.conn.axios.get(`/translation/${config.uuid}`, config);
     }
 
-    add(data: TranslationPlain, config: RequestConfig): Promise<string> {
-        return this.conn.axios.post(`/translation`, data, config);
+    add(config: AddRequestConfig<TranslationPlain>): Promise<string> {
+        return this.conn.axios.post(`/translation`, config.data, config);
     }
 
     edit(
-        target: string,
-        data: TranslationPlain,
-        config: RequestConfig
+        config: EditRequestConfig<TranslationPlain>
     ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post(`/translation/${target}`, data, config);
+        return this.conn.axios.post(
+            `/translation/${config.uuid}`,
+            config.data,
+            config
+        );
     }
 
-    delete(
-        target: string,
-        config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.delete(`/translation/${target}`, config);
+    delete(config: DeleteRequestConfig): Promise<AxiosResponse<string>> {
+        return this.conn.axios.delete(`/translation/${config.uuid}`, config);
     }
 
     /**
@@ -65,28 +70,25 @@ class ActionText {
     }
 
     view(
-        target: string,
-        config: RequestConfig<{ ayah_uuid: string }>
+        config: ViewRequestConfig<{ ayah_uuid: string }>
     ): Promise<AxiosResponse<{ uuid: string; text: string }>> {
-        return this.conn.axios.get(`/translation/text/${target}`, config);
+        return this.conn.axios.get(`/translation/text/${config.uuid}`, config);
     }
 
     modify(
-        target: string,
-        data: { text: string },
-        config: RequestConfig
+        config: ModifyRequestConfig<{ text: string }>
     ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(
-            `/translation/text/${target}`,
-            data,
+            `/translation/text/${config.uuid}`,
+            config.data,
             config
         );
     }
 
-    delete(
-        target: string,
-        config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.delete(`/translation/text/${target}`, config);
+    delete(config: DeleteRequestConfig): Promise<AxiosResponse<string>> {
+        return this.conn.axios.delete(
+            `/translation/text/${config.uuid}`,
+            config
+        );
     }
 }

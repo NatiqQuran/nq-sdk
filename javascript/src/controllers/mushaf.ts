@@ -1,6 +1,12 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import { RequestConfig } from "../utils";
+import {
+    ListRequestConfig,
+    ViewRequestConfig,
+    AddRequestConfig,
+    EditRequestConfig,
+    DeleteRequestConfig,
+} from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
     MushafListParam,
@@ -16,37 +22,34 @@ export class ControllerMushaf {
     }
 
     async list(
-        config: RequestConfig<MushafListParam>
+        config: ListRequestConfig<MushafListParam>
     ): Promise<AxiosResponse<MushafViewProps[]>> {
         return await this.conn.axios.get(`/mushaf`, config);
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        config: ViewRequestConfig
     ): Promise<AxiosResponse<MushafViewProps>> {
-        return await this.conn.axios.get(`/mushaf/${target}`, config);
+        return await this.conn.axios.get(`/mushaf/${config.uuid}`, config);
     }
 
     async add(
-        data: MushafPlain,
-        config: RequestConfig
+        config: AddRequestConfig<MushafPlain>
     ): Promise<AxiosResponse<string>> {
-        return await this.conn.axios.post(`/mushaf`, data, config);
+        return await this.conn.axios.post(`/mushaf`, config.data, config);
     }
 
     async edit(
-        target: string,
-        data: MushafPlain,
-        config: RequestConfig
+        config: EditRequestConfig<MushafPlain>
     ): Promise<AxiosResponse<string>> {
-        return await this.conn.axios.post(`/mushaf/${target}`, data, config);
+        return await this.conn.axios.post(
+            `/mushaf/${config.uuid}`,
+            config.data,
+            config
+        );
     }
 
-    async delete(
-        target: string,
-        config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
-        return await this.conn.axios.delete(`/mushaf/${target}`, config);
+    async delete(config: DeleteRequestConfig): Promise<AxiosResponse<string>> {
+        return await this.conn.axios.delete(`/mushaf/${config.uuid}`, config);
     }
 }
