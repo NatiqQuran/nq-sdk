@@ -47,8 +47,8 @@ export interface SurahViewParam {
     langCode: LangCodeType | null;
 }
 export interface SurahListParam extends Filter {
+    lang_code: LangCodeType | null;
     mushaf: string;
-    lang_code?: LangCodeType;
 }
 
 export interface SurahPlain {

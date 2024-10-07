@@ -1,12 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import {
-    ListRequestConfig,
-    ViewRequestConfig,
-    AddRequestConfig,
-    EditRequestConfig,
-    DeleteRequestConfig,
-} from "../utils";
+import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
     MushafListParam,
@@ -22,34 +16,37 @@ export class ControllerMushaf {
     }
 
     async list(
-        config: ListRequestConfig<MushafListParam>
+        config: RequestConfig<MushafListParam>
     ): Promise<AxiosResponse<MushafViewProps[]>> {
         return await this.conn.axios.get(`/mushaf`, config);
     }
 
     async view(
-        config: ViewRequestConfig
+        target: string,
+        config: RequestConfig
     ): Promise<AxiosResponse<MushafViewProps>> {
-        return await this.conn.axios.get(`/mushaf/${config.uuid}`, config);
+        return await this.conn.axios.get(`/mushaf/${target}`, config);
     }
 
     async add(
-        config: AddRequestConfig<MushafPlain>
+        data: MushafPlain,
+        config: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return await this.conn.axios.post(`/mushaf`, config.data, config);
+        return await this.conn.axios.post(`/mushaf`, data, config);
     }
 
     async edit(
-        config: EditRequestConfig<MushafPlain>
+        target: string,
+        data: MushafPlain,
+        config: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return await this.conn.axios.post(
-            `/mushaf/${config.uuid}`,
-            config.data,
-            config
-        );
+        return await this.conn.axios.post(`/mushaf/${target}`, data, config);
     }
 
-    async delete(config: DeleteRequestConfig): Promise<AxiosResponse<string>> {
-        return await this.conn.axios.delete(`/mushaf/${config.uuid}`, config);
+    async delete(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string>> {
+        return await this.conn.axios.delete(`/mushaf/${target}`, config);
     }
 }

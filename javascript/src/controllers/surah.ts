@@ -1,12 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import {
-    ListRequestConfig,
-    ViewRequestConfig,
-    AddRequestConfig,
-    EditRequestConfig,
-    DeleteRequestConfig,
-} from "../utils";
+import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
     SurahListItemProps,
@@ -24,32 +18,37 @@ export class ControllerSurah {
     }
 
     list(
-        config: ListRequestConfig<SurahListParam>
+        config: RequestConfig<SurahListParam>
     ): Promise<AxiosResponse<SurahListItemProps[]>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
     view(
-        config: ViewRequestConfig<SurahViewParam>
+        target: string,
+        config: RequestConfig<SurahViewParam>
     ): Promise<AxiosResponse<SurahViewProps>> {
-        return this.conn.axios.get(`/surah/${config.uuid}`, config);
+        return this.conn.axios.get(`/surah/${target}`, config);
     }
 
-    add(config: AddRequestConfig<SurahPlain>): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post(`/surah`, config.data, config);
+    add(
+        data: SurahPlain,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string>> {
+        return this.conn.axios.post(`/surah`, data, config);
     }
 
     edit(
-        config: EditRequestConfig<SurahPlain>
+        target: string,
+        data: SurahPlain,
+        config: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post(
-            `/surah/${config.uuid}`,
-            config.data,
-            config
-        );
+        return this.conn.axios.post(`/surah/${target}`, data, config);
     }
 
-    delete(config: DeleteRequestConfig): Promise<AxiosResponse<string>> {
-        return this.conn.axios.delete(`/surah/${config.uuid}`, config);
+    delete(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string>> {
+        return this.conn.axios.delete(`/surah/${target}`, config);
     }
 }
