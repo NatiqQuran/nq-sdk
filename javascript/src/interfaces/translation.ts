@@ -1,26 +1,34 @@
 import { LangCodeType } from "../langCode";
-import Filter from "./filter";
+import { Filter } from "./utils";
 
 //Translation
-interface TranslatorDataProps {
+
+type TranslationListSort = "language" | "createTime" | "updateTime";
+
+interface Translator {
     account_uuid: string;
     username: string;
     first_name: string | null;
     last_name: string | null;
 }
 //Translation List
-export interface TranslationListItemProps {
+export interface TranslationListParam extends Filter<TranslationListSort> {
+    mushaf: string;
+    language?: LangCodeType;
+    translator_account?: string; //TODO: translator_account_uuid
+}
+export interface TranslationListItem {
     uuid: string;
     language: LangCodeType;
-    release_date: string | null;
-    source: string;
+    release_date: string | null; // TODO: Date
+    source: string | null;
     approved: boolean;
     bismillah: string;
-    translator: TranslatorDataProps;
+    translator: Translator;
 }
-export type TranslationListProps = TranslationListItemProps[];
+export type TranslationListResponseData = TranslationListItem[];
 //Translation View
-interface AyahInsideTranslationViewProps {
+interface TranslationViewAyah {
     uuid: string;
     text_uuid: string;
     number: number;
@@ -34,16 +42,9 @@ export interface TranslationViewProps {
     source: string;
     status: string;
     bismillah: string;
-    translator: TranslatorDataProps;
-    ayahs: AyahInsideTranslationViewProps[];
+    translator: Translator;
+    ayahs: TranslationViewAyah[];
 }
-
-export interface TranslationListParam extends Filter {
-    mushaf: string;
-    language?: LangCodeType;
-    translator_account?: string;
-}
-
 export interface TranslationPlain {
     translator_account_uuid: string | null;
     language: LangCodeType;

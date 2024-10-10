@@ -1,5 +1,5 @@
 import { LangCodeType } from "../langCode";
-import Filter from "./filter";
+import { Filter, Sajdah, Period } from "./utils";
 
 //Surah
 interface SurahName {
@@ -10,19 +10,19 @@ interface SurahName {
     transliteration: string | null;
 }
 //Surah List
-export interface SurahListParam extends Filter {
+export interface SurahListParam
+    extends Filter<"name" | "number" | "createTime" | "updateTime"> {
     mushaf: string;
-    lang_code?: LangCodeType;
 }
 export interface SurahListItem {
     uuid: string;
     number: number;
-    period: "makki" | "madani" | null;
+    period: Period;
     number_of_ayahs: number;
     names: SurahName[];
 }
 export type SurahListResponseData = SurahListItem[];
-//Surah Vew
+//Surah View
 export interface SurahViewParam {
     format?: "word" | "text";
     langCode?: LangCodeType;
@@ -30,7 +30,7 @@ export interface SurahViewParam {
 interface AyahInsideSurahViewProps {
     number: number;
     uuid: string;
-    sajdah: "vajib" | "mustahab" | null;
+    sajdah: Sajdah;
     text: string;
 }
 export interface SurahViewProps {
@@ -42,7 +42,7 @@ export interface SurahViewProps {
         source: string | null;
     };
     names: SurahName[];
-    period: "makki" | "madani" | null;
+    period: Period;
     number: number;
     bismillah_status: boolean;
     bismillah_as_first_ayah: boolean;
@@ -56,7 +56,7 @@ export interface SurahViewRequestData {
     name_pronunciation: string | null;
     name_translation_phrase: string | null;
     name_transliteration: string | null;
-    period: "makki" | "madani" | null;
+    period: Period;
     number: number;
     bismillah_status: boolean;
     bismillah_as_first_ayah: boolean;
