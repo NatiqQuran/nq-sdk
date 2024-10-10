@@ -3,9 +3,9 @@ import { Connection } from "../connection";
 import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
-    SurahListItemProps,
+    SurahListItem,
     SurahListParam,
-    SurahPlain,
+    SurahViewRequestData,
     SurahViewParam,
     SurahViewProps,
 } from "../interfaces/surah";
@@ -19,7 +19,7 @@ export class ControllerSurah {
 
     list(
         config: RequestConfig<SurahListParam>
-    ): Promise<AxiosResponse<SurahListItemProps[]>> {
+    ): Promise<AxiosResponse<SurahListItem[]>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
@@ -31,7 +31,7 @@ export class ControllerSurah {
     }
 
     add(
-        data: SurahPlain,
+        data: SurahViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(`/surah`, data, config);
@@ -39,7 +39,7 @@ export class ControllerSurah {
 
     edit(
         target: string,
-        data: SurahPlain,
+        data: SurahViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(`/surah/${target}`, data, config);
