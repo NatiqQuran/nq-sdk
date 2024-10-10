@@ -44,10 +44,10 @@ export interface SurahViewProps {
 }
 export interface SurahViewParam {
     format: "word" | "text";
-    langCode: LangCodeType | null;
+    langCode?: LangCodeType;
 }
 export interface SurahListParam extends Filter {
-    lang_code: LangCodeType | null;
+    lang_code?: LangCodeType;
     mushaf: string;
 }
 

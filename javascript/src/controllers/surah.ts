@@ -1,7 +1,14 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import { SurahListItemProps, SurahListParam, SurahPlain, SurahViewParam, SurahViewProps } from "../interfaces/surah";
+import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
+import {
+    SurahListItemProps,
+    SurahListParam,
+    SurahPlain,
+    SurahViewParam,
+    SurahViewProps,
+} from "../interfaces/surah";
 
 export class ControllerSurah {
     readonly conn: Connection;
@@ -10,24 +17,38 @@ export class ControllerSurah {
         this.conn = connection;
     }
 
-    view(target: string, params: SurahViewParam): Promise<AxiosResponse<SurahViewProps | ErrorProps>> {
-        return this.conn.axios.get(`/surah/${target}`, { params: params });
+    list(
+        config: RequestConfig<SurahListParam>
+    ): Promise<AxiosResponse<SurahListItemProps[]>> {
+        return this.conn.axios.get(`/surah`, config);
     }
 
-    list(params: SurahListParam): Promise<AxiosResponse<SurahListItemProps[] | ErrorProps>> {
-        return this.conn.axios.get(`/surah`, { params: params });
+    view(
+        target: string,
+        config: RequestConfig<SurahViewParam>
+    ): Promise<AxiosResponse<SurahViewProps>> {
+        return this.conn.axios.get(`/surah/${target}`, config);
     }
 
-    add(value: SurahPlain): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.post(`/surah`, value);
+    add(
+        data: SurahPlain,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string>> {
+        return this.conn.axios.post(`/surah`, data, config);
     }
 
-    edit(target: string, value: SurahPlain): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.post(`/surah/${target}`, value);
+    edit(
+        target: string,
+        data: SurahPlain,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string>> {
+        return this.conn.axios.post(`/surah/${target}`, data, config);
     }
 
-    delete(target: string): Promise<AxiosResponse<string | ErrorProps>> {
-        return this.conn.axios.delete(`/surah/${target}`);
+    delete(
+        target: string,
+        config: RequestConfig
+    ): Promise<AxiosResponse<string>> {
+        return this.conn.axios.delete(`/surah/${target}`, config);
     }
 }
-
