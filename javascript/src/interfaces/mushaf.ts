@@ -6,13 +6,13 @@ type MushafListSort = "name" | "createTime" | "updateTime";
 
 //Mushaf List
 export interface MushafListParam extends Filter<MushafListSort> {}
-export interface MushafListItemProps {
+export interface MushafListItem {
     uuid: string;
     short_name: string;
     name: string;
     source: string;
 }
-export type MushafListProps = MushafListItemProps[];
+export type MushafListProps = MushafListItem[];
 //Mushaf View
 export interface MushafViewProps {
     uuid: string;
@@ -21,7 +21,7 @@ export interface MushafViewProps {
     source: string;
     bismillah_text: string;
 }
-export interface MushafPlain {
+export interface MushafViewRequestData {
     short_name: string;
     name: string;
     source: string;

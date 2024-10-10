@@ -45,7 +45,8 @@ export interface TranslationViewProps {
     translator: Translator;
     ayahs: TranslationViewAyah[];
 }
-export interface TranslationPlain {
+//Translation Add | Edit
+export interface TranslationViewRequestData {
     translator_account_uuid: string | null;
     language: LangCodeType;
     release_date: string | null; // TODO: Date

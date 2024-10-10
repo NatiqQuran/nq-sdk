@@ -4,7 +4,7 @@ import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
     MushafListParam,
-    MushafPlain,
+    MushafViewRequestData,
     MushafViewProps,
 } from "../interfaces/mushaf";
 
@@ -29,7 +29,7 @@ export class ControllerMushaf {
     }
 
     async add(
-        data: MushafPlain,
+        data: MushafViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<string>> {
         return await this.conn.axios.post(`/mushaf`, data, config);
@@ -37,7 +37,7 @@ export class ControllerMushaf {
 
     async edit(
         target: string,
-        data: MushafPlain,
+        data: MushafViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<string>> {
         return await this.conn.axios.post(`/mushaf/${target}`, data, config);
