@@ -10,15 +10,23 @@ interface SurahName {
     transliteration: string | null;
 }
 //Surah List
-export interface SurahListItemProps {
+export interface SurahListParam extends Filter {
+    mushaf: string;
+    lang_code?: LangCodeType;
+}
+export interface SurahListItem {
     uuid: string;
     number: number;
     period: "makki" | "madani" | null;
     number_of_ayahs: number;
     names: SurahName[];
 }
-export type SurahListProps = SurahListItemProps[];
+export type SurahListResponseData = SurahListItem[];
 //Surah Vew
+export interface SurahViewParam {
+    format?: "word" | "text";
+    langCode?: LangCodeType;
+}
 interface AyahInsideSurahViewProps {
     number: number;
     uuid: string;
@@ -42,16 +50,8 @@ export interface SurahViewProps {
     number_of_ayahs: number;
     ayahs: AyahInsideSurahViewProps[];
 }
-export interface SurahViewParam {
-    format: "word" | "text";
-    langCode?: LangCodeType;
-}
-export interface SurahListParam extends Filter {
-    lang_code?: LangCodeType;
-    mushaf: string;
-}
-
-export interface SurahPlain {
+//Surah Add | Edit
+export interface SurahViewRequestData {
     name: String;
     name_pronunciation: string | null;
     name_translation_phrase: string | null;
