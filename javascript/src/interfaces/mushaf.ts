@@ -1,31 +1,29 @@
+import { Filter } from "./utils";
+
 //Mushaf
 
-import Filter from "./filter";
+type MushafListSort = "name" | "createTime" | "updateTime";
 
 //Mushaf List
-export interface MushafListItemProps {
+export interface MushafListParam extends Filter<MushafListSort> {}
+export interface MushafListItem {
     uuid: string;
-    creator_user_id: number;
     short_name: string;
     name: string;
     source: string;
 }
-export type MushafListProps = MushafListItemProps[];
+export type MushafListProps = MushafListItem[];
 //Mushaf View
 export interface MushafViewProps {
     uuid: string;
-    creator_user_id: number;
     short_name: string;
     name: string;
     source: string;
     bismillah_text: string;
 }
-
-export interface MushafPlain {
+export interface MushafViewRequestData {
     short_name: string;
     name: string;
     source: string;
     bismillah_text: string;
 }
-
-export interface MushafListParam extends Filter {}

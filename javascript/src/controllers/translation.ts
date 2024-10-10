@@ -3,9 +3,9 @@ import { Connection } from "../connection";
 import { RequestConfig } from "../utils";
 import { ErrorProps } from "../interfaces/error";
 import {
-    TranslationListItemProps,
+    TranslationListResponseData,
     TranslationListParam,
-    TranslationPlain,
+    TranslationViewRequestData,
     TranslationViewProps,
 } from "../interfaces/translation";
 import { config } from "process";
@@ -19,7 +19,7 @@ export class ControllerTranslation {
 
     list(
         config: RequestConfig<TranslationListParam>
-    ): Promise<AxiosResponse<TranslationListItemProps[]>> {
+    ): Promise<AxiosResponse<TranslationListResponseData[]>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
@@ -30,13 +30,16 @@ export class ControllerTranslation {
         return this.conn.axios.get(`/translation/${target}`, config);
     }
 
-    add(data: TranslationPlain, config: RequestConfig): Promise<string> {
+    add(
+        data: TranslationViewRequestData,
+        config: RequestConfig
+    ): Promise<string> {
         return this.conn.axios.post(`/translation`, data, config);
     }
 
     edit(
         target: string,
-        data: TranslationPlain,
+        data: TranslationViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post(`/translation/${target}`, data, config);
