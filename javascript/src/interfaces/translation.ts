@@ -2,22 +2,21 @@ import { LangCodeType } from "../langCode";
 import { Filter } from "./utils";
 
 //Translation
-
-type TranslationListSort = "language" | "createTime" | "updateTime";
-
 interface Translator {
     account_uuid: string;
     username: string;
     first_name: string | null;
     last_name: string | null;
 }
+
 //Translation List
-export interface TranslationListParam extends Filter<TranslationListSort> {
+type TranslationListSort = "language" | "createTime" | "updateTime";
+export interface TranslationListParams extends Filter<TranslationListSort> {
     mushaf: string;
     language?: LangCodeType;
     translator_account?: string; //TODO: translator_account_uuid
 }
-export interface TranslationListItem {
+interface TranslationListItem {
     uuid: string;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
@@ -27,7 +26,11 @@ export interface TranslationListItem {
     translator: Translator;
 }
 export type TranslationListResponseData = TranslationListItem[];
+
 //Translation View
+export interface TranslationViewParams {
+    surah_uuid?: string;
+}
 interface TranslationViewAyah {
     uuid: string;
     text_uuid: string;
@@ -35,7 +38,7 @@ interface TranslationViewAyah {
     surah_number: number;
     text: string;
 }
-export interface TranslationViewProps {
+export interface TranslationViewResponseData {
     mushaf_uuid: string;
     language: LangCodeType;
     release_date: string | null;
@@ -45,10 +48,25 @@ export interface TranslationViewProps {
     translator: Translator;
     ayahs: TranslationViewAyah[];
 }
+
 //Translation Add | Edit
 export interface TranslationViewRequestData {
     translator_account_uuid: string | null;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
     source: string | null;
+}
+
+//Translation/Text
+//Translation/Text View
+export interface TranslationTextViewParams {
+    ayah_uuid: string;
+}
+export interface TranslationTextViewResponseData {
+    uuid: string;
+    text: string;
+}
+//Translation/Text Modify
+export interface TranslationTextModifyRequestData {
+    text: string;
 }

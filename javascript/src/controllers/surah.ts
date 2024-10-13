@@ -1,13 +1,17 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import { RequestConfig } from "../utils";
-import { ErrorProps } from "../interfaces/error";
 import {
-    SurahListItem,
-    SurahListParam,
+    Token,
+    RequestConfig,
+    DefaultResponseData,
+    ErrorResponseData,
+} from "../interfaces/utils";
+import {
+    SurahListParams,
+    SurahListResponseData,
+    SurahViewParams,
     SurahViewRequestData,
-    SurahViewParam,
-    SurahViewProps,
+    SurahViewResponseData,
 } from "../interfaces/surah";
 
 export class ControllerSurah {
@@ -18,37 +22,37 @@ export class ControllerSurah {
     }
 
     list(
-        config: RequestConfig<SurahListParam>
-    ): Promise<AxiosResponse<SurahListItem[]>> {
+        config: RequestConfig<SurahListParams>
+    ): Promise<AxiosResponse<SurahListResponseData>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<SurahViewParam>
-    ): Promise<AxiosResponse<SurahViewProps>> {
+        target: Token,
+        config: RequestConfig<SurahViewParams>
+    ): Promise<AxiosResponse<SurahViewResponseData>> {
         return this.conn.axios.get(`/surah/${target}`, config);
     }
 
     add(
         data: SurahViewRequestData,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah`, data, config);
     }
 
     edit(
-        target: string,
+        target: Token,
         data: SurahViewRequestData,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah/${target}`, data, config);
     }
 
     delete(
-        target: string,
+        target: Token,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/surah/${target}`, config);
     }
 }

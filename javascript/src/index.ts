@@ -3,19 +3,25 @@ import { LangCodeType } from "./langCode";
 export { type LangCodeType };
 
 //Interfaces
-import { MushafListProps, MushafViewRequestData } from "./interfaces/mushaf";
-import { SurahListResponseData, SurahViewProps } from "./interfaces/surah";
+import {
+    MushafListResponseData,
+    MushafViewResponseData,
+} from "./interfaces/mushaf";
+import {
+    SurahListResponseData,
+    SurahViewResponseData,
+} from "./interfaces/surah";
 import {
     TranslationListResponseData,
-    TranslationViewProps,
+    TranslationViewResponseData,
 } from "./interfaces/translation";
 export {
-    type MushafListProps,
-    type MushafViewRequestData,
+    type MushafListResponseData,
+    type MushafViewResponseData,
     type SurahListResponseData,
-    type SurahViewProps,
+    type SurahViewResponseData,
     type TranslationListResponseData,
-    type TranslationViewProps,
+    type TranslationViewResponseData,
 };
 
 //Controllers

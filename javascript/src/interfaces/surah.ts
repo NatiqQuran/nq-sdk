@@ -10,11 +10,11 @@ interface SurahName {
     transliteration: string | null;
 }
 //Surah List
-export interface SurahListParam
-    extends Filter<"name" | "number" | "createTime" | "updateTime"> {
+type SorahListSort = "name" | "number" | "createTime" | "updateTime";
+export interface SurahListParams extends Filter<SorahListSort> {
     mushaf: string;
 }
-export interface SurahListItem {
+interface SurahListItem {
     uuid: string;
     number: number;
     period: Period;
@@ -23,17 +23,17 @@ export interface SurahListItem {
 }
 export type SurahListResponseData = SurahListItem[];
 //Surah View
-export interface SurahViewParam {
+export interface SurahViewParams {
     format?: "word" | "text";
     langCode?: LangCodeType;
 }
-interface AyahInsideSurahViewProps {
+interface SurahViewAyah {
     number: number;
     uuid: string;
     sajdah: Sajdah;
     text: string;
 }
-export interface SurahViewProps {
+export interface SurahViewResponseData {
     uuid: string;
     mushaf: {
         uuid: string;
@@ -48,7 +48,7 @@ export interface SurahViewProps {
     bismillah_as_first_ayah: boolean;
     bismillah_text: string | null;
     number_of_ayahs: number;
-    ayahs: AyahInsideSurahViewProps[];
+    ayahs: SurahViewAyah[];
 }
 //Surah Add | Edit
 export interface SurahViewRequestData {

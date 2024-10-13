@@ -1,11 +1,15 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection";
-import { RequestConfig } from "../utils";
-import { ErrorProps } from "../interfaces/error";
 import {
-    MushafListParam,
+    Token,
+    RequestConfig,
+    DefaultResponseData,
+    ErrorResponseData,
+} from "../interfaces/utils";
+import {
+    MushafListParams,
     MushafViewRequestData,
-    MushafViewProps,
+    MushafViewResponseData,
 } from "../interfaces/mushaf";
 
 export class ControllerMushaf {
@@ -16,37 +20,37 @@ export class ControllerMushaf {
     }
 
     async list(
-        config: RequestConfig<MushafListParam>
-    ): Promise<AxiosResponse<MushafViewProps[]>> {
+        config: RequestConfig<MushafListParams>
+    ): Promise<AxiosResponse<MushafViewResponseData>> {
         return await this.conn.axios.get(`/mushaf`, config);
     }
 
     async view(
-        target: string,
+        target: Token,
         config: RequestConfig
-    ): Promise<AxiosResponse<MushafViewProps>> {
+    ): Promise<AxiosResponse<MushafViewResponseData>> {
         return await this.conn.axios.get(`/mushaf/${target}`, config);
     }
 
     async add(
         data: MushafViewRequestData,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/mushaf`, data, config);
     }
 
     async edit(
-        target: string,
+        target: Token,
         data: MushafViewRequestData,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/mushaf/${target}`, data, config);
     }
 
     async delete(
-        target: string,
+        target: Token,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/mushaf/${target}`, config);
     }
 }
