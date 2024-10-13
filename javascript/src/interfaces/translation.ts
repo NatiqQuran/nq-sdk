@@ -1,5 +1,5 @@
-import { LangCodeType } from "../langCode";
-import { Filter } from "./utils";
+import { LangCodeType } from "../langCode.js";
+import { Filter } from "./utils.js";
 
 //Translation
 interface Translator {

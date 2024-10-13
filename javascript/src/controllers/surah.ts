@@ -1,18 +1,18 @@
 import { AxiosResponse } from "axios";
-import { Connection } from "../connection";
+import { Connection } from "../connection.js";
 import {
     Token,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils";
+} from "../interfaces/utils.js";
 import {
     SurahListParams,
     SurahListResponseData,
     SurahViewParams,
     SurahViewRequestData,
     SurahViewResponseData,
-} from "../interfaces/surah";
+} from "../interfaces/surah.js";
 
 export class ControllerSurah {
     readonly conn: Connection;

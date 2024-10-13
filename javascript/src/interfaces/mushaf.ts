@@ -1,4 +1,4 @@
-import { Filter } from "./utils";
+import { Filter } from "./utils.js";
 
 //Mushaf
 

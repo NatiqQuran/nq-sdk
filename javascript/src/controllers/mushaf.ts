@@ -1,16 +1,16 @@
 import { AxiosResponse } from "axios";
-import { Connection } from "../connection";
+import { Connection } from "../connection.js";
 import {
     Token,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils";
+} from "../interfaces/utils.js";
 import {
     MushafListParams,
     MushafViewRequestData,
     MushafViewResponseData,
-} from "../interfaces/mushaf";
+} from "../interfaces/mushaf.js";
 
 export class ControllerMushaf {
     readonly conn: Connection;

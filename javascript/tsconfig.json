@@ -1,13 +1,8 @@
 {
     "compilerOptions": {
-        "noImplicitAny": true,
         "outDir": "./build/",
-        "module": "es2022",
-        "target": "es2022",
+        "module": "node16",
         "allowJs": false,
-        "moduleResolution": "node",
-        "declaration": true,
-        "sourceMap": true,
-        "allowSyntheticDefaultImports": true
+        "strict": true
     }
 }

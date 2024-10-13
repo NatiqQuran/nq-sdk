@@ -1,5 +1,5 @@
-import { LangCodeType } from "../langCode";
-import { Filter, Sajdah, Period } from "./utils";
+import { LangCodeType } from "../langCode.js";
+import { Filter, Sajdah, Period } from "./utils.js";
 
 //Surah
 interface SurahName {

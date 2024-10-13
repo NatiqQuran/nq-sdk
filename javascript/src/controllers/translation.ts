@@ -1,11 +1,11 @@
 import { AxiosResponse } from "axios";
-import { Connection } from "../connection";
+import { Connection } from "../connection.js";
 import {
     Token,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils";
+} from "../interfaces/utils.js";
 import {
     TranslationListParams,
     TranslationListResponseData,
@@ -15,7 +15,7 @@ import {
     TranslationViewParams,
     TranslationViewRequestData,
     TranslationViewResponseData,
-} from "../interfaces/translation";
+} from "../interfaces/translation.js";
 
 export class ControllerTranslation {
     readonly conn: Connection;
