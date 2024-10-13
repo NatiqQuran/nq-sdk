@@ -1,30 +1,36 @@
 //Types
-import { LangCodeType } from "./langCode";
+import { LangCodeType } from "./langCode.js";
 export { type LangCodeType };
 
 //Interfaces
-import { MushafListProps, MushafViewRequestData } from "./interfaces/mushaf";
-import { SurahListResponseData, SurahViewProps } from "./interfaces/surah";
+import {
+    MushafListResponseData,
+    MushafViewResponseData,
+} from "./interfaces/mushaf.js";
+import {
+    SurahListResponseData,
+    SurahViewResponseData,
+} from "./interfaces/surah.js";
 import {
     TranslationListResponseData,
-    TranslationViewProps,
-} from "./interfaces/translation";
+    TranslationViewResponseData,
+} from "./interfaces/translation.js";
 export {
-    type MushafListProps,
-    type MushafViewRequestData,
+    type MushafListResponseData,
+    type MushafViewResponseData,
     type SurahListResponseData,
-    type SurahViewProps,
+    type SurahViewResponseData,
     type TranslationListResponseData,
-    type TranslationViewProps,
+    type TranslationViewResponseData,
 };
 
 //Controllers
-import { Connection } from "./connection";
-import { ControllerSurah } from "./controllers/surah";
-import { ControllerMushaf } from "./controllers/mushaf";
-import { ControllerTranslation } from "./controllers/translation";
+import { Connection } from "./connection.js";
+import { ControllerSurah } from "./controllers/surah.js";
+import { ControllerMushaf } from "./controllers/mushaf.js";
+import { ControllerTranslation } from "./controllers/translation.js";
 export { Connection, ControllerSurah, ControllerMushaf, ControllerTranslation };
 
 //Functions
-import { getLangNameFromCode } from "./langCode";
+import { getLangNameFromCode } from "./langCode.js";
 export { getLangNameFromCode };

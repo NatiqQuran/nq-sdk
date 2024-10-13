@@ -1,8 +1,10 @@
 {
     "name": "@ntq/sdk",
-    "version": "1.1.19",
+    "version": "1.1.25",
     "description": "Natiq Open API SDK",
-    "main": "./build/src/index.js",
+    "main": "./build/index.js",
+    "type": "module",
+    "types": "./build/index.d.ts",
     "scripts": {
         "build": "tsc"
     },

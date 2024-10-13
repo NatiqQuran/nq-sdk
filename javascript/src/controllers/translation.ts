@@ -1,14 +1,21 @@
 import { AxiosResponse } from "axios";
-import { Connection } from "../connection";
-import { RequestConfig } from "../utils";
-import { ErrorProps } from "../interfaces/error";
+import { Connection } from "../connection.js";
 import {
+    Token,
+    RequestConfig,
+    DefaultResponseData,
+    ErrorResponseData,
+} from "../interfaces/utils.js";
+import {
+    TranslationListParams,
     TranslationListResponseData,
-    TranslationListParam,
+    TranslationTextModifyRequestData,
+    TranslationTextViewParams,
+    TranslationTextViewResponseData,
+    TranslationViewParams,
     TranslationViewRequestData,
-    TranslationViewProps,
-} from "../interfaces/translation";
-import { config } from "process";
+    TranslationViewResponseData,
+} from "../interfaces/translation.js";
 
 export class ControllerTranslation {
     readonly conn: Connection;
@@ -18,37 +25,37 @@ export class ControllerTranslation {
     }
 
     list(
-        config: RequestConfig<TranslationListParam>
-    ): Promise<AxiosResponse<TranslationListResponseData[]>> {
+        config: RequestConfig<TranslationListParams>
+    ): Promise<AxiosResponse<TranslationListResponseData>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<{ surah_uuid?: string }>
-    ): Promise<AxiosResponse<TranslationViewProps>> {
+        target: Token,
+        config: RequestConfig<TranslationViewParams>
+    ): Promise<AxiosResponse<TranslationViewResponseData>> {
         return this.conn.axios.get(`/translation/${target}`, config);
     }
 
     add(
         data: TranslationViewRequestData,
         config: RequestConfig
-    ): Promise<string> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation`, data, config);
     }
 
     edit(
-        target: string,
+        target: Token,
         data: TranslationViewRequestData,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation/${target}`, data, config);
     }
 
     delete(
-        target: string,
+        target: Token,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/translation/${target}`, config);
     }
 
@@ -68,17 +75,17 @@ class ActionText {
     }
 
     view(
-        target: string,
-        config: RequestConfig<{ ayah_uuid: string }>
-    ): Promise<AxiosResponse<{ uuid: string; text: string }>> {
+        target: Token,
+        config: RequestConfig<TranslationTextViewParams>
+    ): Promise<AxiosResponse<TranslationTextViewResponseData>> {
         return this.conn.axios.get(`/translation/text/${target}`, config);
     }
 
     modify(
-        target: string,
-        data: { text: string },
+        target: Token,
+        data: TranslationTextModifyRequestData,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(
             `/translation/text/${target}`,
             data,
@@ -87,9 +94,9 @@ class ActionText {
     }
 
     delete(
-        target: string,
+        target: Token,
         config: RequestConfig
-    ): Promise<AxiosResponse<string>> {
+    ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/translation/text/${target}`, config);
     }
 }
