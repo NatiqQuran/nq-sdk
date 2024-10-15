@@ -13,7 +13,7 @@ import {
     TranslationTextViewParams,
     TranslationTextViewResponseData,
     TranslationViewParams,
-    TranslationViewRequestData,
+    TranslationAddRequestData,
     TranslationViewResponseData,
 } from "../interfaces/translation.js";
 
@@ -38,7 +38,7 @@ export class ControllerTranslation {
     }
 
     add(
-        data: TranslationViewRequestData,
+        data: TranslationAddRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation`, data, config);
@@ -46,7 +46,7 @@ export class ControllerTranslation {
 
     edit(
         target: UUID,
-        data: TranslationViewRequestData,
+        data: TranslationAddRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation/${target}`, data, config);
