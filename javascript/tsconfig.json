@@ -3,6 +3,8 @@
         "outDir": "./build/",
         "module": "node16",
         "allowJs": false,
-        "strict": true
+        "strict": true,
+        "declaration": true,
+        "sourceMap": true
     }
 }
