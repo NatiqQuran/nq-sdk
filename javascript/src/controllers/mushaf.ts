@@ -26,10 +26,9 @@ export class ControllerMushaf {
     }
 
     async view(
-        target: Token,
         config: RequestConfig
     ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.conn.axios.get(`/mushaf/${target}`, config);
+        return await this.conn.axios.get(`/mushaf/`, config);
     }
 
     async add(
