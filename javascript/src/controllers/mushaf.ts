@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
-    Token,
+    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
@@ -26,9 +26,10 @@ export class ControllerMushaf {
     }
 
     async view(
+        target: UUID,
         config: RequestConfig
     ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.conn.axios.get(`/mushaf/`, config);
+        return await this.conn.axios.get(`/mushaf/${target}`, config);
     }
 
     async add(
@@ -39,7 +40,7 @@ export class ControllerMushaf {
     }
 
     async edit(
-        target: Token,
+        target: UUID,
         data: MushafViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -47,7 +48,7 @@ export class ControllerMushaf {
     }
 
     async delete(
-        target: Token,
+        target: UUID,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/mushaf/${target}`, config);

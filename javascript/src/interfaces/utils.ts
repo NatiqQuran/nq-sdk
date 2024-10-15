@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-export type Token = String;
+export type UUID = String;
 export interface RequestConfig<P = undefined>
     extends Omit<AxiosRequestConfig, "url" | "baseUrl" | "method" | "data"> {
     params?: P;

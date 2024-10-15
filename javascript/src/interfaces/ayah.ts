@@ -13,10 +13,10 @@ interface AyahListItem {
     sajdah: Sajdah;
     text: string;
 }
-export type AyahListResponseData = AyahListItem;
+export type AyahListResponseData = AyahListItem[];
 
 //Ayah View
-interface AyahViewWords {
+interface AyahViewWord {
     uuid: string;
     word: string;
 }
@@ -27,7 +27,7 @@ export interface AyahViewResponseData {
     ayah_number: number;
     sajdah: Sajdah;
     text: string;
-    words: AyahViewWords[];
+    words: AyahViewWord[];
 }
 
 //Ayah Add | Edit

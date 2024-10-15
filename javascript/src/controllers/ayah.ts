@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
-    Token,
+    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
@@ -27,21 +27,21 @@ export class ControllerAyah {
     }
 
     async view(
+        target: UUID,
         config: RequestConfig
     ): Promise<AxiosResponse<AyahViewResponseData>> {
-        return await this.conn.axios.get(`/ayah/`, config);
+        return await this.conn.axios.get(`/ayah/${target}`, config);
     }
 
     async add(
-        target: Token,
         data: AyahViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/ayah/${target}`, data, config);
+        return await this.conn.axios.post(`/ayah`, data, config);
     }
 
     async edit(
-        target: Token,
+        target: UUID,
         data: AyahViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -49,7 +49,7 @@ export class ControllerAyah {
     }
 
     async delete(
-        target: Token,
+        target: UUID,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/ayah/${target}`, config);
