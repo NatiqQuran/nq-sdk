@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
-    Token,
+    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
@@ -28,7 +28,7 @@ export class ControllerSurah {
     }
 
     view(
-        target: Token,
+        target: UUID,
         config: RequestConfig<SurahViewParams>
     ): Promise<AxiosResponse<SurahViewResponseData>> {
         return this.conn.axios.get(`/surah/${target}`, config);
@@ -42,7 +42,7 @@ export class ControllerSurah {
     }
 
     edit(
-        target: Token,
+        target: UUID,
         data: SurahViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -50,7 +50,7 @@ export class ControllerSurah {
     }
 
     delete(
-        target: Token,
+        target: UUID,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/surah/${target}`, config);

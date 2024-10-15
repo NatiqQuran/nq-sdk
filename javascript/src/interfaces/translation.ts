@@ -50,7 +50,7 @@ export interface TranslationViewResponseData {
 }
 
 //Translation Add | Edit
-export interface TranslationViewRequestData {
+export interface TranslationAddRequestData {
     translator_account_uuid: string | null;
     language: LangCodeType;
     release_date: string | null; // TODO: Date

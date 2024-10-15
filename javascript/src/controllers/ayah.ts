@@ -7,12 +7,13 @@ import {
     ErrorResponseData,
 } from "../interfaces/utils.js";
 import {
-    MushafListParams,
-    MushafViewRequestData,
-    MushafViewResponseData,
-} from "../interfaces/mushaf.js";
+    AyahListParams,
+    AyahListResponseData,
+    AyahViewResponseData,
+    AyahAddRequestData,
+} from "../interfaces/ayah.js";
 
-export class ControllerMushaf {
+export class ControllerAyah {
     readonly conn: Connection;
 
     constructor(connection: Connection) {
@@ -20,37 +21,37 @@ export class ControllerMushaf {
     }
 
     async list(
-        config: RequestConfig<MushafListParams>
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.conn.axios.get(`/mushaf`, config);
+        config: RequestConfig<AyahListParams>
+    ): Promise<AxiosResponse<AyahListResponseData>> {
+        return await this.conn.axios.get(`/ayah`, config);
     }
 
     async view(
         target: UUID,
         config: RequestConfig
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.conn.axios.get(`/mushaf/${target}`, config);
+    ): Promise<AxiosResponse<AyahViewResponseData>> {
+        return await this.conn.axios.get(`/ayah/${target}`, config);
     }
 
     async add(
-        data: MushafViewRequestData,
+        data: AyahAddRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/mushaf`, data, config);
+        return await this.conn.axios.post(`/ayah`, data, config);
     }
 
     async edit(
         target: UUID,
-        data: MushafViewRequestData,
+        data: AyahAddRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/mushaf/${target}`, data, config);
+        return await this.conn.axios.post(`/ayah/${target}`, data, config);
     }
 
     async delete(
         target: UUID,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.delete(`/mushaf/${target}`, config);
+        return await this.conn.axios.delete(`/ayah/${target}`, config);
     }
 }
