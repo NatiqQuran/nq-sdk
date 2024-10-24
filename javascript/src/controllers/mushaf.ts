@@ -1,13 +1,13 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
-    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
 } from "../interfaces/utils.js";
 import {
     MushafListParams,
+    MushafListResponseData,
     MushafViewRequestData,
     MushafViewResponseData,
 } from "../interfaces/mushaf.js";
@@ -21,12 +21,12 @@ export class ControllerMushaf {
 
     async list(
         config: RequestConfig<MushafListParams>
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
+    ): Promise<AxiosResponse<MushafListResponseData>> {
         return await this.conn.axios.get(`/mushaf`, config);
     }
 
     async view(
-        target: UUID,
+        target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<MushafViewResponseData>> {
         return await this.conn.axios.get(`/mushaf/${target}`, config);
@@ -40,7 +40,7 @@ export class ControllerMushaf {
     }
 
     async edit(
-        target: UUID,
+        target: string,
         data: MushafViewRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -48,7 +48,7 @@ export class ControllerMushaf {
     }
 
     async delete(
-        target: UUID,
+        target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/mushaf/${target}`, config);

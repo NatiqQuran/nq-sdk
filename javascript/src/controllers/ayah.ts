@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
-    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
@@ -27,7 +26,7 @@ export class ControllerAyah {
     }
 
     async view(
-        target: UUID,
+        target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<AyahViewResponseData>> {
         return await this.conn.axios.get(`/ayah/${target}`, config);
@@ -41,7 +40,7 @@ export class ControllerAyah {
     }
 
     async edit(
-        target: UUID,
+        target: string,
         data: AyahAddRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -49,7 +48,7 @@ export class ControllerAyah {
     }
 
     async delete(
-        target: UUID,
+        target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/ayah/${target}`, config);

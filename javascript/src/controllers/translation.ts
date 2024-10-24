@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
-    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
@@ -31,7 +30,7 @@ export class ControllerTranslation {
     }
 
     view(
-        target: UUID,
+        target: string,
         config: RequestConfig<TranslationViewParams>
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
         return this.conn.axios.get(`/translation/${target}`, config);
@@ -45,7 +44,7 @@ export class ControllerTranslation {
     }
 
     edit(
-        target: UUID,
+        target: string,
         data: TranslationAddRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -53,7 +52,7 @@ export class ControllerTranslation {
     }
 
     delete(
-        target: UUID,
+        target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/translation/${target}`, config);
@@ -75,14 +74,14 @@ class ActionText {
     }
 
     view(
-        target: UUID,
+        target: string,
         config: RequestConfig<TranslationTextViewParams>
     ): Promise<AxiosResponse<TranslationTextViewResponseData>> {
         return this.conn.axios.get(`/translation/text/${target}`, config);
     }
 
     modify(
-        target: UUID,
+        target: string,
         data: TranslationTextModifyRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
@@ -94,7 +93,7 @@ class ActionText {
     }
 
     delete(
-        target: UUID,
+        target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/translation/text/${target}`, config);
