@@ -27,7 +27,7 @@ export class Connection {
     public async healthCheck() {
         for (let server of this.servers) {
             const begin = Date.now();
-            const resp = await axios.get("/");
+            const resp = await this.axios.get("/");
             const delay = Date.now() - begin;
 
             if (resp.status === 200) {
