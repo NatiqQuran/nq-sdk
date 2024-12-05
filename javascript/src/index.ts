@@ -4,6 +4,15 @@ export { type LangCodeType };
 
 //Interfaces
 import {
+    AccountSendCodeRequesteData,
+    AccountVerifyRequesteData,
+} from "./interfaces/account.js";
+import { UserListItem, UserAddRequestData } from "./interfaces/user.js";
+import {
+    ProfileListItem,
+    ProfileAddRequestData,
+} from "./interfaces/profile.js";
+import {
     MushafListResponseData,
     MushafViewResponseData,
 } from "./interfaces/mushaf.js";
@@ -19,7 +28,18 @@ import {
     TranslationListResponseData,
     TranslationViewResponseData,
 } from "./interfaces/translation.js";
+import {
+    PhraseListResponseData,
+    PhraseAddRequestData,
+    PhraseViewResponseData,
+} from "./interfaces/phrase.js";
 export {
+    type AccountSendCodeRequesteData,
+    type AccountVerifyRequesteData,
+    type UserListItem,
+    type UserAddRequestData,
+    type ProfileListItem,
+    type ProfileAddRequestData,
     type MushafListResponseData,
     type MushafViewResponseData,
     type SurahListResponseData,
@@ -28,6 +48,9 @@ export {
     type AyahViewResponseData,
     type TranslationListResponseData,
     type TranslationViewResponseData,
+    type PhraseListResponseData,
+    type PhraseAddRequestData,
+    type PhraseViewResponseData,
 };
 
 //Controllers
