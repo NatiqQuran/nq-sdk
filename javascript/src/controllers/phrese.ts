@@ -19,8 +19,8 @@ export class ControllerAyah {
     }
 
     async list(
-        config: RequestConfig<PhraseListResponseData>
-    ): Promise<AxiosResponse<PhraseListResponseData[]>> {
+        config: RequestConfig
+    ): Promise<AxiosResponse<PhraseListResponseData>> {
         return await this.conn.axios.get(`/phrase`, config);
     }
 

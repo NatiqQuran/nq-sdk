@@ -9,8 +9,10 @@ export interface ProfileListItem {
     profile_image: string | null;
     language: string | null;
 }
-//profile Add | Edit
-export interface ProfileAddRequestData {
+export type ProfileListResponseData = ProfileListItem[];
+
+//profile Edit
+export interface ProfileEditRequestData {
     username: string;
     first_name: string | null;
     last_name: string | null;

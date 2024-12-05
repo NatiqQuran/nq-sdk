@@ -16,15 +16,20 @@ export class ControllerAccount {
     constructor(connection: Connection) {
         this.conn = connection;
     }
-    sendCode(
+
+    async sendCode(
         data: AccountSendCodeRequesteData
     ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post("/account/sendCode", data);
     }
-    verify(data: AccountVerifyRequesteData): Promise<AxiosResponse<string>> {
+
+    async verify(
+        data: AccountVerifyRequesteData
+    ): Promise<AxiosResponse<string>> {
         return this.conn.axios.post("/account/verify", data);
     }
-    logout(): Promise<AxiosResponse<string>> {
+
+    async logout(): Promise<AxiosResponse<string>> {
         return this.conn.axios.get("/account/logout");
     }
 }

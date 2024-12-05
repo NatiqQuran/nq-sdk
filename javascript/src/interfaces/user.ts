@@ -9,6 +9,8 @@ export interface UserListItem {
     profile_image: string | null;
     language: string | null;
 }
+export type UserListResponseData = UserListItem[];
+
 //user Add | Edit
 export interface UserAddRequestData {
     username: string;

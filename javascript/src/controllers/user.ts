@@ -5,7 +5,11 @@ import {
     DefaultResponseData,
     ErrorResponseData,
 } from "../interfaces/utils.js";
-import { UserListItem, UserAddRequestData } from "../interfaces/user.js";
+import {
+    UserListItem,
+    UserAddRequestData,
+    UserListResponseData,
+} from "../interfaces/user.js";
 
 export class ControllerAyah {
     readonly conn: Connection;
@@ -15,8 +19,8 @@ export class ControllerAyah {
     }
 
     async list(
-        config: RequestConfig<UserListItem>
-    ): Promise<AxiosResponse<UserListItem[]>> {
+        config: RequestConfig
+    ): Promise<AxiosResponse<UserListResponseData>> {
         return await this.conn.axios.get(`/user`, config);
     }
 
