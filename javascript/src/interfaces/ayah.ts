@@ -8,7 +8,7 @@ export interface AyahListParams extends Filter<AyahListSort> {
     mushaf: string;
 }
 interface AyahListItem {
-    number: string;
+    number: number;
     uuid: string;
     sajdah: Sajdah;
     text: string;
