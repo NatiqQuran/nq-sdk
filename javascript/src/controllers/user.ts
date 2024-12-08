@@ -11,7 +11,7 @@ import {
     UserListResponseData,
 } from "../interfaces/user.js";
 
-export class ControllerAyah {
+export class ControllerUser {
     readonly conn: Connection;
 
     constructor(connection: Connection) {

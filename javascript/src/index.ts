@@ -8,10 +8,7 @@ import {
     AccountVerifyRequesteData,
 } from "./interfaces/account.js";
 import { UserListItem, UserAddRequestData } from "./interfaces/user.js";
-import {
-    ProfileListItem,
-    ProfileAddRequestData,
-} from "./interfaces/profile.js";
+import { ProfileEditRequestData } from "./interfaces/profile.js";
 import {
     MushafListResponseData,
     MushafViewResponseData,
@@ -38,8 +35,7 @@ export {
     type AccountVerifyRequesteData,
     type UserListItem,
     type UserAddRequestData,
-    type ProfileListItem,
-    type ProfileAddRequestData,
+    type ProfileEditRequestData,
     type MushafListResponseData,
     type MushafViewResponseData,
     type SurahListResponseData,

@@ -6,11 +6,11 @@ import {
     ErrorResponseData,
 } from "../interfaces/utils.js";
 import {
-    ProfileListItem,
-    ProfileAddRequestData,
+    ProfileEditRequestData,
+    ProfileListResponseData,
 } from "../interfaces/profile.js";
 
-export class ControllerAyah {
+export class ControllerProfile {
     readonly conn: Connection;
 
     constructor(connection: Connection) {
@@ -18,13 +18,13 @@ export class ControllerAyah {
     }
 
     async list(
-        config: RequestConfig<ProfileListItem>
-    ): Promise<AxiosResponse<ProfileListItem[]>> {
+        config: RequestConfig
+    ): Promise<AxiosResponse<ProfileListResponseData>> {
         return await this.conn.axios.get(`/profile`, config);
     }
 
     async edit(
-        data: ProfileAddRequestData,
+        data: ProfileEditRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post("/profile", data, config);

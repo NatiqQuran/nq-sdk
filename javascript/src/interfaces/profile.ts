@@ -1,5 +1,5 @@
 //profie List
-export interface ProfileListItem {
+interface ProfileListItem {
     uuid: string;
     email: string | null;
     username: string;
@@ -17,5 +17,6 @@ export interface ProfileEditRequestData {
     first_name: string | null;
     last_name: string | null;
     birthday: string | null;
+    language: string | null;
     profile_image: string | null;
 }

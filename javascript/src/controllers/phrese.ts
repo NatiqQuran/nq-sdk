@@ -11,7 +11,7 @@ import {
     PhraseViewResponseData,
 } from "../interfaces/phrase.js";
 
-export class ControllerAyah {
+export class ControllerPhrase {
     readonly conn: Connection;
 
     constructor(connection: Connection) {
