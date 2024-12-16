@@ -6,7 +6,6 @@ import {
     ErrorResponseData,
 } from "../interfaces/utils.js";
 import {
-    UserListItem,
     UserAddRequestData,
     UserListResponseData,
 } from "../interfaces/user.js";
@@ -27,7 +26,7 @@ export class ControllerUser {
     async view(
         target: string,
         config: RequestConfig
-    ): Promise<AxiosResponse<UserListItem>> {
+    ): Promise<AxiosResponse<UserListResponseData>> {
         return await this.conn.axios.get(`/user/${target}`, config);
     }
     async edit(

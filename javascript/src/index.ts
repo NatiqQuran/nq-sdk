@@ -51,16 +51,24 @@ export {
 
 //Controllers
 import { Connection } from "./connection.js";
+import { ControllerAccount } from "./controllers/account.js";
+import { ControllerUser } from "./controllers/user.js";
+import { ControllerProfile } from "./controllers/profile.js";
 import { ControllerSurah } from "./controllers/surah.js";
 import { ControllerMushaf } from "./controllers/mushaf.js";
 import { ControllerAyah } from "./controllers/ayah.js";
 import { ControllerTranslation } from "./controllers/translation.js";
+import { ControllerPhrase } from "./controllers/phrese.js";
 export {
     Connection,
+    ControllerAccount,
+    ControllerUser,
+    ControllerProfile,
     ControllerSurah,
     ControllerMushaf,
     ControllerAyah,
     ControllerTranslation,
+    ControllerPhrase,
 };
 
 //Functions
