@@ -28,7 +28,7 @@ export interface OrganizationAddRequestData {
 }
 
 //Organization/Name
-//Organization/Text List
+//Organization/Name List
 export interface OrganizationNameListItem {
     uuid: string;
     language: string;
@@ -36,7 +36,7 @@ export interface OrganizationNameListItem {
 }
 export type OrganizationNameListResponseData = OrganizationNameListItem[];
 
-//Organization/Text View
+//Organization/Name View
 export interface OrganizationNameViewResponseData {
     uuid: string;
     language: string;
