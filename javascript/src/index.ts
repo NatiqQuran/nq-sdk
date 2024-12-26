@@ -59,6 +59,7 @@ import { ControllerMushaf } from "./controllers/mushaf.js";
 import { ControllerAyah } from "./controllers/ayah.js";
 import { ControllerTranslation } from "./controllers/translation.js";
 import { ControllerPhrase } from "./controllers/phrese.js";
+import { ControllerOrganization } from "./controllers/organization.js";
 export {
     Connection,
     ControllerAccount,
@@ -69,6 +70,7 @@ export {
     ControllerAyah,
     ControllerTranslation,
     ControllerPhrase,
+    ControllerOrganization,
 };
 
 //Functions
