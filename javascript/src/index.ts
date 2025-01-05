@@ -7,7 +7,7 @@ import {
     AccountSendCodeRequesteData,
     AccountVerifyRequesteData,
 } from "./interfaces/account.js";
-import { UserListItem, UserAddRequestData } from "./interfaces/user.js";
+import { UserAddRequestData } from "./interfaces/user.js";
 import { ProfileEditRequestData } from "./interfaces/profile.js";
 import {
     MushafListResponseData,
@@ -30,10 +30,10 @@ import {
     PhraseAddRequestData,
     PhraseViewResponseData,
 } from "./interfaces/phrase.js";
+import { WordViewResponseData, WordAddRequestData } from "./interfaces/word.js";
 export {
     type AccountSendCodeRequesteData,
     type AccountVerifyRequesteData,
-    type UserListItem,
     type UserAddRequestData,
     type ProfileEditRequestData,
     type MushafListResponseData,
@@ -47,6 +47,8 @@ export {
     type PhraseListResponseData,
     type PhraseAddRequestData,
     type PhraseViewResponseData,
+    type WordViewResponseData,
+    type WordAddRequestData,
 };
 
 //Controllers
@@ -60,6 +62,7 @@ import { ControllerAyah } from "./controllers/ayah.js";
 import { ControllerTranslation } from "./controllers/translation.js";
 import { ControllerPhrase } from "./controllers/phrese.js";
 import { ControllerOrganization } from "./controllers/organization.js";
+import { ControllerWord } from "./controllers/word.js";
 export {
     Connection,
     ControllerAccount,
@@ -71,6 +74,7 @@ export {
     ControllerTranslation,
     ControllerPhrase,
     ControllerOrganization,
+    ControllerWord,
 };
 
 //Functions
