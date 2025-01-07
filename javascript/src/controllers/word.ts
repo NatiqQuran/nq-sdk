@@ -23,6 +23,7 @@ export class ControllerWord {
     ): Promise<AxiosResponse<WordViewResponseData>> {
         return await this.conn.axios.get(`/word/${target}`, config);
     }
+
     async edit(
         target: string,
         data: WordAddRequestData,
