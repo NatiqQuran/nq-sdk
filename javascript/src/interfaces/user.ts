@@ -1,5 +1,5 @@
 //user view
-export interface UserListItem {
+interface UserListItem {
     uuid: string;
     email: string | null;
     username: string;
