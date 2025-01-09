@@ -4,6 +4,7 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
+    UUID,
 } from "../interfaces/utils.js";
 import {
     SurahListParams,
@@ -21,36 +22,36 @@ export class ControllerSurah {
     }
 
     list(
-        config: RequestConfig<SurahListParams>
+        config?: RequestConfig<SurahListParams>
     ): Promise<AxiosResponse<SurahListResponseData>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<SurahViewParams>
+        target: UUID,
+        config?: RequestConfig<SurahViewParams>
     ): Promise<AxiosResponse<SurahViewResponseData>> {
         return this.conn.axios.get(`/surah/${target}`, config);
     }
 
     add(
         data: SurahViewRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah`, data, config);
     }
 
     edit(
-        target: string,
+        target: UUID,
         data: SurahViewRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah/${target}`, data, config);
     }
 
     delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/surah/${target}`, config);
     }

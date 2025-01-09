@@ -4,6 +4,7 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
+    UUID,
 } from "../interfaces/utils.js";
 import {
     TranslationListParams,
@@ -24,36 +25,36 @@ export class ControllerTranslation {
     }
 
     list(
-        config: RequestConfig<TranslationListParams>
+        config?: RequestConfig<TranslationListParams>
     ): Promise<AxiosResponse<TranslationListResponseData>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<TranslationViewParams>
+        target: UUID,
+        config?: RequestConfig<TranslationViewParams>
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
         return this.conn.axios.get(`/translation/${target}`, config);
     }
 
     add(
         data: TranslationAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation`, data, config);
     }
 
     edit(
-        target: string,
+        target: UUID,
         data: TranslationAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation/${target}`, data, config);
     }
 
     delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/translation/${target}`, config);
     }

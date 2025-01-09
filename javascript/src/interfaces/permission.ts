@@ -1,6 +1,6 @@
 //Permission List
 interface PermissionListItemConditions {
-    id: number | null;
+    // id: number | null;  // deleted
     name: string;
     value: string;
 }
@@ -28,8 +28,8 @@ export interface PermissionViewResponseData {
     account: {
         uuid: string;
         username: string;
-        firs_name: string;
-        last_name: string;
+        firs_name: string | null;
+        last_name: string | null;
     };
     object: string;
     action: string;

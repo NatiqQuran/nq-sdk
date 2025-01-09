@@ -4,6 +4,7 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
+    UUID,
 } from "../interfaces/utils.js";
 import {
     UserAddRequestData,
@@ -24,22 +25,22 @@ export class ControllerUser {
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<UserListResponseData>> {
         return await this.conn.axios.get(`/user/${target}`, config);
     }
     async edit(
-        target: string,
+        target: UUID,
         data: UserAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/user/${target}`, data, config);
     }
 
     async delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/user/${target}`, config);
     }
