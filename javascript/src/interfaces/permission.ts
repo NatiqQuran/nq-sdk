@@ -1,13 +1,15 @@
+import { UUID } from "./utils/utils.js";
+
 //Permission List
 interface PermissionListItemConditions {
-    id: number | null;
+    // id: number | null;  // deleted
     name: string;
     value: string;
 }
 interface PermissionListItem {
-    uuid: string;
+    uuid: UUID;
     account: {
-        uuid: string;
+        uuid: UUID;
         username: string;
         firs_name: string;
         last_name: string;
@@ -24,12 +26,12 @@ interface PermissionViewConditions {
     value: string;
 }
 export interface PermissionViewResponseData {
-    uuid: string;
+    uuid: UUID;
     account: {
-        uuid: string;
+        uuid: UUID;
         username: string;
-        firs_name: string;
-        last_name: string;
+        firs_name: string | null;
+        last_name: string | null;
     };
     object: string;
     action: string;
@@ -38,7 +40,7 @@ export interface PermissionViewResponseData {
 
 //Permission Add
 export interface PermissionAddRequestData {
-    subject: string | null;
+    subject: UUID;
     object: string;
     action: string;
     conditions: PermissionListItemConditions[];
@@ -46,7 +48,7 @@ export interface PermissionAddRequestData {
 
 //Permission Edit
 export interface PermissionEditRequestData {
-    subject: string | null;
+    subject: UUID;
     object: string;
     action: string;
     conditions: PermissionViewConditions[];

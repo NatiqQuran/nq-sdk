@@ -4,11 +4,12 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+    UUID,
+} from "../interfaces/utils/utils.js";
 import {
-    SurahListParams,
+    SurahListRequestParameters,
     SurahListResponseData,
-    SurahViewParams,
+    SurahViewRequestParameters,
     SurahViewRequestData,
     SurahViewResponseData,
 } from "../interfaces/surah.js";
@@ -21,36 +22,36 @@ export class ControllerSurah {
     }
 
     list(
-        config: RequestConfig<SurahListParams>
+        config?: RequestConfig<SurahListRequestParameters>
     ): Promise<AxiosResponse<SurahListResponseData>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<SurahViewParams>
+        target: UUID,
+        config?: RequestConfig<SurahViewRequestParameters>
     ): Promise<AxiosResponse<SurahViewResponseData>> {
         return this.conn.axios.get(`/surah/${target}`, config);
     }
 
     add(
         data: SurahViewRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah`, data, config);
     }
 
     edit(
-        target: string,
+        target: UUID,
         data: SurahViewRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah/${target}`, data, config);
     }
 
     delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/surah/${target}`, config);
     }

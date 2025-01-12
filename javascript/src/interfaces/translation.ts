@@ -1,9 +1,9 @@
 import { LangCodeType } from "../langCode.js";
-import { Filter } from "./utils.js";
+import { Filter, UUID } from "./utils/utils.js";
 
 //Translation
 interface Translator {
-    account_uuid: string;
+    account_uuid: UUID;
     username: string;
     first_name: string | null;
     last_name: string | null;
@@ -11,13 +11,14 @@ interface Translator {
 
 //Translation List
 type TranslationListSort = "language" | "createTime" | "updateTime";
-export interface TranslationListParams extends Filter<TranslationListSort> {
+export interface TranslationListRequestParameters
+    extends Filter<TranslationListSort> {
     mushaf: string;
     language?: LangCodeType;
     translator_account?: string; //TODO: translator_account_uuid
 }
 interface TranslationListItem {
-    uuid: string;
+    uuid: UUID;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
     source: string | null;
@@ -28,18 +29,18 @@ interface TranslationListItem {
 export type TranslationListResponseData = TranslationListItem[];
 
 //Translation View
-export interface TranslationViewParams {
+export interface TranslationViewRequestParameters {
     surah_uuid?: string;
 }
 interface TranslationViewAyah {
-    uuid: string;
-    text_uuid: string;
+    uuid: UUID;
+    text_uuid: UUID;
     number: number;
     surah_number: number;
     text: string;
 }
 export interface TranslationViewResponseData {
-    mushaf_uuid: string;
+    mushaf_uuid: UUID;
     language: LangCodeType;
     release_date: string | null;
     source: string;
@@ -51,7 +52,7 @@ export interface TranslationViewResponseData {
 
 //Translation Add | Edit
 export interface TranslationAddRequestData {
-    translator_account_uuid: string | null;
+    translator_account_uuid: UUID | null;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
     source: string | null;
@@ -59,11 +60,11 @@ export interface TranslationAddRequestData {
 
 //Translation/Text
 //Translation/Text View
-export interface TranslationTextViewParams {
-    ayah_uuid: string;
+export interface TranslationTextViewRequestParameters {
+    ayah_uuid: UUID;
 }
 export interface TranslationTextViewResponseData {
-    uuid: string;
+    uuid: UUID;
     text: string;
 }
 //Translation/Text Modify

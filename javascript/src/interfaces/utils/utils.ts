@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 
 export interface RequestConfig<P = undefined>
     extends Omit<AxiosRequestConfig, "url" | "baseUrl" | "method" | "data"> {
-    params?: P;
+    RequestParameters?: P;
 }
 export interface Filter<S> {
     sort?: S;
@@ -11,6 +11,7 @@ export interface Filter<S> {
     to?: number;
 }
 
+export type UUID = string;
 export type Sajdah = "vajib" | "mustahab" | null;
 export type Period = "makki" | "madani" | null;
 

@@ -1,12 +1,13 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../connection.js";
 import {
+    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
-    AyahListParams,
+    AyahListRequestParameters,
     AyahListResponseData,
     AyahViewResponseData,
     AyahAddRequestData,
@@ -20,36 +21,36 @@ export class ControllerAyah {
     }
 
     async list(
-        config: RequestConfig<AyahListParams>
+        config?: RequestConfig<AyahListRequestParameters>
     ): Promise<AxiosResponse<AyahListResponseData>> {
         return await this.conn.axios.get(`/ayah`, config);
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<AyahViewResponseData>> {
         return await this.conn.axios.get(`/ayah/${target}`, config);
     }
 
     async add(
         data: AyahAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/ayah`, data, config);
     }
 
     async edit(
-        target: string,
+        target: UUID,
         data: AyahAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/ayah/${target}`, data, config);
     }
 
     async delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/ayah/${target}`, config);
     }

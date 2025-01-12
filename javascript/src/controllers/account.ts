@@ -4,7 +4,7 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
     AccountSendCodeRequesteData,
     AccountVerifyRequesteData,

@@ -7,8 +7,7 @@ export type PhraseListResponseData = PhraseListItem[];
 
 //phrase view
 export interface PhraseViewResponseData {
-    ٱلصَّلَوٰةَ: string;
-    ٱللَّهَ: string;
+    [key: string]: string;
 }
 //pharse Add/Edit
 export interface PhraseAddRequestData {

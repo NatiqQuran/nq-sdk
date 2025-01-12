@@ -4,7 +4,8 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+    UUID,
+} from "../interfaces/utils/utils.js";
 import {
     PermissionListResponseData,
     PermissionAddRequestData,
@@ -20,29 +21,29 @@ export class ControllerPermission {
     }
 
     async list(
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<PermissionListResponseData>> {
         return await this.conn.axios.get(`/permission`, config);
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<PermissionViewResponseData>> {
         return await this.conn.axios.get(`/permission/${target}`, config);
     }
 
     async add(
         data: PermissionAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/permission`, data, config);
     }
 
     async edit(
-        target: string,
+        target: UUID,
         data: PermissionEditRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(
             `/permission/${target}`,
@@ -52,8 +53,8 @@ export class ControllerPermission {
     }
 
     async delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/permission/${target}`, config);
     }

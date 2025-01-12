@@ -4,7 +4,8 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+    UUID,
+} from "../interfaces/utils/utils.js";
 import {
     OrganizationListResponseData,
     OrganizationNameViewResponseData,
@@ -22,36 +23,36 @@ export class ControllerOrganization {
     }
 
     list(
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<OrganizationListResponseData>> {
         return this.conn.axios.get(`/organization`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<OrganizationViewResponseData>> {
         return this.conn.axios.get(`/organization/${target}`, config);
     }
 
     add(
         data: OrganizationAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/organization`, data, config);
     }
 
     edit(
-        target: string,
+        target: UUID,
         data: OrganizationAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/organization/${target}`, data, config);
     }
 
     delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/organization/${target}`, config);
     }
@@ -72,23 +73,23 @@ class ActionName {
     }
 
     view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<OrganizationNameViewResponseData>> {
         return this.conn.axios.get(`/organization/name/${target}`, config);
     }
 
     add(
         data: OrganizationNameAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/organization/name`, data, config);
     }
 
     edit(
-        target: string,
+        target: UUID,
         data: OrganizationNameEditRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(
             `/organization/name${target}`,
@@ -98,8 +99,8 @@ class ActionName {
     }
 
     delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/organization/name/${target}`, config);
     }

@@ -1,12 +1,14 @@
+import { UUID } from "./utils/utils.js";
+
 //Word View
 export interface WordViewResponseData {
-    uuid: string;
+    uuid: UUID;
     creator_user_id: number;
     word: string;
 }
 
 //Word Add | Edit
 export interface WordAddRequestData {
-    ayah_uuid: string;
+    ayah_uuid: UUID;
     word: string;
 }

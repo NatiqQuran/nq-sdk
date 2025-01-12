@@ -1,6 +1,8 @@
+import { UUID } from "./utils/utils.js";
+
 //profie List
 interface ProfileListItem {
-    uuid: string;
+    uuid: UUID;
     email: string | null;
     username: string;
     first_name: string | null;

@@ -4,7 +4,8 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+    UUID,
+} from "../interfaces/utils/utils.js";
 import {
     WordAddRequestData,
     WordViewResponseData,
@@ -18,23 +19,23 @@ export class ControllerWord {
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<WordViewResponseData>> {
         return await this.conn.axios.get(`/word/${target}`, config);
     }
 
     async edit(
-        target: string,
+        target: UUID,
         data: WordAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/word/${target}`, data, config);
     }
 
     async delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/word/${target}`, config);
     }

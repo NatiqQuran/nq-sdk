@@ -4,7 +4,8 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+    UUID,
+} from "../interfaces/utils/utils.js";
 import {
     PhraseListResponseData,
     PhraseAddRequestData,
@@ -19,36 +20,36 @@ export class ControllerPhrase {
     }
 
     async list(
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<PhraseListResponseData>> {
         return await this.conn.axios.get(`/phrase`, config);
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<PhraseViewResponseData>> {
         return await this.conn.axios.get(`/phrase/${target}`, config);
     }
 
     async add(
         data: PhraseAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/phrase`, data, config);
     }
 
     async edit(
-        target: string,
+        target: UUID,
         data: PhraseAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/phrase/${target}`, data, config);
     }
 
     async delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/phrase/${target}`, config);
     }
