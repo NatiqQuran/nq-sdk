@@ -5,14 +5,14 @@ import {
     DefaultResponseData,
     ErrorResponseData,
     UUID,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
-    TranslationListParams,
+    TranslationListRequestParameters,
     TranslationListResponseData,
     TranslationTextModifyRequestData,
-    TranslationTextViewParams,
+    TranslationTextViewRequestParameters,
     TranslationTextViewResponseData,
-    TranslationViewParams,
+    TranslationViewRequestParameters,
     TranslationAddRequestData,
     TranslationViewResponseData,
 } from "../interfaces/translation.js";
@@ -25,14 +25,14 @@ export class ControllerTranslation {
     }
 
     list(
-        config?: RequestConfig<TranslationListParams>
+        config?: RequestConfig<TranslationListRequestParameters>
     ): Promise<AxiosResponse<TranslationListResponseData>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
     view(
         target: UUID,
-        config?: RequestConfig<TranslationViewParams>
+        config?: RequestConfig<TranslationViewRequestParameters>
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
         return this.conn.axios.get(`/translation/${target}`, config);
     }
@@ -76,7 +76,7 @@ class ActionText {
 
     view(
         target: string,
-        config: RequestConfig<TranslationTextViewParams>
+        config: RequestConfig<TranslationTextViewRequestParameters>
     ): Promise<AxiosResponse<TranslationTextViewResponseData>> {
         return this.conn.axios.get(`/translation/text/${target}`, config);
     }

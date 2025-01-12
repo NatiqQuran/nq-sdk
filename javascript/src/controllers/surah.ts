@@ -5,11 +5,11 @@ import {
     DefaultResponseData,
     ErrorResponseData,
     UUID,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
-    SurahListParams,
+    SurahListRequestParameters,
     SurahListResponseData,
-    SurahViewParams,
+    SurahViewRequestParameters,
     SurahViewRequestData,
     SurahViewResponseData,
 } from "../interfaces/surah.js";
@@ -22,14 +22,14 @@ export class ControllerSurah {
     }
 
     list(
-        config?: RequestConfig<SurahListParams>
+        config?: RequestConfig<SurahListRequestParameters>
     ): Promise<AxiosResponse<SurahListResponseData>> {
         return this.conn.axios.get(`/surah`, config);
     }
 
     view(
         target: UUID,
-        config?: RequestConfig<SurahViewParams>
+        config?: RequestConfig<SurahViewRequestParameters>
     ): Promise<AxiosResponse<SurahViewResponseData>> {
         return this.conn.axios.get(`/surah/${target}`, config);
     }

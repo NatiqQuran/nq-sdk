@@ -5,9 +5,9 @@ import {
     DefaultResponseData,
     ErrorResponseData,
     UUID,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
-    MushafListParams,
+    MushafListRequestParameters,
     MushafListResponseData,
     MushafViewRequestData,
     MushafViewResponseData,
@@ -21,7 +21,7 @@ export class ControllerMushaf {
     }
 
     async list(
-        config: RequestConfig<MushafListParams>
+        config: RequestConfig<MushafListRequestParameters>
     ): Promise<AxiosResponse<MushafListResponseData>> {
         return await this.conn.axios.get(`/mushaf`, config);
     }

@@ -1,5 +1,5 @@
 import { LangCodeType } from "../langCode.js";
-import { Filter, Sajdah, Period } from "./utils.js";
+import { Filter, Sajdah, Period, UUID } from "./utils/utils.js";
 
 //Surah
 interface SurahName {
@@ -11,11 +11,12 @@ interface SurahName {
 }
 //Surah List
 type SorahListSort = "name" | "number" | "createTime" | "updateTime";
-export interface SurahListParams extends Filter<SorahListSort> {
+export interface SurahListRequestParameters extends Filter<SorahListSort> {
     mushaf: string;
+    lang_code?: string;
 }
 interface SurahListItem {
-    uuid: string;
+    uuid: UUID;
     number: number;
     period: Period;
     number_of_ayahs: number;
@@ -23,20 +24,20 @@ interface SurahListItem {
 }
 export type SurahListResponseData = SurahListItem[];
 //Surah View
-export interface SurahViewParams {
+export interface SurahViewRequestParameters {
     format?: "word" | "text";
     langCode?: LangCodeType;
 }
 interface SurahViewAyah {
     number: number;
-    uuid: string;
+    uuid: UUID;
     sajdah: Sajdah;
     text: string;
 }
 export interface SurahViewResponseData {
-    uuid: string;
+    uuid: UUID;
     mushaf: {
-        uuid: string;
+        uuid: UUID;
         short_name: string | null;
         name: string | null;
         source: string | null;
@@ -60,5 +61,5 @@ export interface SurahViewRequestData {
     number: number;
     bismillah_status: boolean;
     bismillah_as_first_ayah: boolean;
-    mushaf_uuid: string;
+    mushaf_id: UUID;
 }

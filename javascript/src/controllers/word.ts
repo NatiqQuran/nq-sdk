@@ -5,7 +5,7 @@ import {
     DefaultResponseData,
     ErrorResponseData,
     UUID,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
     WordAddRequestData,
     WordViewResponseData,

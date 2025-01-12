@@ -1,12 +1,12 @@
-import { Filter } from "./utils.js";
+import { Filter, UUID } from "./utils/utils.js";
 
 //Mushaf
 
 //Mushaf List
 type MushafListSort = "name" | "createTime" | "updateTime";
-export interface MushafListParams extends Filter<MushafListSort> {}
+export interface MushafListRequestParameters extends Filter<MushafListSort> {}
 interface MushafListItem {
-    uuid: string;
+    uuid: UUID;
     short_name: string;
     name: string;
     source: string;
@@ -14,16 +14,16 @@ interface MushafListItem {
 export type MushafListResponseData = MushafListItem[];
 
 //Mushaf View
-export interface MushafViewRequestData {
+export interface MushafViewResponseData {
+    uuid: UUID;
     short_name: string;
     name: string;
     source: string;
     bismillah_text: string;
 }
-export interface MushafViewResponseData {
-    uuid: string;
+//Mushaf Add | Edit
+export interface MushafAddRequestData {
     short_name: string;
     name: string;
     source: string;
-    bismillah_text: string;
 }

@@ -5,9 +5,9 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+} from "../interfaces/utils/utils.js";
 import {
-    AyahListParams,
+    AyahListRequestParameters,
     AyahListResponseData,
     AyahViewResponseData,
     AyahAddRequestData,
@@ -21,7 +21,7 @@ export class ControllerAyah {
     }
 
     async list(
-        config?: RequestConfig<AyahListParams>
+        config?: RequestConfig<AyahListRequestParameters>
     ): Promise<AxiosResponse<AyahListResponseData>> {
         return await this.conn.axios.get(`/ayah`, config);
     }
