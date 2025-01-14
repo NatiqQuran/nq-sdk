@@ -27,7 +27,7 @@ import {
     MushafListRequestParameters,
     MushafListResponseData,
     MushafViewResponseData,
-    MushafAddrequestBody,
+    MushafAddRequestBody,
 } from "./interfaces/mushaf.js";
 import {
     SurahListRequestParameters,
@@ -82,7 +82,7 @@ export {
     type MushafListRequestParameters,
     type MushafListResponseData,
     type MushafViewResponseData,
-    type MushafAddrequestBody,
+    type MushafAddRequestBody,
     type SurahListRequestParameters,
     type SurahListResponseData,
     type SurahViewRequestParameters,
