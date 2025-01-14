@@ -21,7 +21,7 @@ export interface OrganizationViewResponseData {
 }
 
 //Organization Add | Edit
-export interface OrganizationAddRequestData {
+export interface OrganizationAddrequestBody {
     usename: string;
     name: string;
     profile_image: string | null;
@@ -46,12 +46,12 @@ export interface OrganizationNameViewResponseData {
 }
 
 //Organization/Name Add
-export interface OrganizationNameAddRequestData {
+export interface OrganizationNameAddrequestBody {
     name: string;
     language: string;
 }
 
 //Organization/Name Edit
-export interface OrganizationNameEditRequestData {
+export interface OrganizationNameEditrequestBody {
     name: string;
 }

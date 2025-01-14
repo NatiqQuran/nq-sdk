@@ -51,7 +51,7 @@ export interface TranslationViewResponseData {
 }
 
 //Translation Add | Edit
-export interface TranslationAddRequestData {
+export interface TranslationAddrequestBody {
     translator_account_uuid: UUID | null;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
@@ -68,6 +68,6 @@ export interface TranslationTextViewResponseData {
     text: string;
 }
 //Translation/Text Modify
-export interface TranslationTextModifyRequestData {
+export interface TranslationTextModifyrequestBody {
     text: string;
 }

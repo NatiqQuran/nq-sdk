@@ -31,7 +31,7 @@ export interface AyahViewResponseData {
 }
 
 //Ayah Add | Edit
-export interface AyahAddRequestData {
+export interface AyahAddrequestBody {
     surah_uuid: UUID;
     sajdah: Sajdah;
     text: string;

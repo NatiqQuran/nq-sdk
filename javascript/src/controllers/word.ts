@@ -7,7 +7,7 @@ import {
     UUID,
 } from "../interfaces/utils/utils.js";
 import {
-    WordAddRequestData,
+    WordAddrequestBody,
     WordViewResponseData,
 } from "../interfaces/word.js";
 
@@ -27,7 +27,7 @@ export class ControllerWord {
 
     async edit(
         target: UUID,
-        data: WordAddRequestData,
+        data: WordAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/word/${target}`, data, config);

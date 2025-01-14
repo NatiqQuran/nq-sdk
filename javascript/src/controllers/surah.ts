@@ -10,7 +10,7 @@ import {
     SurahListRequestParameters,
     SurahListResponseData,
     SurahViewRequestParameters,
-    SurahViewRequestData,
+    SurahViewrequestBody,
     SurahViewResponseData,
 } from "../interfaces/surah.js";
 
@@ -35,7 +35,7 @@ export class ControllerSurah {
     }
 
     add(
-        data: SurahViewRequestData,
+        data: SurahViewrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah`, data, config);
@@ -43,7 +43,7 @@ export class ControllerSurah {
 
     edit(
         target: UUID,
-        data: SurahViewRequestData,
+        data: SurahViewrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/surah/${target}`, data, config);

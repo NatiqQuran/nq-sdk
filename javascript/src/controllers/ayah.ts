@@ -10,7 +10,7 @@ import {
     AyahListRequestParameters,
     AyahListResponseData,
     AyahViewResponseData,
-    AyahAddRequestData,
+    AyahAddrequestBody,
 } from "../interfaces/ayah.js";
 
 export class ControllerAyah {
@@ -34,7 +34,7 @@ export class ControllerAyah {
     }
 
     async add(
-        data: AyahAddRequestData,
+        data: AyahAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/ayah`, data, config);
@@ -42,7 +42,7 @@ export class ControllerAyah {
 
     async edit(
         target: UUID,
-        data: AyahAddRequestData,
+        data: AyahAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/ayah/${target}`, data, config);

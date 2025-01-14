@@ -9,10 +9,10 @@ import {
 import {
     OrganizationListResponseData,
     OrganizationNameViewResponseData,
-    OrganizationAddRequestData,
+    OrganizationAddrequestBody,
     OrganizationViewResponseData,
-    OrganizationNameAddRequestData,
-    OrganizationNameEditRequestData,
+    OrganizationNameAddrequestBody,
+    OrganizationNameEditrequestBody,
 } from "../interfaces/organization.js";
 
 export class ControllerOrganization {
@@ -36,7 +36,7 @@ export class ControllerOrganization {
     }
 
     add(
-        data: OrganizationAddRequestData,
+        data: OrganizationAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/organization`, data, config);
@@ -44,7 +44,7 @@ export class ControllerOrganization {
 
     edit(
         target: UUID,
-        data: OrganizationAddRequestData,
+        data: OrganizationAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/organization/${target}`, data, config);
@@ -80,7 +80,7 @@ class ActionName {
     }
 
     add(
-        data: OrganizationNameAddRequestData,
+        data: OrganizationNameAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/organization/name`, data, config);
@@ -88,7 +88,7 @@ class ActionName {
 
     edit(
         target: UUID,
-        data: OrganizationNameEditRequestData,
+        data: OrganizationNameEditrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(

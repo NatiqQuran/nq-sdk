@@ -7,7 +7,7 @@ import {
     UUID,
 } from "../interfaces/utils/utils.js";
 import {
-    UserAddRequestData,
+    UserAddrequestBody,
     UserListResponseData,
 } from "../interfaces/user.js";
 
@@ -32,7 +32,7 @@ export class ControllerUser {
     }
     async edit(
         target: UUID,
-        data: UserAddRequestData,
+        data: UserAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/user/${target}`, data, config);

@@ -8,7 +8,7 @@ import {
 } from "../interfaces/utils/utils.js";
 import {
     PhraseListResponseData,
-    PhraseAddRequestData,
+    PhraseAddrequestBody,
     PhraseViewResponseData,
 } from "../interfaces/phrase.js";
 
@@ -33,7 +33,7 @@ export class ControllerPhrase {
     }
 
     async add(
-        data: PhraseAddRequestData,
+        data: PhraseAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/phrase`, data, config);
@@ -41,7 +41,7 @@ export class ControllerPhrase {
 
     async edit(
         target: UUID,
-        data: PhraseAddRequestData,
+        data: PhraseAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/phrase/${target}`, data, config);

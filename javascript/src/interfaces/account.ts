@@ -1,9 +1,9 @@
 //account
 
-export interface AccountSendCodeRequesteData {
+export interface AccountSendCoderequestBody {
     email: string;
 }
-export interface AccountVerifyRequesteData {
+export interface AccountVerifyrequestBody {
     email: string;
     code: number;
 }
