@@ -6,7 +6,7 @@ import {
     ErrorResponseData,
 } from "../interfaces/utils/utils.js";
 import {
-    ProfileEditRequestData,
+    ProfileEditrequestBody,
     ProfileListResponseData,
 } from "../interfaces/profile.js";
 
@@ -24,7 +24,7 @@ export class ControllerProfile {
     }
 
     async edit(
-        data: ProfileEditRequestData,
+        data: ProfileEditrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post("/profile", data, config);

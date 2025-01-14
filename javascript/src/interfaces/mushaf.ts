@@ -22,7 +22,7 @@ export interface MushafViewResponseData {
     bismillah_text: string;
 }
 //Mushaf Add | Edit
-export interface MushafAddRequestData {
+export interface MushafAddrequestBody {
     short_name: string;
     name: string;
     source: string;

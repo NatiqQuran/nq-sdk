@@ -8,9 +8,9 @@ import {
 } from "../interfaces/utils/utils.js";
 import {
     PermissionListResponseData,
-    PermissionAddRequestData,
+    PermissionAddrequestBody,
     PermissionViewResponseData,
-    PermissionEditRequestData,
+    PermissionEditrequestBody,
 } from "../interfaces/permission.js";
 
 export class ControllerPermission {
@@ -34,7 +34,7 @@ export class ControllerPermission {
     }
 
     async add(
-        data: PermissionAddRequestData,
+        data: PermissionAddrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/permission`, data, config);
@@ -42,7 +42,7 @@ export class ControllerPermission {
 
     async edit(
         target: UUID,
-        data: PermissionEditRequestData,
+        data: PermissionEditrequestBody,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(

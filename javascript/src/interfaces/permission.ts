@@ -39,7 +39,7 @@ export interface PermissionViewResponseData {
 }
 
 //Permission Add
-export interface PermissionAddRequestData {
+export interface PermissionAddrequestBody {
     subject: UUID;
     object: string;
     action: string;
@@ -47,7 +47,7 @@ export interface PermissionAddRequestData {
 }
 
 //Permission Edit
-export interface PermissionEditRequestData {
+export interface PermissionEditrequestBody {
     subject: UUID;
     object: string;
     action: string;

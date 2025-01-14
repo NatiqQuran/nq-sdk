@@ -52,7 +52,7 @@ export interface SurahViewResponseData {
     ayahs: SurahViewAyah[];
 }
 //Surah Add | Edit
-export interface SurahViewRequestData {
+export interface SurahViewrequestBody {
     name: string;
     name_pronunciation: string | null;
     name_translation_phrase: string | null;

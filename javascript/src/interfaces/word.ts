@@ -8,7 +8,7 @@ export interface WordViewResponseData {
 }
 
 //Word Add | Edit
-export interface WordAddRequestData {
+export interface WordAddrequestBody {
     ayah_uuid: UUID;
     word: string;
 }

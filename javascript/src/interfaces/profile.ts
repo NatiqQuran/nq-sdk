@@ -14,7 +14,7 @@ interface ProfileListItem {
 export type ProfileListResponseData = ProfileListItem[];
 
 //profile Edit
-export interface ProfileEditRequestData {
+export interface ProfileEditrequestBody {
     username: string;
     first_name: string | null;
     last_name: string | null;

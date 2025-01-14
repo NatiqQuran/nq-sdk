@@ -10,6 +10,6 @@ export interface PhraseViewResponseData {
     [key: string]: string;
 }
 //pharse Add/Edit
-export interface PhraseAddRequestData {
+export interface PhraseAddrequestBody {
     phrase: string;
 }

@@ -14,7 +14,7 @@ interface UserListItem {
 export type UserListResponseData = UserListItem[];
 
 //user Add | Edit
-export interface UserAddRequestData {
+export interface UserAddrequestBody {
     username: string;
     primary_email?: string | null;
     first_name: string;
