@@ -1,7 +1,0 @@
-#Ignore
-node_modules
-build
-
-#Allow
-!declarations.d.ts
-!environment.d.ts
