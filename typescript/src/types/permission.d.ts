@@ -1,31 +1,12 @@
 import { UUID } from "../utils/globalTypes";
 
-//Permission List
-interface PermissionListItemConditions {
-    // id: number | null;  // deleted
+// Permission
+interface PermissionConditions {
     name: string;
     value: string;
 }
-interface PermissionListItem {
-    uuid: UUID;
-    account: {
-        uuid: UUID;
-        username: string;
-        firs_name: string;
-        last_name: string;
-    };
-    object: string;
-    action: string;
-    conditions: PermissionListItemConditions[];
-}
-export type PermissionListResponseData = PermissionListItem[];
-
-//Permission view
-interface PermissionViewConditions {
-    name: string;
-    value: string;
-}
-export interface PermissionViewResponseData {
+// Permission List
+export interface PermissionListItem {
     uuid: UUID;
     account: {
         uuid: UUID;
@@ -35,13 +16,17 @@ export interface PermissionViewResponseData {
     };
     object: string;
     action: string;
-    conditions: PermissionViewConditions[];
+    conditions: PermissionConditions[];
 }
+export type PermissionListResponseData = PermissionListItem[];
 
-//Permission Add/Edit
+// Permission view
+export type PermissionViewResponseData = PerformanceListItem;
+
+// Permission Add/Edit
 export interface PermissionAddRequestData {
     subject: UUID;
     object: string;
     action: string;
-    conditions: PermissionListItemConditions[];
+    conditions: PermissionConditions[];
 }

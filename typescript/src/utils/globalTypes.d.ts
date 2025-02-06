@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from "axios";
 
 export interface RequestConfig<P = undefined>
     extends Omit<AxiosRequestConfig, "url" | "baseUrl" | "method" | "data"> {
-    RequestParameters?: P;
+    params?: P;
 }
 export interface Filter<S> {
     sort?: S;
