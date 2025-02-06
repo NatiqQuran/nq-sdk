@@ -6,22 +6,22 @@ interface PermissionConditions {
     value: string;
 }
 // Permission List
-export interface PermissionListItem {
+export interface PermissionListResponseItem {
     uuid: UUID;
     account: {
         uuid: UUID;
         username: string;
-        firs_name: string | null;
+        first_name: string | null;
         last_name: string | null;
     };
     object: string;
     action: string;
     conditions: PermissionConditions[];
 }
-export type PermissionListResponseData = PermissionListItem[];
+export type PermissionListResponseData = PermissionListResponseItem[];
 
 // Permission view
-export type PermissionViewResponseData = PerformanceListItem;
+export type PermissionViewResponseData = PermissionListResponseItem;
 
 // Permission Add/Edit
 export interface PermissionAddRequestData {

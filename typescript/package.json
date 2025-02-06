@@ -1,6 +1,6 @@
 {
     "name": "@ntq/sdk",
-    "version": "1.1.40",
+    "version": "1.1.42",
     "private": false,
     "author": "Natiq",
     "description": "Natiq Open API SDK",
@@ -22,16 +22,13 @@
     },
     "homepage": "https://developer.natiq.net",
     "scripts": {
-        "clean": "rimraf dist/",
-        "copy-files": "copyfiles -u 1 src/**/*.d.ts dist/",
-        "build": "npm run clean && tsc && npm run copy-files"
+        "build": "tsc "
     },
     "dependencies": {
         "axios": "1.7.7"
     },
     "devDependencies": {
         "@types/node": "22.5.4",
-        "copyfiles": "2.4.1",
         "typescript": "5.4.5"
     }
 }
