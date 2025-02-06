@@ -1,9 +1,9 @@
 import { UUID } from "../utils/globalTypes";
 
-//user view
+// user List
 interface UserListItem {
     uuid: UUID;
-    email: string | null;
+    email: string;
     username: string;
     first_name: string | null;
     last_name: string | null;
@@ -13,7 +13,7 @@ interface UserListItem {
 }
 export type UserListResponseData = UserListItem[];
 
-//user Add | Edit
+// user Add | Edit
 export interface UserAddRequestData {
     username: string;
     primary_email?: string | null;

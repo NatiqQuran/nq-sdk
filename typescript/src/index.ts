@@ -28,4 +28,5 @@ export * from "./modules/phrese";
 export * from "./modules/profile";
 
 // Utils
+export * from "./utils/globalTypes";
 export * from "./utils/langCode";
