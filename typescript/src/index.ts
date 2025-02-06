@@ -1,74 +1,32 @@
 // Types
-export { type LangCodeType } from "./utils/langCode";
+export * from "./types/account";
+export * from "./types/profile";
+export * from "./types/user";
+export * from "./types/organization";
+export * from "./types/permission";
+export * from "./types/phrase";
+export * from "./types/mushaf";
+export * from "./types/surah";
+export * from "./types/ayah";
+export * from "./types/translation";
+export * from "./types/word";
 
-// Interfaces
-export {
-    type AccountSendCodeRequestData,
-    type AccountVerifyRequestData,
-} from "./types/account";
-export {
-    type MushafListResponseItem,
-    type MushafListResponseData,
-    type MushafViewResponseData,
-    type MushafAddRequestData,
-} from "./types/mushaf";
-export {
-    type SurahListRequestParams,
-    type SurahListResponseItem,
-    type SurahListResponseData,
-    type SurahViewRequestParams,
-    type SurahViewResponseAyah,
-    type SurahViewResponseData,
-    type SurahAddRequestData,
-} from "./types/surah";
-export {
-    type AyahListRequestParams,
-    type AyahListResponseItem,
-    type AyahListResponseData,
-    type AyahViewResponseData,
-    type AyahAddRequestData,
-} from "./types/ayah";
-export {
-    type TranslationListRequestParams,
-    type TranslationListResponseItem,
-    type TranslationListResponseData,
-    type TranslationViewRequestParams,
-    type TranslationViewResponseAyah,
-    type TranslationViewResponseData,
-} from "./types/translation";
-export {
-    type TranslationTextViewRequestParams,
-    type TranslationTextViewResponseData,
-    type TranslationTextModifyRequestData,
-} from "./types/translation";
-export {
-    type PhraseListResponseData,
-    type PhraseViewResponseData,
-    type PhraseAddRequestData,
-} from "./types/phrase";
-export {
-    type WordViewResponseData,
-    type WordAddRequestData,
-} from "./types/word";
-export {
-    type PermissionListResponseData,
-    type PermissionViewResponseData,
-    type PermissionAddRequestData,
-} from "./types/permission";
+// Client
+export * from "./client/connection";
 
-// Controllers
-export { Connection } from "./client/connection";
-export { ControllerAccount } from "./modules/account";
-export { ControllerUser } from "./modules/user";
-export { ControllerOrganization } from "./modules/organization";
-export { ControllerPermission } from "./modules/permission";
-export { ControllerMushaf } from "./modules/mushaf";
-export { ControllerSurah } from "./modules/surah";
-export { ControllerAyah } from "./modules/ayah";
-export { ControllerWord } from "./modules/word";
-export { ControllerTranslation } from "./modules/translation";
-export { ControllerPhrase } from "./modules/phrese";
-export { ControllerProfile } from "./modules/profile";
+// Modules
+export * from "./modules/account";
+export * from "./modules/user";
+export * from "./modules/organization";
+export * from "./modules/permission";
+export * from "./modules/mushaf";
+export * from "./modules/surah";
+export * from "./modules/ayah";
+export * from "./modules/word";
+export * from "./modules/translation";
+export * from "./modules/phrese";
+export * from "./modules/profile";
 
-//Functions
-export { getLangNameFromCode } from "./utils/langCode";
+// Utils
+export * from "./utils/globalTypes";
+export * from "./utils/langCode";

@@ -61,5 +61,5 @@ export interface SurahAddRequestData {
     number: number;
     bismillah_status: boolean;
     bismillah_as_first_ayah: boolean;
-    mushaf_id: UUID;
+    mushaf_uuid: UUID;
 }
