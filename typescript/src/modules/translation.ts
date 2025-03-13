@@ -1,20 +1,21 @@
 import { AxiosResponse } from "axios";
-import { Connection } from "../connection.js";
+import { Connection } from "../client/connection";
 import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+    UUID,
+} from "../utils/globalTypes";
 import {
-    TranslationListParams,
+    TranslationListRequestParams,
     TranslationListResponseData,
     TranslationTextModifyRequestData,
-    TranslationTextViewParams,
+    TranslationTextViewRequestParams,
     TranslationTextViewResponseData,
-    TranslationViewParams,
+    TranslationViewRequestParams,
     TranslationAddRequestData,
     TranslationViewResponseData,
-} from "../interfaces/translation.js";
+} from "../types/translation";
 
 export class ControllerTranslation {
     readonly conn: Connection;
@@ -24,36 +25,36 @@ export class ControllerTranslation {
     }
 
     list(
-        config: RequestConfig<TranslationListParams>
+        config?: RequestConfig<TranslationListRequestParams>
     ): Promise<AxiosResponse<TranslationListResponseData>> {
         return this.conn.axios.get(`/translation`, config);
     }
 
     view(
-        target: string,
-        config: RequestConfig<TranslationViewParams>
+        target: UUID,
+        config?: RequestConfig<TranslationViewRequestParams>
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
         return this.conn.axios.get(`/translation/${target}`, config);
     }
 
     add(
         data: TranslationAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation`, data, config);
     }
 
     edit(
-        target: string,
+        target: UUID,
         data: TranslationAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(`/translation/${target}`, data, config);
     }
 
     delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.delete(`/translation/${target}`, config);
     }
@@ -75,7 +76,7 @@ class ActionText {
 
     view(
         target: string,
-        config: RequestConfig<TranslationTextViewParams>
+        config: RequestConfig<TranslationTextViewRequestParams>
     ): Promise<AxiosResponse<TranslationTextViewResponseData>> {
         return this.conn.axios.get(`/translation/text/${target}`, config);
     }

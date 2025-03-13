@@ -11,6 +11,7 @@ export interface Filter<S> {
     to?: number;
 }
 
+export type UUID = string;
 export type Sajdah = "vajib" | "mustahab" | null;
 export type Period = "makki" | "madani" | null;
 

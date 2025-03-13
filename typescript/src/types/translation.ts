@@ -1,9 +1,9 @@
-import { LangCodeType } from "../langCode.js";
-import { Filter } from "./utils.js";
+import { LangCodeType } from "../utils/langCode.js";
+import { Filter, UUID } from "../utils/globalTypes";
 
 //Translation
 interface Translator {
-    account_uuid: string;
+    account_uuid: UUID;
     username: string;
     first_name: string | null;
     last_name: string | null;
@@ -11,13 +11,14 @@ interface Translator {
 
 //Translation List
 type TranslationListSort = "language" | "createTime" | "updateTime";
-export interface TranslationListParams extends Filter<TranslationListSort> {
+export interface TranslationListRequestParams
+    extends Filter<TranslationListSort> {
     mushaf: string;
     language?: LangCodeType;
     translator_account?: string; //TODO: translator_account_uuid
 }
-interface TranslationListItem {
-    uuid: string;
+export interface TranslationListResponseItem {
+    uuid: UUID;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
     source: string | null;
@@ -25,33 +26,33 @@ interface TranslationListItem {
     bismillah: string;
     translator: Translator;
 }
-export type TranslationListResponseData = TranslationListItem[];
+export type TranslationListResponseData = TranslationListResponseItem[];
 
 //Translation View
-export interface TranslationViewParams {
+export interface TranslationViewRequestParams {
     surah_uuid?: string;
 }
-interface TranslationViewAyah {
-    uuid: string;
-    text_uuid: string;
+export interface TranslationViewResponseAyah {
+    uuid: UUID;
+    text_uuid: UUID;
     number: number;
     surah_number: number;
     text: string;
 }
 export interface TranslationViewResponseData {
-    mushaf_uuid: string;
+    mushaf_uuid: UUID;
     language: LangCodeType;
     release_date: string | null;
     source: string;
     status: string;
     bismillah: string;
     translator: Translator;
-    ayahs: TranslationViewAyah[];
+    ayahs: TranslationViewResponseAyah[];
 }
 
 //Translation Add | Edit
 export interface TranslationAddRequestData {
-    translator_account_uuid: string | null;
+    translator_account_uuid: UUID | null;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
     source: string | null;
@@ -59,11 +60,11 @@ export interface TranslationAddRequestData {
 
 //Translation/Text
 //Translation/Text View
-export interface TranslationTextViewParams {
-    ayah_uuid: string;
+export interface TranslationTextViewRequestParams {
+    ayah_uuid: UUID;
 }
 export interface TranslationTextViewResponseData {
-    uuid: string;
+    uuid: UUID;
     text: string;
 }
 //Translation/Text Modify
