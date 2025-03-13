@@ -18,18 +18,20 @@ export class ControllerAccount {
     }
 
     async sendCode(
-        data: AccountSendCodeRequestData
+        data: AccountSendCodeRequestData,
+        config?: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post("/account/sendCode", data);
+        return this.conn.axios.post("/account/sendCode", data, config);
     }
 
     async verify(
-        data: AccountVerifyRequestData
+        data: AccountVerifyRequestData,
+        config?: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post("/account/verify", data);
+        return this.conn.axios.post("/account/verify", data, config);
     }
 
-    async logout(): Promise<AxiosResponse<string>> {
-        return this.conn.axios.get("/account/logout");
+    async logout(config?: RequestConfig): Promise<AxiosResponse<string>> {
+        return this.conn.axios.get("/account/logout", config);
     }
 }

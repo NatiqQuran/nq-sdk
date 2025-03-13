@@ -7,32 +7,31 @@ import {
     MushafViewResponseData,
     MushafAddRequestData,
 } from "../types/mushaf";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerMushaf {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerMushaf extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async list(
-        config: RequestConfig<MushafListRequestParameters>
+        config?: RequestConfig<MushafListRequestParameters>
     ): Promise<AxiosResponse<MushafListResponseData>> {
-        return await this.conn.axios.get(`/mushaf`, config);
+        return await this.axiosGet(`/mushaf`, config);
     }
 
     async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.conn.axios.get(`/mushaf/${target}`, config);
+        return await this.axiosGet(`/mushaf/${target}`, config);
     }
 
     async add(
         data: MushafAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/mushaf`, data, config);
+        return await this.axiosPost(`/mushaf`, data, config);
     }
 
     async edit(
@@ -40,13 +39,13 @@ export class ControllerMushaf {
         data: MushafAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/mushaf/${target}`, data, config);
+        return await this.axiosPost(`/mushaf/${target}`, data, config);
     }
 
     async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.delete(`/mushaf/${target}`, config);
+        return await this.axiosDelete(`/mushaf/${target}`, config);
     }
 }
