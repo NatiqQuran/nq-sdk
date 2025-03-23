@@ -15,13 +15,15 @@ export interface TranslationListRequestParams
     extends Filter<TranslationListSort> {
     mushaf: string;
     language?: LangCodeType;
-    translator_account?: string; //TODO: translator_account_uuid
+    translator_account_uuid?: string;
 }
+type TranslationStatus = "ok" | "notapproved" | "incomplete";
 export interface TranslationListResponseItem {
     uuid: UUID;
     language: LangCodeType;
     release_date: string | null; // TODO: Date
     source: string | null;
+    status: TranslationStatus;
     approved: boolean;
     bismillah: string;
     translator: Translator;
@@ -32,19 +34,20 @@ export type TranslationListResponseData = TranslationListResponseItem[];
 export interface TranslationViewRequestParams {
     surah_uuid?: string;
 }
-export interface TranslationViewResponseAyah {
+interface TranslationViewResponseAyah {
     uuid: UUID;
     text_uuid: UUID;
     number: number;
     surah_number: number;
     text: string;
+    bismillah?: string | null;
 }
 export interface TranslationViewResponseData {
     mushaf_uuid: UUID;
     language: LangCodeType;
     release_date: string | null;
     source: string;
-    status: string;
+    status: string | null;
     bismillah: string;
     translator: Translator;
     ayahs: TranslationViewResponseAyah[];
@@ -58,16 +61,19 @@ export interface TranslationAddRequestData {
     source: string | null;
 }
 
-//Translation/Text
-//Translation/Text View
-export interface TranslationTextViewRequestParams {
+//Translation/Ayah
+//Translation/Ayah View
+export interface TranslationAyahViewRequestParams {
     ayah_uuid: UUID;
 }
-export interface TranslationTextViewResponseData {
+export interface TranslationAyahViewResponseData {
     uuid: UUID;
     text: string;
+    bismillah?: string | null;
+    has_bismillah: boolean;
 }
 //Translation/Text Modify
-export interface TranslationTextModifyRequestData {
+export interface TranslationAyahModifyRequestData {
     text: string;
+    bismillah?: string;
 }

@@ -9,9 +9,9 @@ import {
 import {
     TranslationListRequestParams,
     TranslationListResponseData,
-    TranslationTextModifyRequestData,
-    TranslationTextViewRequestParams,
-    TranslationTextViewResponseData,
+    TranslationAyahModifyRequestData,
+    TranslationAyahViewRequestParams,
+    TranslationAyahViewResponseData,
     TranslationViewRequestParams,
     TranslationAddRequestData,
     TranslationViewResponseData,
@@ -76,14 +76,14 @@ class ActionText {
 
     view(
         target: string,
-        config: RequestConfig<TranslationTextViewRequestParams>
-    ): Promise<AxiosResponse<TranslationTextViewResponseData>> {
+        config: RequestConfig<TranslationAyahViewRequestParams>
+    ): Promise<AxiosResponse<TranslationAyahViewResponseData>> {
         return this.conn.axios.get(`/translation/text/${target}`, config);
     }
 
     modify(
         target: string,
-        data: TranslationTextModifyRequestData,
+        data: TranslationAyahModifyRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.conn.axios.post(
