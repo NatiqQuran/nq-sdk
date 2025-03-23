@@ -1,16 +1,18 @@
 import { AxiosResponse } from "axios";
-import { Connection } from "../connection.js";
+import { Connection } from "../client/connection";
 import {
+    UUID,
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-} from "../interfaces/utils.js";
+} from "../utils/globalTypes";
 import {
-    AyahListParams,
+    AyahListRequestParams,
     AyahListResponseData,
     AyahViewResponseData,
     AyahAddRequestData,
-} from "../interfaces/ayah.js";
+    AyahEditRequestData,
+} from "../types/ayah";
 
 export class ControllerAyah {
     readonly conn: Connection;
@@ -20,36 +22,36 @@ export class ControllerAyah {
     }
 
     async list(
-        config: RequestConfig<AyahListParams>
+        config?: RequestConfig<AyahListRequestParams>
     ): Promise<AxiosResponse<AyahListResponseData>> {
         return await this.conn.axios.get(`/ayah`, config);
     }
 
     async view(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<AyahViewResponseData>> {
         return await this.conn.axios.get(`/ayah/${target}`, config);
     }
 
     async add(
         data: AyahAddRequestData,
-        config: RequestConfig
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/ayah`, data, config);
     }
 
     async edit(
-        target: string,
-        data: AyahAddRequestData,
-        config: RequestConfig
+        target: UUID,
+        data: AyahEditRequestData,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.post(`/ayah/${target}`, data, config);
     }
 
     async delete(
-        target: string,
-        config: RequestConfig
+        target: UUID,
+        config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.conn.axios.delete(`/ayah/${target}`, config);
     }
