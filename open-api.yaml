@@ -1,0 +1,1882 @@
+openapi: 3.0.3
+info:
+  title: Natiq API
+  version: 1.0.0
+  description: Natiq Quran API
+paths:
+  /auth/login/:
+    post:
+      operationId: auth_login_create
+      tags:
+      - auth
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /auth/logout/:
+    post:
+      operationId: auth_logout_create
+      tags:
+      - auth
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          description: No response body
+  /auth/logoutall/:
+    post:
+      operationId: auth_logoutall_create
+      description: |-
+        Log the user out of all sessions
+        I.E. deletes all auth tokens for the user
+      tags:
+      - auth
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          description: No response body
+  /auth/register/:
+    post:
+      operationId: auth_register_create
+      description: |-
+        Register a new user with username, password, and email.
+        Returns user data and Knox token upon successful registration.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /ayah-translations/:
+    get:
+      operationId: ayah_translations_list
+      tags:
+      - ayah-translations
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+    post:
+      operationId: ayah_translations_create
+      tags:
+      - ayah-translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+  /ayah-translations/{id}/:
+    get:
+      operationId: ayah_translations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah translation.
+        required: true
+      tags:
+      - ayah-translations
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+    put:
+      operationId: ayah_translations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah translation.
+        required: true
+      tags:
+      - ayah-translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+    patch:
+      operationId: ayah_translations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah translation.
+        required: true
+      tags:
+      - ayah-translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAyahTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAyahTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAyahTranslation'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+    delete:
+      operationId: ayah_translations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah translation.
+        required: true
+      tags:
+      - ayah-translations
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /ayahs/:
+    get:
+      operationId: ayahs_list
+      parameters:
+      - in: query
+        name: surah_id
+        schema:
+          type: number
+      tags:
+      - ayahs
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ayah'
+          description: ''
+    post:
+      operationId: ayahs_create
+      tags:
+      - ayahs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AyahAdd'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AyahAdd'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AyahAdd'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahAdd'
+          description: ''
+  /ayahs/{id}/:
+    get:
+      operationId: ayahs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah.
+        required: true
+      tags:
+      - ayahs
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahSerializerView'
+          description: ''
+    put:
+      operationId: ayahs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah.
+        required: true
+      tags:
+      - ayahs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ayah'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ayah'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ayah'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ayah'
+          description: ''
+    patch:
+      operationId: ayahs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah.
+        required: true
+      tags:
+      - ayahs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAyah'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAyah'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAyah'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ayah'
+          description: ''
+    delete:
+      operationId: ayahs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ayah.
+        required: true
+      tags:
+      - ayahs
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /groups/:
+    get:
+      operationId: groups_list
+      description: API endpoint that allows groups to be viewed or edited.
+      tags:
+      - groups
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+          description: ''
+    post:
+      operationId: groups_create
+      description: API endpoint that allows groups to be viewed or edited.
+      tags:
+      - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+  /groups/{id}/:
+    get:
+      operationId: groups_retrieve
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this group.
+        required: true
+      tags:
+      - groups
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+    put:
+      operationId: groups_update
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this group.
+        required: true
+      tags:
+      - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Group'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Group'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Group'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+    patch:
+      operationId: groups_partial_update
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this group.
+        required: true
+      tags:
+      - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGroup'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGroup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGroup'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+          description: ''
+    delete:
+      operationId: groups_destroy
+      description: API endpoint that allows groups to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this group.
+        required: true
+      tags:
+      - groups
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /mushafs/:
+    get:
+      operationId: mushafs_list
+      tags:
+      - mushafs
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mushaf'
+          description: ''
+    post:
+      operationId: mushafs_create
+      tags:
+      - mushafs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mushaf'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Mushaf'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Mushaf'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mushaf'
+          description: ''
+  /mushafs/{id}/:
+    get:
+      operationId: mushafs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mushaf.
+        required: true
+      tags:
+      - mushafs
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mushaf'
+          description: ''
+    put:
+      operationId: mushafs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mushaf.
+        required: true
+      tags:
+      - mushafs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mushaf'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Mushaf'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Mushaf'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mushaf'
+          description: ''
+    patch:
+      operationId: mushafs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mushaf.
+        required: true
+      tags:
+      - mushafs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMushaf'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMushaf'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMushaf'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mushaf'
+          description: ''
+    delete:
+      operationId: mushafs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mushaf.
+        required: true
+      tags:
+      - mushafs
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /phrases/:
+    get:
+      operationId: phrases_list
+      tags:
+      - phrases
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Phrase'
+          description: ''
+    post:
+      operationId: phrases_create
+      tags:
+      - phrases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phrase'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Phrase'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Phrase'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phrase'
+          description: ''
+  /phrases/{id}/:
+    get:
+      operationId: phrases_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this phrase.
+        required: true
+      tags:
+      - phrases
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phrase'
+          description: ''
+    put:
+      operationId: phrases_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this phrase.
+        required: true
+      tags:
+      - phrases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phrase'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Phrase'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Phrase'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phrase'
+          description: ''
+    patch:
+      operationId: phrases_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this phrase.
+        required: true
+      tags:
+      - phrases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPhrase'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPhrase'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPhrase'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phrase'
+          description: ''
+    delete:
+      operationId: phrases_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this phrase.
+        required: true
+      tags:
+      - phrases
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /surahs/:
+    get:
+      operationId: surahs_list
+      tags:
+      - surahs
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Surah'
+          description: ''
+    post:
+      operationId: surahs_create
+      tags:
+      - surahs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surah'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Surah'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Surah'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Surah'
+          description: ''
+  /surahs/{id}/:
+    get:
+      operationId: surahs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this surah.
+        required: true
+      tags:
+      - surahs
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SurahDetail'
+          description: ''
+    put:
+      operationId: surahs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this surah.
+        required: true
+      tags:
+      - surahs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Surah'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Surah'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Surah'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Surah'
+          description: ''
+    patch:
+      operationId: surahs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this surah.
+        required: true
+      tags:
+      - surahs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSurah'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSurah'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSurah'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Surah'
+          description: ''
+    delete:
+      operationId: surahs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this surah.
+        required: true
+      tags:
+      - surahs
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /translations/:
+    get:
+      operationId: translations_list
+      tags:
+      - translations
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Translation'
+          description: ''
+    post:
+      operationId: translations_create
+      tags:
+      - translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Translation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Translation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Translation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Translation'
+          description: ''
+  /translations/{id}/:
+    get:
+      operationId: translations_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this translation.
+        required: true
+      tags:
+      - translations
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Translation'
+          description: ''
+    put:
+      operationId: translations_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this translation.
+        required: true
+      tags:
+      - translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Translation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Translation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Translation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Translation'
+          description: ''
+    patch:
+      operationId: translations_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this translation.
+        required: true
+      tags:
+      - translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTranslation'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Translation'
+          description: ''
+    delete:
+      operationId: translations_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this translation.
+        required: true
+      tags:
+      - translations
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /users/:
+    get:
+      operationId: users_list
+      description: API endpoint that allows users to be viewed or edited.
+      tags:
+      - users
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+          description: ''
+    post:
+      operationId: users_create
+      description: API endpoint that allows users to be viewed or edited.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /users/{id}/:
+    get:
+      operationId: users_retrieve
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    put:
+      operationId: users_update
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUser'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+    delete:
+      operationId: users_destroy
+      description: API endpoint that allows users to be viewed or edited.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /words/:
+    get:
+      operationId: words_list
+      tags:
+      - words
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Word'
+          description: ''
+    post:
+      operationId: words_create
+      tags:
+      - words
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Word'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Word'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+  /words/{id}/:
+    get:
+      operationId: words_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this word.
+        required: true
+      tags:
+      - words
+      security:
+      - knoxApiToken: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+    put:
+      operationId: words_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this word.
+        required: true
+      tags:
+      - words
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Word'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Word'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Word'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+    patch:
+      operationId: words_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this word.
+        required: true
+      tags:
+      - words
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWord'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWord'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWord'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Word'
+          description: ''
+    delete:
+      operationId: words_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this word.
+        required: true
+      tags:
+      - words
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Ayah:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sajdah:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SajdahEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        text:
+          type: string
+          readOnly: true
+        breakers:
+          type: string
+          readOnly: true
+        bismillah:
+          type: string
+          readOnly: true
+        surah:
+          type: string
+          readOnly: true
+      required:
+      - bismillah
+      - breakers
+      - id
+      - number
+      - surah
+      - text
+    AyahAdd:
+      type: object
+      properties:
+        surah_id:
+          type: integer
+        text:
+          type: string
+        is_bismillah:
+          type: boolean
+          default: false
+        bismillah_text:
+          type: string
+          nullable: true
+        sajdah:
+          type: string
+          nullable: true
+      required:
+      - surah_id
+      - text
+    AyahSerializerView:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sajdah:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SajdahEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        text:
+          type: string
+          readOnly: true
+        breakers:
+          type: string
+          readOnly: true
+        bismillah:
+          type: string
+          readOnly: true
+        surah:
+          allOf:
+          - $ref: '#/components/schemas/SurahInAyah'
+          readOnly: true
+        mushaf:
+          type: string
+          readOnly: true
+        words:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          readOnly: true
+      required:
+      - bismillah
+      - breakers
+      - id
+      - mushaf
+      - number
+      - surah
+      - text
+      - words
+    AyahTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        translation_id:
+          type: integer
+          readOnly: true
+        ayah_id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+        bismillah:
+          type: string
+          nullable: true
+      required:
+      - ayah_id
+      - id
+      - text
+      - translation_id
+    BlankEnum:
+      enum:
+      - ''
+    Group:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          maxLength: 150
+      required:
+      - name
+      - url
+    Mushaf:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        short_name:
+          type: string
+          maxLength: 100
+        name:
+          type: string
+        source:
+          type: string
+      required:
+      - id
+      - name
+      - source
+    NullEnum:
+      enum:
+      - null
+    PatchedAyah:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sajdah:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SajdahEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        text:
+          type: string
+          readOnly: true
+        breakers:
+          type: string
+          readOnly: true
+        bismillah:
+          type: string
+          readOnly: true
+        surah:
+          type: string
+          readOnly: true
+    PatchedAyahTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        translation_id:
+          type: integer
+          readOnly: true
+        ayah_id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+        bismillah:
+          type: string
+          nullable: true
+    PatchedGroup:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        name:
+          type: string
+          maxLength: 150
+    PatchedMushaf:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        short_name:
+          type: string
+          maxLength: 100
+        name:
+          type: string
+        source:
+          type: string
+    PatchedPhrase:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        phrase:
+          type: string
+    PatchedSurah:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mushaf:
+          allOf:
+          - $ref: '#/components/schemas/Mushaf'
+          readOnly: true
+        names:
+          type: string
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        period:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PeriodEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        search_terms:
+          type: string
+          nullable: true
+        number_of_ayahs:
+          type: string
+          readOnly: true
+    PatchedTranslation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mushaf:
+          type: integer
+        translator:
+          type: integer
+        language:
+          type: string
+          maxLength: 5
+        release_date:
+          type: string
+          format: date
+          nullable: true
+        source:
+          type: string
+          nullable: true
+          maxLength: 300
+        approved:
+          type: boolean
+    PatchedUser:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+    PatchedWord:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ayah_id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+    PeriodEnum:
+      enum:
+      - makki
+      - madani
+      type: string
+      description: |-
+        * `makki` - Makki
+        * `madani` - Madani
+    Phrase:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        phrase:
+          type: string
+      required:
+      - id
+      - phrase
+    SajdahEnum:
+      enum:
+      - none
+      type: string
+      description: '* `none` - None'
+    Surah:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mushaf:
+          allOf:
+          - $ref: '#/components/schemas/Mushaf'
+          readOnly: true
+        names:
+          type: string
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        period:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PeriodEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        search_terms:
+          type: string
+          nullable: true
+        number_of_ayahs:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - mushaf
+      - names
+      - number
+      - number_of_ayahs
+    SurahDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mushaf:
+          allOf:
+          - $ref: '#/components/schemas/Mushaf'
+          readOnly: true
+        names:
+          type: string
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        period:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/PeriodEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        search_terms:
+          type: string
+          nullable: true
+        number_of_ayahs:
+          type: string
+          readOnly: true
+        ayahs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ayah'
+          readOnly: true
+      required:
+      - ayahs
+      - id
+      - mushaf
+      - names
+      - number
+      - number_of_ayahs
+    SurahInAyah:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        names:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - names
+    Translation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        mushaf:
+          type: integer
+        translator:
+          type: integer
+        language:
+          type: string
+          maxLength: 5
+        release_date:
+          type: string
+          format: date
+          nullable: true
+        source:
+          type: string
+          nullable: true
+          maxLength: 300
+        approved:
+          type: boolean
+      required:
+      - id
+      - language
+      - mushaf
+      - translator
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          writeOnly: true
+        password2:
+          type: string
+          writeOnly: true
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+      required:
+      - email
+      - password
+      - password2
+      - username
+    Word:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ayah_id:
+          type: integer
+          readOnly: true
+        text:
+          type: string
+      required:
+      - ayah_id
+      - id
+      - text
+  securitySchemes:
+    knoxApiToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
