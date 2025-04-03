@@ -1,4 +1,3 @@
-import { AxiosInstance, AxiosRequestConfig } from "axios";
 import { Connection } from "../client/connection";
 import { RequestConfig } from "../utils/globalTypes";
 
@@ -33,28 +32,28 @@ export class BaseController {
     }
 
     // Optionally, you can have methods for making common requests like GET, POST, etc.
-    protected axiosGet<T, P>(
-        url: string,
-        config?: RequestConfig<P>
+    protected async clientGet<T, C>(
+        url: any,
+        config?: RequestConfig<C>
     ): Promise<T> {
-        return this.conn.axios
-            .get(url, this.getAuthConfig(config))
-            .then((res) => res.data);
+        return (await this.conn.client
+            .GET(url, this.getAuthConfig(config))).data
     }
 
-    protected axiosPost<T>(
-        url: string,
+    protected async clientPost<T>(
+        url: any,
         data: any,
         config?: RequestConfig
     ): Promise<T> {
-        return this.conn.axios
-            .post(url, data, this.getAuthConfig(config))
-            .then((res) => res.data);
+        return (await this.conn.client
+            .POST(url, {
+                body: data,
+                headers: this.getAuthConfig(config).headers
+            })).data
     }
 
-    protected axiosDelete<T>(url: string, config?: RequestConfig): Promise<T> {
-        return this.conn.axios
-            .delete(url, this.getAuthConfig(config))
-            .then((res) => res.data);
+    protected async clientDelete<T>(url: any, config?: RequestConfig): Promise<T> {
+        return (await this.conn.client
+            .DELETE(url, this.getAuthConfig(config))).data
     }
 }
