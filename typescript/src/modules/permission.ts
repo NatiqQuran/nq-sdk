@@ -11,32 +11,31 @@ import {
     PermissionViewResponseData,
     PermissionAddRequestData,
 } from "../types/permission";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerPermission {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerPermission extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<PermissionListResponseData>> {
-        return await this.conn.axios.get(`/permission`, config);
+        return await this.axiosGet(`/permission`, config);
     }
 
     async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<PermissionViewResponseData>> {
-        return await this.conn.axios.get(`/permission/${target}`, config);
+        return await this.axiosGet(`/permission/${target}`, config);
     }
 
     async add(
         data: PermissionAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/permission`, data, config);
+        return await this.axiosPost(`/permission`, data, config);
     }
 
     async edit(
@@ -44,7 +43,7 @@ export class ControllerPermission {
         data: PermissionAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(
+        return await this.axiosPost(
             `/permission/${target}`,
             data,
             config
@@ -55,6 +54,6 @@ export class ControllerPermission {
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.delete(`/permission/${target}`, config);
+        return await this.axiosDelete(`/permission/${target}`, config);
     }
 }
