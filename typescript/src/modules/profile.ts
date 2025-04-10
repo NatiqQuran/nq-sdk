@@ -9,24 +9,23 @@ import {
     ProfileEditRequestData,
     ProfileListResponseData,
 } from "../types/profile";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerProfile {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerProfile extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileListResponseData>> {
-        return await this.conn.axios.get(`/profile`, config);
+        return await this.axiosGet(`/profile`, config);
     }
 
     async edit(
         data: ProfileEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post("/profile", data, config);
+        return await this.axiosPost("/profile", data, config);
     }
 }
