@@ -34,7 +34,7 @@ export type TranslationListResponseData = TranslationListResponseItem[];
 export interface TranslationViewRequestParams {
     surah_uuid?: string;
 }
-interface TranslationViewResponseAyah {
+export interface TranslationViewResponseAyah {
     uuid: UUID;
     text_uuid: UUID;
     number: number;
