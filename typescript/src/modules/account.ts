@@ -9,29 +9,28 @@ import {
     AccountSendCodeRequestData,
     AccountVerifyRequestData,
 } from "../types/account";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerAccount {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerAccount extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async sendCode(
         data: AccountSendCodeRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post("/account/sendCode", data, config);
+        return await this.axiosPost("/account/sendCode", data, config);
     }
 
     async verify(
         data: AccountVerifyRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<string>> {
-        return this.conn.axios.post("/account/verify", data, config);
+        return await this.axiosPost("/account/verify", data, config);
     }
 
     async logout(config?: RequestConfig): Promise<AxiosResponse<string>> {
-        return this.conn.axios.get("/account/logout", config);
+        return await this.axiosGet("/account/logout", config);
     }
 }

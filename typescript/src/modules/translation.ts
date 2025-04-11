@@ -16,87 +16,84 @@ import {
     TranslationAddRequestData,
     TranslationViewResponseData,
 } from "../types/translation";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerTranslation {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerTranslation extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
-    list(
+    async list(
         config?: RequestConfig<TranslationListRequestParams>
     ): Promise<AxiosResponse<TranslationListResponseData>> {
-        return this.conn.axios.get(`/translation`, config);
+        return await this.axiosGet(`/translation`, config);
     }
 
-    view(
+    async view(
         target: UUID,
         config?: RequestConfig<TranslationViewRequestParams>
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
-        return this.conn.axios.get(`/translation/${target}`, config);
+        return await this.axiosGet(`/translation/${target}`, config);
     }
 
-    add(
+    async add(
         data: TranslationAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/translation`, data, config);
+        return await this.axiosPost(`/translation`, data, config);
     }
 
-    edit(
+    async edit(
         target: UUID,
         data: TranslationAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/translation/${target}`, data, config);
+        return await this.axiosPost(`/translation/${target}`, data, config);
     }
 
-    delete(
+    async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.delete(`/translation/${target}`, config);
+        return await this.axiosDelete(`/translation/${target}`, config);
     }
 
     /**
      * @description `/translation/text`
      */
     text() {
-        return new ActionText(this.conn);
+        return new ActionText(this.conn, this.token);
     }
 }
 
-class ActionText {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+class ActionText extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
-    view(
+    async view(
         target: string,
         config: RequestConfig<TranslationAyahViewRequestParams>
     ): Promise<AxiosResponse<TranslationAyahViewResponseData>> {
-        return this.conn.axios.get(`/translation/text/${target}`, config);
+        return await this.axiosGet(`/translation/text/${target}`, config);
     }
 
-    modify(
+    async modify(
         target: string,
         data: TranslationAyahModifyRequestData,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(
+        return await this.axiosPost(
             `/translation/text/${target}`,
             data,
             config
         );
     }
 
-    delete(
+    async delete(
         target: string,
         config: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.delete(`/translation/text/${target}`, config);
+        return await this.axiosDelete(`/translation/text/${target}`, config);
     }
 }

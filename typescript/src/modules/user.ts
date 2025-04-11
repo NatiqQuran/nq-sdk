@@ -7,38 +7,38 @@ import {
     UUID,
 } from "../utils/globalTypes";
 import { UserAddRequestData, UserListResponseData } from "../types/user";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerUser {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerUser extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async list(
         config: RequestConfig
     ): Promise<AxiosResponse<UserListResponseData>> {
-        return await this.conn.axios.get(`/user`, config);
+        return await this.axiosGet(`/user`, config);
     }
 
     async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<UserListResponseData>> {
-        return await this.conn.axios.get(`/user/${target}`, config);
+        return await this.axiosGet(`/user/${target}`, config);
     }
+    
     async edit(
         target: UUID,
         data: UserAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/user/${target}`, data, config);
+        return await this.axiosPost(`/user/${target}`, data, config);
     }
 
     async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.delete(`/user/${target}`, config);
+        return await this.axiosDelete(`/user/${target}`, config);
     }
 }
