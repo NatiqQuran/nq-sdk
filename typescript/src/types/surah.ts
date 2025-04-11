@@ -21,6 +21,7 @@ export interface SurahListResponseItem {
     period: Period;
     number_of_ayahs: number;
     names: SurahName[];
+    search_terms?: string[];
 }
 export type SurahListResponseData = SurahListResponseItem[];
 //Surah View
@@ -33,6 +34,7 @@ export interface SurahViewResponseAyah {
     uuid: UUID;
     sajdah: Sajdah;
     text: string;
+    words: string[];
 }
 export interface SurahViewResponseData {
     uuid: UUID;
@@ -50,16 +52,18 @@ export interface SurahViewResponseData {
     bismillah_text: string | null;
     number_of_ayahs: number;
     ayahs: SurahViewResponseAyah[];
+    search_terms?: string[];
 }
 //Surah Add | Edit
 export interface SurahAddRequestData {
     name: string;
-    name_pronunciation: string | null;
-    name_translation_phrase: string | null;
-    name_transliteration: string | null;
+    name_pronunciation?: string | null;
+    name_translation_phrase?: string | null;
+    name_transliteration?: string | null;
     period: Period;
     number: number;
     bismillah_status: boolean;
     bismillah_as_first_ayah: boolean;
     mushaf_uuid: UUID;
+    search_terms?: string[];
 }

@@ -7,19 +7,18 @@ import {
     UUID,
 } from "../utils/globalTypes";
 import { WordAddRequestData, WordViewResponseData } from "../types/word";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerWord {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerWord extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<WordViewResponseData>> {
-        return await this.conn.axios.get(`/word/${target}`, config);
+        return await this.axiosGet(`/word/${target}`, config);
     }
 
     async edit(
@@ -27,13 +26,13 @@ export class ControllerWord {
         data: WordAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/word/${target}`, data, config);
+        return await this.axiosPost(`/word/${target}`, data, config);
     }
 
     async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.delete(`/word/${target}`, config);
+        return await this.axiosDelete(`/word/${target}`, config);
     }
 }

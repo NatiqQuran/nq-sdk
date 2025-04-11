@@ -24,7 +24,7 @@ export * from "./modules/surah";
 export * from "./modules/ayah";
 export * from "./modules/word";
 export * from "./modules/translation";
-export * from "./modules/phrese";
+export * from "./modules/phrase";
 export * from "./modules/profile";
 
 // Utils

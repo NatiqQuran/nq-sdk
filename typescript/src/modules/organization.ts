@@ -14,94 +14,91 @@ import {
     OrganizationNameAddRequestData,
     OrganizationNameEditRequestData,
 } from "../types/organization";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerOrganization {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerOrganization extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
-    list(
+    async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<OrganizationListResponseData>> {
-        return this.conn.axios.get(`/organization`, config);
+        return await this.axiosGet(`/organization`, config);
     }
 
-    view(
+    async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<OrganizationViewResponseData>> {
-        return this.conn.axios.get(`/organization/${target}`, config);
+        return await this.axiosGet(`/organization/${target}`, config);
     }
 
-    add(
+    async add(
         data: OrganizationAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/organization`, data, config);
+        return await this.axiosPost(`/organization`, data, config);
     }
 
-    edit(
+    async edit(
         target: UUID,
         data: OrganizationAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/organization/${target}`, data, config);
+        return await this.axiosPost(`/organization/${target}`, data, config);
     }
 
-    delete(
+    async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.delete(`/organization/${target}`, config);
+        return await this.axiosDelete(`/organization/${target}`, config);
     }
 
     /**
      * @description `/organization/name`
      */
     name() {
-        return new ActionName(this.conn);
+        return new ActionName(this.conn, this.token);
     }
 }
 
-class ActionName {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+class ActionName extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
-    view(
+    async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<OrganizationNameViewResponseData>> {
-        return this.conn.axios.get(`/organization/name/${target}`, config);
+        return await this.axiosGet(`/organization/name/${target}`, config);
     }
 
-    add(
+    async add(
         data: OrganizationNameAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/organization/name`, data, config);
+        return await this.axiosPost(`/organization/name`, data, config);
     }
 
-    edit(
+    async edit(
         target: UUID,
         data: OrganizationNameEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(
-            `/organization/name${target}`,
+        return await this.axiosPost(
+            `/organization/name/${target}`,
             data,
             config
         );
     }
 
-    delete(
+    async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.delete(`/organization/name/${target}`, config);
+        return await this.axiosDelete(`/organization/name/${target}`, config);
     }
 }

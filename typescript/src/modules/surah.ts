@@ -13,46 +13,45 @@ import {
     SurahViewResponseData,
     SurahAddRequestData,
 } from "../types/surah";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerSurah {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerSurah extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
-    list(
+    async list(
         config?: RequestConfig<SurahListRequestParams>
     ): Promise<AxiosResponse<SurahListResponseData>> {
-        return this.conn.axios.get(`/surah`, config);
+        return await this.axiosGet(`/surah`, config);
     }
 
-    view(
+    async view(
         target: UUID,
         config?: RequestConfig<SurahViewRequestParams>
     ): Promise<AxiosResponse<SurahViewResponseData>> {
-        return this.conn.axios.get(`/surah/${target}`, config);
+        return await this.axiosGet(`/surah/${target}`, config);
     }
 
-    add(
+    async add(
         data: SurahAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/surah`, data, config);
+        return await this.axiosPost(`/surah`, data, config);
     }
 
-    edit(
+    async edit(
         target: UUID,
         data: SurahAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.post(`/surah/${target}`, data, config);
+        return await this.axiosPost(`/surah/${target}`, data, config);
     }
 
-    delete(
+    async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.conn.axios.delete(`/surah/${target}`, config);
+        return await this.axiosDelete(`/surah/${target}`, config);
     }
 }

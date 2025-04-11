@@ -11,32 +11,31 @@ import {
     PhraseAddRequestData,
     PhraseViewResponseData,
 } from "../types/phrase";
+import { BaseController } from "../utils/baseController";
 
-export class ControllerPhrase {
-    readonly conn: Connection;
-
-    constructor(connection: Connection) {
-        this.conn = connection;
+export class ControllerPhrase extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
     }
 
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<PhraseListResponseData>> {
-        return await this.conn.axios.get(`/phrase`, config);
+        return await this.axiosGet(`/phrase`, config);
     }
 
     async view(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<PhraseViewResponseData>> {
-        return await this.conn.axios.get(`/phrase/${target}`, config);
+        return await this.axiosGet(`/phrase/${target}`, config);
     }
 
     async add(
         data: PhraseAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/phrase`, data, config);
+        return await this.axiosPost(`/phrase`, data, config);
     }
 
     async edit(
@@ -44,13 +43,13 @@ export class ControllerPhrase {
         data: PhraseAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.post(`/phrase/${target}`, data, config);
+        return await this.axiosPost(`/phrase/${target}`, data, config);
     }
 
     async delete(
         target: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.conn.axios.delete(`/phrase/${target}`, config);
+        return await this.axiosDelete(`/phrase/${target}`, config);
     }
 }
