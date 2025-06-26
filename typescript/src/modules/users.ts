@@ -6,7 +6,7 @@ import {
     ErrorResponseData,
     UUID,
 } from "../utils/globalTypes";
-import { UserAddRequestData, UserListResponseData } from "../types/user";
+import { UserAddRequestData, UserListResponseData } from "../types/users";
 import { BaseController } from "../utils/baseController";
 
 export class ControllerUser extends BaseController {

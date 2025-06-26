@@ -10,7 +10,12 @@ import {
     PhraseListResponseData,
     PhraseAddRequestData,
     PhraseViewResponseData,
-} from "../types/phrase";
+    PhraseUpdateRequestData,
+    PhrasePartialUpdateRequestData,
+    PhrasesRetrieveRequestParams,
+    PhrasesUpdateRequestParams,
+    PhrasesPartialUpdateRequestParams,
+} from "../types/phrases";
 import { BaseController } from "../utils/baseController";
 
 export class ControllerPhrase extends BaseController {
@@ -25,10 +30,10 @@ export class ControllerPhrase extends BaseController {
     }
 
     async view(
-        target: UUID,
+        params: PhrasesRetrieveRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<PhraseViewResponseData>> {
-        return await this.axiosGet(`/phrase/${target}`, config);
+        return await this.axiosGet(`/phrase/${params.id}`, config);
     }
 
     async add(
@@ -39,17 +44,25 @@ export class ControllerPhrase extends BaseController {
     }
 
     async edit(
-        target: UUID,
-        data: PhraseAddRequestData,
+        params: PhrasesUpdateRequestParams,
+        data: PhraseUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/phrase/${target}`, data, config);
+        return await this.axiosPut(`/phrase/${params.id}`, data, config);
+    }
+
+    async partialUpdate(
+        params: PhrasesPartialUpdateRequestParams,
+        data: PhrasePartialUpdateRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<DefaultResponseData>> {
+        return await this.axiosPatch(`/phrase/${params.id}`, data, config);
     }
 
     async delete(
-        target: UUID,
+        id: UUID,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/phrase/${target}`, config);
+        return await this.axiosDelete(`/phrase/${id}`, config);
     }
 }
