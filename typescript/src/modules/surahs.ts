@@ -4,15 +4,17 @@ import {
     RequestConfig,
     DefaultResponseData,
     ErrorResponseData,
-    UUID,
 } from "../utils/globalTypes";
 import {
-    SurahListRequestParams,
     SurahListResponseData,
     SurahViewRequestParams,
     SurahViewResponseData,
     SurahAddRequestData,
-} from "../types/surah";
+    SurahsUpdateRequestParams,
+    SurahsUpdateRequestData,
+    SurahsPartialUpdateRequestParams,
+    SurahsPartialUpdateRequestData,
+} from "../types/surahs";
 import { BaseController } from "../utils/baseController";
 
 export class ControllerSurah extends BaseController {
@@ -21,16 +23,16 @@ export class ControllerSurah extends BaseController {
     }
 
     async list(
-        config?: RequestConfig<SurahListRequestParams>
+        config?: RequestConfig
     ): Promise<AxiosResponse<SurahListResponseData>> {
         return await this.axiosGet(`/surah`, config);
     }
 
     async view(
-        target: UUID,
-        config?: RequestConfig<SurahViewRequestParams>
+        params: SurahViewRequestParams,
+        config?: RequestConfig
     ): Promise<AxiosResponse<SurahViewResponseData>> {
-        return await this.axiosGet(`/surah/${target}`, config);
+        return await this.axiosGet(`/surah/${params.id}`, config);
     }
 
     async add(
@@ -41,17 +43,25 @@ export class ControllerSurah extends BaseController {
     }
 
     async edit(
-        target: UUID,
-        data: SurahAddRequestData,
+        params: SurahsUpdateRequestParams,
+        data: SurahsUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/surah/${target}`, data, config);
+        return await this.axiosPut(`/surah/${params.id}`, data, config);
+    }
+
+    async partialUpdate(
+        params: SurahsPartialUpdateRequestParams,
+        data: SurahsPartialUpdateRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<DefaultResponseData>> {
+        return await this.axiosPatch(`/surah/${params.id}`, data, config);
     }
 
     async delete(
-        target: UUID,
+        params: SurahsUpdateRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/surah/${target}`, config);
+        return await this.axiosDelete(`/surah/${params.id}`, config);
     }
 }
