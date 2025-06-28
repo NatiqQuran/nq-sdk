@@ -1,14 +1,3 @@
-import { LangCodeType } from "../utils/langCode.js";
-import { Filter, UUID } from "../utils/globalTypes.js";
-
-// //Translation
-// interface Translator {
-//     account_uuid: UUID;
-//     username: string;
-//     first_name: string | null;
-//     last_name: string | null;
-// }
-
 //Translation List
 
 interface TranslationsListResponseItem {
@@ -16,7 +5,7 @@ interface TranslationsListResponseItem {
     mushaf: number;
     translator: string;
     language: string;
-    release_date: string | null;
+    release_date: string;
     source: string;
     approved: boolean;
 }
@@ -31,7 +20,7 @@ export interface TranslationViewResponseData {
     mushaf: number;
     translator: string;
     language: string;
-    release_date: string | null;
+    release_date: string;
     source: string;
     approved: boolean;
 }
@@ -41,29 +30,29 @@ export interface TranslationsAddRequestData {
     mushaf: number;
     translator: number;
     language: string;
-    release_date?: string | null;
+    release_date?: string;
     source?: string;
     approved?: boolean;
 }
 
-//Translation Put
-export interface TranslationsUpdateRequestParams {
+//Translation Edit
+export interface TranslationsEditRequestParams {
     id: number;
 }
-export interface TranslationsUpdateRequestData {
+export interface TranslationsEditRequestData {
     mushaf: number;
     translator: number;
     language: string;
-    release_date?: string | null;
+    release_date?: string;
     source?: string;
     approved?: boolean;
 }
 
-//Translation Patch
-export interface TrasnlationsPartialUpdateRequestParams {
-    id: number
+//Translation Update
+export interface TrasnlationsUpdateRequestParams {
+    id: number;
 }
-export interface TranslationsPartialUpdateRequestData {
+export interface TranslationsUpdateRequestData {
     id: number;
     mushaf: number;
     translator: number;
@@ -71,5 +60,4 @@ export interface TranslationsPartialUpdateRequestData {
     release_date: string;
     source: string;
     approved: boolean;
-    
 }

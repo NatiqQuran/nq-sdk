@@ -1,36 +1,36 @@
-//phrase List
+//Phrases List
 interface PhrasesListItem {
     id: number;
     phrase: string;
 }
-export type PhraseListResponseData = PhrasesListItem[];
+export type PhrasesListResponseData = PhrasesListItem[];
 
-//phrase view
-export interface PhrasesRetrieveRequestParams {
-    id: number
-}
-export interface PhraseViewResponseData {
+//Phrases View
+export interface PhrasesViewRequestParams {
     id: number;
-    phrase: string
 }
-
-//pharse Add
-export interface PhraseAddRequestData {
+export interface PhrasesViewResponseData {
+    id: number;
     phrase: string;
 }
 
-//Phrase Put
-export interface PhrasesUpdateRequestParams {
-    id: number
-}
-export interface PhraseUpdateRequestData {
-    phrase: string
+//Pharses Add
+export interface PhrasesAddRequestData {
+    phrase: string;
 }
 
-//Phrase Patch
-export interface PhrasesPartialUpdateRequestParams {
-    id: number
+//Phrases Edit
+export interface PhrasesEditRequestParams {
+    id: number;
 }
-export interface PhrasePartialUpdateRequestData {
-    phrase?: string
+export interface PhrasesEditRequestData {
+    phrase: string;
+}
+
+//Phrases Update
+export interface PhrasesUpdateRequestParams {
+    id: number;
+}
+export interface PhrasesUpdateRequestData {
+    phrase?: string;
 }

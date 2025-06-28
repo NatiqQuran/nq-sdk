@@ -4,33 +4,33 @@ import { Sajdah } from "../utils/globalTypes";
 
 // Ayahs List
 export interface AyahsListRequestParams {
-  surah_id?: number;
+    surah_id?: number;
 }
-export interface AyahsListResponseItem {
-  id: number;
-  number: number;
-  sajdah: Sajdah | null;
-  text: string;
-  breakers: string;
-  bismillah: string;
-  surah: string;
+interface AyahsListResponseItem {
+    id: number;
+    number: number;
+    sajdah: Sajdah | null;
+    text: string;
+    breakers: string;
+    bismillah: string;
+    surah: string;
 }
 export type AyahsListResponseData = AyahsListResponseItem[];
-  
+
 //Ayah View
-export interface AyahsRetrieveRequestParams {
+export interface AyahsViewRequestParams {
     id: number;
-  }
-  interface SurahInAyah {
+}
+interface SurahInAyah {
     id: number;
     names: string;
-  }
-  interface Word {
+}
+interface Word {
     id: number;
     ayah_id: number;
     text: string;
-  }
-  export interface AyahsRetrieveResponseData {
+}
+export interface AyahsViewResponseData {
     id: number;
     number: number;
     sajdah: Sajdah | null;
@@ -40,15 +40,15 @@ export interface AyahsRetrieveRequestParams {
     surah: SurahInAyah;
     mushaf: string;
     words: Word[];
-  }
+}
 
 // Ayah Add
 export interface AyahsAddRequestData {
-  surah_id: number;
-  text: string;
-  is_bismillah?: boolean;
-  bismillah_text?: string | null;
-  sajdah?: Sajdah | null;
+    surah_id: number;
+    text: string;
+    is_bismillah?: boolean;
+    bismillah_text?: string | null;
+    sajdah?: Sajdah | null;
 }
 
 export interface AyahsAddResponseData {
@@ -61,15 +61,34 @@ export interface AyahsAddResponseData {
     surah: string;
 }
 
-//Ayah Put | Patch
+//Ayah Edit | Update
+export interface AyahsEditRequestParams {
+    id: number;
+}
+
+export interface AyahsEditRequestData {
+    number?: number;
+    sajdah?: Sajdah | null;
+}
+
+export interface AyahsEditResponseData {
+    id: number;
+    number: number;
+    sajdah: Sajdah | null;
+    text: string;
+    breakers: string;
+    bismillah: string;
+    surah: string;
+}
+
 export interface AyahsUpdateRequestParams {
     id: number;
-  }
+}
 
 export interface AyahsUpdateRequestData {
     number?: number;
     sajdah?: Sajdah | null;
-  }
+}
 
 export interface AyahsUpdateResponseData {
     id: number;
@@ -81,21 +100,62 @@ export interface AyahsUpdateResponseData {
     surah: string;
 }
 
-export interface AyahsPartialUpdateRequestParams {
+//Ayahs/Traslation
+//Ayahs/Traslation List
+interface AyahsTraslationResponseItem {
     id: number;
-}
-
-export interface AyahsPartialUpdateRequestData {
-    number?: number;
-    sajdah?: Sajdah | null;
-}
-
-export interface AyahsPartialUpdateResponseData {
-    id: number;
-    number: number;
-    sajdah: Sajdah | null;
+    traslation_id: number;
+    ayah_id: number;
     text: string;
-    breakers: string;
-    bismillah: string;
-    surah: string;
+    bismillah?: string;
+}
+export type AyahsTraslationListResponseData = AyahsTraslationResponseItem[];
+
+//Ayahs/Traslation view
+export interface AyahsTraslationViewRequestParams {
+    id: number;
+}
+export interface AyahsTraslationViewResponseData {
+    id: number;
+    traslation_id: number;
+    ayah_id: number;
+    text: string;
+    bismillah?: string;
+}
+
+//Ayahs/Traslation Add
+export interface AyahsTraslationAddRequestData {
+    text: string;
+    bismillah?: string;
+}
+//Ayahs/Traslation Edit
+export interface AyahsTraslationEditRequestParams {
+    id: number;
+}
+
+export interface AyahsTraslationEditRequestData {
+    text: string;
+    bismillah?: string;
+}
+export interface AyahsTraslationEditResponseData {
+    id: number;
+    traslation_id: number;
+    ayah_id: number;
+    text: string;
+    bismillah?: string;
+}
+export interface AyahsTraslationUpdateRequestParams {
+    id: number;
+}
+
+export interface AyahsTraslationUpdateRequestData {
+    text?: string;
+    bismillah?: string;
+}
+export interface AyahsTraslationUpdateResponseData {
+    id: number;
+    traslation_id: number;
+    ayah_id: number;
+    text: string;
+    bismillah?: string;
 }

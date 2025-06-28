@@ -1,5 +1,3 @@
-// Auth
-
 // Login
 export interface AuthLoginRequestData {
     username: string;

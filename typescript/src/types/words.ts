@@ -1,41 +1,53 @@
-import { IdParam } from "../utils/globalTypes";
+//Word List
+interface WordListResponseItem {
+    id: number;
+    ayah_id: number;
+    text: string;
+}
+export type WordListResponseData = WordListResponseItem[];
 
-// Word schema (components/schemas/Word)
-export interface WordResponseData {
-  id: number;
-  ayah_id: number;
-  text: string;
+//Word View
+export interface WordViewRequestParams {
+    id: number;
+}
+export interface WordViewResponseData {
+    id: number;
+    ayah_id: number;
+    text: string;
 }
 
-// لیست Word
-export type WordListResponseData = WordResponseData[];
-
-// نمایش یک Word
-export type WordViewRequestParams = IdParam;
-export type WordViewResponseData = WordResponseData;
-
-//  Word
+//Word Add
 export interface WordAddRequestData {
-  ayah_id: number;
-  text: string;
+    text: string;
 }
-export type WordAddResponseData = WordResponseData;
+export interface WordAddResponseData {
+    id: number;
+    ayah_id: number;
+    text: string;
+}
 
-// Word (PUT)
-export type WordUpdateRequestParams = IdParam;
+//Word Edit
+export interface WordEditRequestParams {
+    id: number;
+}
+export interface WordEditRequestData {
+    text: string;
+}
+export interface WordEditResponseData {
+    id: number;
+    ayah_id: number;
+    text: string;
+}
+
+//Word Update
+export interface WordUpdateRequestParams {
+    id: number;
+}
 export interface WordUpdateRequestData {
-  ayah_id: number;
-  text: string;
+    text?: string;
 }
-export type WordUpdateResponseData = WordResponseData;
-
-//  Word (PATCH)
-export type WordPartialUpdateRequestParams = IdParam;
-export interface WordPartialUpdateRequestData {
-  ayah_id?: number;
-  text?: string;
+export interface WordUpdateResponseData {
+    id: number;
+    ayah_id: number;
+    text: string;
 }
-export type WordPartialUpdateResponseData = WordResponseData;
-
-// حذف Word
-export type WordDeleteRequestParams = IdParam;
