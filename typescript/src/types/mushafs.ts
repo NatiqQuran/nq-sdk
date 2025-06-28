@@ -12,8 +12,8 @@ export interface MushafsListResponseItem {
 export type MushafsListResponseData = MushafsListResponseItem[];
 
 //Mushaf View
-export interface MushafsRetrieveRequestParams {
-    id: number
+export interface MushafsViewRequestParams {
+    id: number;
 }
 export interface MushafViewResponseData {
     id: number;
@@ -30,25 +30,22 @@ export interface MushasfAddRequestData {
     source: string;
 }
 
-//Mushaf Put
-export interface MushafsUpdateRequestParams {
-    id: number
+//Mushaf Edit
+export interface MushafsEditRequestParams {
+    id: number;
 }
-export interface MushafsUpdateRequestData {
+export interface MushafsEditRequestData {
     short_name?: string;
     name: string;
     source: string;
 }
 
-//Mushaf Patch
-export interface MushafsPartialUpdateRequestParams {
-    id: number
+//Mushaf Update
+export interface MushafsUpdateRequestParams {
+    id: number;
 }
-export interface MushafasPartialUpdateRequestData {
+export interface MushafasUpdateRequestData {
     short_name: string;
     name: string;
     source: string;
 }
-
-
-

@@ -7,7 +7,8 @@ interface Translator {
     last_name: string | null;
 }
 type TranslationListSort = "language" | "createTime" | "updateTime";
-export interface TranslationListRequestParameters extends Filter<TranslationListSort> {
+export interface TranslationListRequestParameters
+    extends Filter<TranslationListSort> {
     mushaf: string;
     language?: LangCodeType;
     translator_account?: string;

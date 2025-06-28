@@ -1,13 +1,7 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { RequestConfig } from "../utils/globalTypes";
 import {
-    RequestConfig,
-    DefaultResponseData,
-    ErrorResponseData,
-} from "../utils/globalTypes";
-import {
-    AccountSendCodeRequestData,
-    AccountVerifyRequestData,
     AuthLoginRequestData,
     AuthRegisterRequestData,
     AuthRegisterResponseData,

@@ -1,5 +1,4 @@
-import { LangCodeType } from "../utils/langCode.js";
-import { Filter, Sajdah, Period} from "../utils/globalTypes.js";
+import { Sajdah, Period } from "../utils/globalTypes.js";
 
 //Surah
 
@@ -8,7 +7,7 @@ interface MushafDetails {
     id: number;
     short_name: string;
     name: string;
-    source: string
+    source: string;
 }
 export interface SurahListResponseItem {
     id: number;
@@ -17,13 +16,13 @@ export interface SurahListResponseItem {
     number: number;
     period?: Period;
     search_terms?: string[];
-    number_of_ayahs: string
+    number_of_ayahs: string;
 }
 export type SurahListResponseData = SurahListResponseItem[];
 
 //Surah View
 export interface SurahViewRequestParams {
-    id: number
+    id: number;
 }
 interface SurahViewResponseAyah {
     id: number;
@@ -32,7 +31,7 @@ interface SurahViewResponseAyah {
     text: string;
     breakers: string;
     bismillah: string;
-    surah: string
+    surah: string;
 }
 export interface SurahViewResponseData {
     id: number;
@@ -42,32 +41,32 @@ export interface SurahViewResponseData {
     period: Period;
     search_terms?: string[];
     number_of_ayahs: number;
-    ayahs: SurahViewResponseAyah[]
+    ayahs: SurahViewResponseAyah[];
 }
 
 //Surah Add
 export interface SurahAddRequestData {
     number: number;
     period: Period;
-    search_terms?: string[]
+    search_terms?: string[];
 }
 
-//Surah Put
-export interface SurahsUpdateRequestParams {
-    id: number
+//Surah Edit
+export interface SurahsEditRequestParams {
+    id: number;
 }
-export interface SurahsUpdateRequestData {
+export interface SurahsEditRequestData {
     number: number;
     period: Period;
-    search_terms?: string[]
+    search_terms?: string[];
 }
 
-//Surah Patch
-export interface SurahsPartialUpdateRequestParams {
-    id: number
+//Surah Update
+export interface SurahsUpdateRequestParams {
+    id: number;
 }
-export interface SurahsPartialUpdateRequestData {
+export interface SurahsUpdateRequestData {
     number?: number;
     period?: Period;
-    search_terms?: string[]
+    search_terms?: string[];
 }

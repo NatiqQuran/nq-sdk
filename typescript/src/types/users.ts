@@ -1,25 +1,67 @@
-import { UUID } from "../utils/globalTypes";
-
-// user List
-interface UserListItem {
-    uuid: UUID;
+// Users List
+interface UsersListResponseItem {
+    username: string;
     email: string;
-    username: string;
-    first_name: string | null;
-    last_name: string | null;
-    birthday: string | null;
-    profile_image: string | null;
-    language: string | null;
+    first_name?: string;
+    last_name?: string;
 }
-export type UserListResponseData = UserListItem[];
+export type UsersListResponseData = UsersListResponseItem[];
 
-// user Add | Edit
-export interface UserAddRequestData {
+//Users View
+export interface UsersViewRequestParams {
+    id: number;
+}
+export interface UsersViewResponseData {
     username: string;
-    primary_email?: string | null;
-    first_name: string;
-    last_name: string;
-    birthday: string;
-    profile_image?: string;
-    language: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+}
+
+//Users Add
+export interface UsersAddRequestData {
+    username: string;
+    password: string;
+    password2: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+}
+
+//Users Edit
+export interface UsersEditRequestParams {
+    id: number;
+}
+export interface UsersEditRequestData {
+    username: string;
+    password: string;
+    password2: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+}
+export interface UsersEditResponseData {
+    username: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+}
+
+//Users Update
+export interface UsersUpdateRequestParams {
+    id: number;
+}
+export interface UsersUpdateRequestData {
+    username?: string;
+    password?: string;
+    password2?: string;
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+}
+export interface UsersUpdateResponseData {
+    username: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
 }

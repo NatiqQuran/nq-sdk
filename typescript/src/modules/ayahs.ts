@@ -1,77 +1,77 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import {
-  RequestConfig,
-  DefaultResponseData,
-  ErrorResponseData,
+    RequestConfig,
+    DefaultResponseData,
+    ErrorResponseData,
 } from "../utils/globalTypes";
 import {
-  AyahsListRequestParams,
-  AyahsListResponseData,
-  AyahsRetrieveRequestParams,
-  AyahsRetrieveResponseData,
-  AyahsAddRequestData,
-  AyahsAddResponseData,
-  AyahsUpdateRequestParams,
-  AyahsUpdateRequestData,
-  AyahsUpdateResponseData,
-  AyahsPartialUpdateRequestParams,
-  AyahsPartialUpdateRequestData,
-  AyahsPartialUpdateResponseData,
+    AyahsListRequestParams,
+    AyahsListResponseData,
+    AyahsViewRequestParams,
+    AyahsViewResponseData,
+    AyahsAddRequestData,
+    AyahsAddResponseData,
+    AyahsEditRequestParams,
+    AyahsEditRequestData,
+    AyahsEditResponseData,
+    AyahsUpdateRequestParams,
+    AyahsUpdateRequestData,
+    AyahsUpdateResponseData,
 } from "../types/ayahs";
 import { BaseController } from "../utils/baseController";
 
 export class ControllerAyahs extends BaseController {
-  constructor(connection: Connection, token?: string) {
-    super(connection, token);
-  }
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
+    }
 
-  /** GET /ayahs/ */
-  async list(
-    config?: RequestConfig<AyahsListRequestParams>
-  ): Promise<AxiosResponse<AyahsListResponseData>> {
-    return await this.axiosGet(`/ayahs`, config);
-  }
+    /** GET /Ayahs/ */
+    async list(
+        config?: RequestConfig<AyahsListRequestParams>
+    ): Promise<AxiosResponse<AyahsListResponseData>> {
+        return await this.axiosGet(`/ayahs`, config);
+    }
 
-  /** GET /ayahs/{id}/ */
-  async view(
-    params: AyahsRetrieveRequestParams,
-    config?: RequestConfig
-  ): Promise<AxiosResponse<AyahsRetrieveResponseData>> {
-    return await this.axiosGet(`/ayahs/${params.id}/`, config);
-  }
+    /** GET /Ayahs/{id}/ */
+    async view(
+        params: AyahsViewRequestParams,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsViewResponseData>> {
+        return await this.axiosGet(`/ayahs/${params.id}/`, config);
+    }
 
-  /** POST /ayahs/ */
-  async add(
-    data: AyahsAddRequestData,
-    config?: RequestConfig
-  ): Promise<AxiosResponse<AyahsAddResponseData>> {
-    return await this.axiosPost(`/ayahs`, data, config);
-  }
+    /** POST /Ayahs/ */
+    async add(
+        data: AyahsAddRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsAddResponseData>> {
+        return await this.axiosPost(`/ayahs`, data, config);
+    }
 
-  /** PUT /ayahs/{id}/ */
-  async update(
-    params: AyahsUpdateRequestParams,
-    data: AyahsUpdateRequestData,
-    config?: RequestConfig
-  ): Promise<AxiosResponse<AyahsUpdateResponseData>> {
-    return await this.axiosPut(`/ayahs/${params.id}/`, data, config);
-  }
+    /** PUT /Ayahs/{id}/ */
+    async Edit(
+        params: AyahsEditRequestParams,
+        data: AyahsEditRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsEditResponseData>> {
+        return await this.axiosPut(`/ayahs/${params.id}/`, data, config);
+    }
 
-  /** PATCH /ayahs/{id}/ */
-  async partialUpdate(
-    params: AyahsPartialUpdateRequestParams,
-    data: AyahsPartialUpdateRequestData,
-    config?: RequestConfig
-  ): Promise<AxiosResponse<AyahsPartialUpdateResponseData>> {
-    return await this.axiosPatch(`/ayahs/${params.id}/`, data, config);
-  }
+    /** PATCH /Ayahs/{id}/ */
+    async partialEdit(
+        params: AyahsUpdateRequestParams,
+        data: AyahsUpdateRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsUpdateResponseData>> {
+        return await this.axiosPatch(`/ayahs/${params.id}/`, data, config);
+    }
 
-  /** DELETE /ayahs/{id}/ */
-  async delete(
-    params: AyahsRetrieveRequestParams,
-    config?: RequestConfig
-  ): Promise<AxiosResponse<DefaultResponseData>> {
-    return await this.axiosDelete(`/ayahs/${params.id}/`, config);
-  }
+    /** DELETE /Ayahs/{id}/ */
+    async delete(
+        params: AyahsEditRequestParams,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<DefaultResponseData>> {
+        return await this.axiosDelete(`/ayahs/${params.id}/`, config);
+    }
 }

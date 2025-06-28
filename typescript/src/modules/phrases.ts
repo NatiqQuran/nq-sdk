@@ -1,20 +1,15 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
-    RequestConfig,
-    DefaultResponseData,
-    ErrorResponseData,
-    UUID,
-} from "../utils/globalTypes";
-import {
-    PhraseListResponseData,
-    PhraseAddRequestData,
-    PhraseViewResponseData,
-    PhraseUpdateRequestData,
-    PhrasePartialUpdateRequestData,
-    PhrasesRetrieveRequestParams,
+    PhrasesListResponseData,
+    PhrasesViewRequestParams,
+    PhrasesViewResponseData,
+    PhrasesAddRequestData,
+    PhrasesEditRequestParams,
+    PhrasesEditRequestData,
     PhrasesUpdateRequestParams,
-    PhrasesPartialUpdateRequestParams,
+    PhrasesUpdateRequestData,
 } from "../types/phrases";
 import { BaseController } from "../utils/baseController";
 
@@ -23,46 +18,52 @@ export class ControllerPhrase extends BaseController {
         super(connection, token);
     }
 
+    /** GET /Phrases/ */
     async list(
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhraseListResponseData>> {
+    ): Promise<AxiosResponse<PhrasesListResponseData>> {
         return await this.axiosGet(`/phrase`, config);
     }
 
+    /** GET /Phrases/{id}/ */
     async view(
-        params: PhrasesRetrieveRequestParams,
+        params: PhrasesViewRequestParams,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhraseViewResponseData>> {
+    ): Promise<AxiosResponse<PhrasesViewResponseData>> {
         return await this.axiosGet(`/phrase/${params.id}`, config);
     }
 
+    /** POST /Phrases/ */
     async add(
-        data: PhraseAddRequestData,
+        data: PhrasesAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosPost(`/phrase`, data, config);
     }
 
+    /** PUT /Phrases/{id}/ */
     async edit(
-        params: PhrasesUpdateRequestParams,
-        data: PhraseUpdateRequestData,
+        params: PhrasesEditRequestParams,
+        data: PhrasesEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosPut(`/phrase/${params.id}`, data, config);
     }
 
-    async partialUpdate(
-        params: PhrasesPartialUpdateRequestParams,
-        data: PhrasePartialUpdateRequestData,
+    /** PATCH /Phrases/{id}/ */
+    async partialEdit(
+        params: PhrasesUpdateRequestParams,
+        data: PhrasesUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosPatch(`/phrase/${params.id}`, data, config);
     }
 
+    /** DELETE /Phrases/{id}/ */
     async delete(
-        id: UUID,
+        params: PhrasesEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/phrase/${id}`, config);
+        return await this.axiosDelete(`/phrase/${params.id}`, config);
     }
 }

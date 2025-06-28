@@ -1,7 +1,6 @@
 import { Filter, UUID } from "./utils/utils.js";
 type MushafListSort = "name" | "createTime" | "updateTime";
-export interface MushafListRequestParameters extends Filter<MushafListSort> {
-}
+export interface MushafListRequestParameters extends Filter<MushafListSort> {}
 interface MushafListItem {
     uuid: UUID;
     short_name: string;
