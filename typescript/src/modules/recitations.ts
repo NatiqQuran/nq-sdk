@@ -22,7 +22,7 @@ export class ControllerPhrase extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsListResponseData>> {
-        return await this.axiosGet(`/phrase`, config);
+        return await this.axiosGet(`/recitations`, config);
     }
 
     /** GET /Recitations/{id}/ */
@@ -30,7 +30,7 @@ export class ControllerPhrase extends BaseController {
         params: RecitationsViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsViewResponseData>> {
-        return await this.axiosGet(`/phrase/${params.id}`, config);
+        return await this.axiosGet(`/recitations/${params.id}`, config);
     }
 
     /** POST /Recitations/ */
@@ -38,7 +38,7 @@ export class ControllerPhrase extends BaseController {
         data: RecitationsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/phrase`, data, config);
+        return await this.axiosPost(`/recitations`, data, config);
     }
 
     /** PUT /Recitations/{id}/ */
@@ -47,7 +47,7 @@ export class ControllerPhrase extends BaseController {
         data: RecitationsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPut(`/phrase/${params.id}`, data, config);
+        return await this.axiosPut(`/recitations/${params.id}`, data, config);
     }
 
     /** PATCH /Recitations/{id}/ */
@@ -56,7 +56,7 @@ export class ControllerPhrase extends BaseController {
         data: RecitationsUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPatch(`/phrase/${params.id}`, data, config);
+        return await this.axiosPatch(`/recitations/${params.id}`, data, config);
     }
 
     /** DELETE /Recitations/{id}/ */
@@ -64,6 +64,6 @@ export class ControllerPhrase extends BaseController {
         params: RecitationsEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/phrase/${params.id}`, config);
+        return await this.axiosDelete(`/recitations/${params.id}`, config);
     }
 }
