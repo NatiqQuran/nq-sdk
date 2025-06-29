@@ -1,5 +1,3 @@
-import { Filter, UUID } from "../utils/globalTypes";
-
 //Mushaf
 
 //Mushaf List

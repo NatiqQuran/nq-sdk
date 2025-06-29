@@ -9,7 +9,7 @@ export interface AyahsListRequestParams {
 interface AyahsListResponseItem {
     id: number;
     number: number;
-    sajdah: Sajdah | null;
+    sajdah: Sajdah;
     text: string;
     breakers: string;
     bismillah: string;
@@ -33,7 +33,7 @@ interface Word {
 export interface AyahsViewResponseData {
     id: number;
     number: number;
-    sajdah: Sajdah | null;
+    sajdah: Sajdah;
     text: string;
     breakers: string;
     bismillah: string;
@@ -47,14 +47,14 @@ export interface AyahsAddRequestData {
     surah_id: number;
     text: string;
     is_bismillah?: boolean;
-    bismillah_text?: string | null;
-    sajdah?: Sajdah | null;
+    bismillah_text?: string;
+    sajdah?: Sajdah;
 }
 
 export interface AyahsAddResponseData {
     id: number;
     number: number;
-    sajdah: Sajdah | null;
+    sajdah: Sajdah;
     text: string;
     breakers: string;
     bismillah: string;
@@ -68,13 +68,13 @@ export interface AyahsEditRequestParams {
 
 export interface AyahsEditRequestData {
     number?: number;
-    sajdah?: Sajdah | null;
+    sajdah?: Sajdah;
 }
 
 export interface AyahsEditResponseData {
     id: number;
     number: number;
-    sajdah: Sajdah | null;
+    sajdah: Sajdah;
     text: string;
     breakers: string;
     bismillah: string;
@@ -87,13 +87,13 @@ export interface AyahsUpdateRequestParams {
 
 export interface AyahsUpdateRequestData {
     number?: number;
-    sajdah?: Sajdah | null;
+    sajdah?: Sajdah;
 }
 
 export interface AyahsUpdateResponseData {
     id: number;
     number: number;
-    sajdah: Sajdah | null;
+    sajdah: Sajdah;
     text: string;
     breakers: string;
     bismillah: string;
