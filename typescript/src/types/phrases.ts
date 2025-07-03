@@ -34,3 +34,14 @@ export interface PhrasesUpdateRequestParams {
 export interface PhrasesUpdateRequestData {
     phrase?: string;
 }
+
+// Phrases Modify
+export interface PhrasesModifyRequestData {
+    phrases: {
+        [key: string]: string;
+    };
+}
+export interface PhrasesModifyResponseData {
+    success: boolean;
+    message: string;
+}

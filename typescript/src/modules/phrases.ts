@@ -10,6 +10,8 @@ import {
     PhrasesEditRequestData,
     PhrasesUpdateRequestParams,
     PhrasesUpdateRequestData,
+    PhrasesModifyRequestData,
+    PhrasesModifyResponseData,
 } from "../types/phrases";
 import { BaseController } from "../utils/baseController";
 
@@ -65,5 +67,13 @@ export class ControllerPhrase extends BaseController {
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosDelete(`/phrase/${params.id}`, config);
+    }
+
+    /** POST /phrase/modify/ */
+    async modify(
+        data: PhrasesModifyRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<PhrasesModifyResponseData>> {
+        return await this.axiosPost(`/phrase/modify`, data, config);
     }
 }
