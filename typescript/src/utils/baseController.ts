@@ -45,6 +45,22 @@ export class BaseController {
         return this.conn.axios.post(url, data, this.getAuthConfig(config));
     }
 
+    protected axiosPut<T>(
+        url: string,
+        data: any,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<T>> {
+        return this.conn.axios.put(url, data, this.getAuthConfig(config));
+    }
+
+    protected axiosPatch<T>(
+        url: string,
+        data: any,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<T>> {
+        return this.conn.axios.patch(url, data, this.getAuthConfig(config));
+    }
+
     protected axiosDelete<T>(url: string, config?: RequestConfig): Promise<AxiosResponse<T>> {
         return this.conn.axios.delete(url, this.getAuthConfig(config));
     }

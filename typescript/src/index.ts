@@ -1,31 +1,26 @@
 // Types
-export * from "./types/account";
-export * from "./types/profile";
-export * from "./types/user";
-export * from "./types/organization";
-export * from "./types/permission";
-export * from "./types/phrase";
-export * from "./types/mushaf";
-export * from "./types/surah";
-export * from "./types/ayah";
-export * from "./types/translation";
-export * from "./types/word";
+export * from "./types/auths";
+export * from "./types/users";
+export * from "./types/groups";
+export * from "./types/phrases";
+export * from "./types/mushafs";
+export * from "./types/surahs";
+export * from "./types/ayahs";
+export * from "./types/translations";
+export * from "./types/words";
 
 // Client
 export * from "./client/connection";
 
 // Modules
-export * from "./modules/account";
-export * from "./modules/user";
-export * from "./modules/organization";
-export * from "./modules/permission";
-export * from "./modules/mushaf";
-export * from "./modules/surah";
-export * from "./modules/ayah";
-export * from "./modules/word";
+export * from "./modules/auths";
+export * from "./modules/users";
+export * from "./modules/groups";
+export * from "./modules/mushafs";
+export * from "./modules/surahs";
+export * from "./modules/ayahs";
+export * from "./modules/words";
 export * from "./modules/translation";
-export * from "./modules/phrase";
-export * from "./modules/profile";
 
 // Utils
 export * from "./utils/globalTypes";

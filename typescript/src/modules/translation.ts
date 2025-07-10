@@ -1,99 +1,58 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
-    RequestConfig,
-    DefaultResponseData,
-    ErrorResponseData,
-    UUID,
-} from "../utils/globalTypes";
-import {
-    TranslationListRequestParams,
-    TranslationListResponseData,
-    TranslationAyahModifyRequestData,
-    TranslationAyahViewRequestParams,
-    TranslationAyahViewResponseData,
-    TranslationViewRequestParams,
-    TranslationAddRequestData,
+    TranslationsListResponseData,
+    TranslationsViewRequestParams,
     TranslationViewResponseData,
-} from "../types/translation";
+    TranslationsAddRequestData,
+    TranslationsEditRequestParams,
+    TranslationsEditRequestData,
+} from "../types/translations";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerTranslation extends BaseController {
+export class ControllerTranslations extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
 
+    /** GET /Translations/ */
     async list(
-        config?: RequestConfig<TranslationListRequestParams>
-    ): Promise<AxiosResponse<TranslationListResponseData>> {
-        return await this.axiosGet(`/translation`, config);
+        config?: RequestConfig
+    ): Promise<AxiosResponse<TranslationsListResponseData>> {
+        return await this.axiosGet(`/translations`, config);
     }
 
+    /** GET /Translations/{id}/ */
     async view(
-        target: UUID,
-        config?: RequestConfig<TranslationViewRequestParams>
+        params: TranslationsViewRequestParams,
+        config?: RequestConfig
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
-        return await this.axiosGet(`/translation/${target}`, config);
+        return await this.axiosGet(`/translations/${params.id}`, config);
     }
 
+    /** POST /Translations/ */
     async add(
-        data: TranslationAddRequestData,
+        data: TranslationsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/translation`, data, config);
+        return await this.axiosPost(`/translations`, data, config);
     }
 
-    async edit(
-        target: UUID,
-        data: TranslationAddRequestData,
+    /** PUT /Translations/{id}/ */
+    async Edit(
+        params: TranslationsEditRequestParams,
+        data: TranslationsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/translation/${target}`, data, config);
+        return await this.axiosPut(`/translations/${params.id}/`, data, config);
     }
 
+    /** DELETE /Translations/{id}/ */
     async delete(
-        target: UUID,
+        params: TranslationsEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/translation/${target}`, config);
-    }
-
-    /**
-     * @description `/translation/text`
-     */
-    text() {
-        return new ActionText(this.conn, this.token);
-    }
-}
-
-class ActionText extends BaseController {
-    constructor(connection: Connection, token?: string) {
-        super(connection, token);
-    }
-
-    async view(
-        target: string,
-        config: RequestConfig<TranslationAyahViewRequestParams>
-    ): Promise<AxiosResponse<TranslationAyahViewResponseData>> {
-        return await this.axiosGet(`/translation/text/${target}`, config);
-    }
-
-    async modify(
-        target: string,
-        data: TranslationAyahModifyRequestData,
-        config: RequestConfig
-    ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(
-            `/translation/text/${target}`,
-            data,
-            config
-        );
-    }
-
-    async delete(
-        target: string,
-        config: RequestConfig
-    ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/translation/text/${target}`, config);
+        return await this.axiosDelete(`/translations/${params.id}`, config);
     }
 }

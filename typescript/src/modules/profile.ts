@@ -1,31 +1,40 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
-    RequestConfig,
-    DefaultResponseData,
-    ErrorResponseData,
-} from "../utils/globalTypes";
-import {
-    ProfileEditRequestData,
-    ProfileListResponseData,
+    PrifileViewRequestParams,
+    ProfileViewResponseData,
+    ProfileMeListResponseData,
+    ProfileMeAddRequestData,
+    ProfileMeAddResponseData,
 } from "../types/profile";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerProfile extends BaseController {
+export class ControllerProfiles extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
 
-    async list(
+    /** GET /profiles/{id}/ */
+    async view(
+        params: PrifileViewRequestParams,
         config?: RequestConfig
-    ): Promise<AxiosResponse<ProfileListResponseData>> {
-        return await this.axiosGet(`/profile`, config);
+    ): Promise<AxiosResponse<ProfileViewResponseData>> {
+        return await this.axiosGet(`/profiles/${params.id}/`, config);
     }
 
-    async edit(
-        data: ProfileEditRequestData,
+    /** GET /profiles/me/ */
+    async meList(
         config?: RequestConfig
-    ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost("/profile", data, config);
+    ): Promise<AxiosResponse<ProfileMeListResponseData>> {
+        return await this.axiosGet(`/profiles/me/`, config);
+    }
+
+    /** POST /profiles/me/ */
+    async meAdd(
+        data: ProfileMeAddRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<ProfileMeAddResponseData>> {
+        return await this.axiosPost(`/profiles/me/`, data, config);
     }
 }
