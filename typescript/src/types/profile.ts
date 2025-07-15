@@ -1,6 +1,6 @@
 //Prifile View
 export interface PrifileViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface ProfileViewResponseData {
     username: string[];

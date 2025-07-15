@@ -1,16 +1,16 @@
 //Phrases List
 interface PhrasesListItem {
-    id: number;
+uuid: string;
     phrase: string;
 }
 export type PhrasesListResponseData = PhrasesListItem[];
 
 //Phrases View
 export interface PhrasesViewRequestParams {
-    id: number;
+uuid: string;
 }
 export interface PhrasesViewResponseData {
-    id: number;
+uuid: string;
     phrase: string;
 }
 
@@ -21,7 +21,7 @@ export interface PhrasesAddRequestData {
 
 //Phrases Edit
 export interface PhrasesEditRequestParams {
-    id: number;
+uuid: string;
 }
 export interface PhrasesEditRequestData {
     phrase: string;
@@ -29,7 +29,7 @@ export interface PhrasesEditRequestData {
 
 //Phrases Update
 export interface PhrasesUpdateRequestParams {
-    id: number;
+uuid: string;
 }
 export interface PhrasesUpdateRequestData {
     phrase?: string;

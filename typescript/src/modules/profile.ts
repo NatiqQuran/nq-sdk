@@ -10,31 +10,31 @@ import {
 } from "../types/profile";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerProfiles extends BaseController {
+export class ControllerProfile extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
 
-    /** GET /profiles/{id}/ */
+    /** GET /profile/{uuid}/ */
     async view(
         params: PrifileViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileViewResponseData>> {
-        return await this.axiosGet(`/profiles/${params.id}/`, config);
+        return await this.axiosGet(`/profile/${params.uuid}`, config);
     }
 
-    /** GET /profiles/me/ */
+    /** GET /profile/me/ */
     async meList(
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileMeListResponseData>> {
-        return await this.axiosGet(`/profiles/me/`, config);
+        return await this.axiosGet(`/profile/me/`, config);
     }
 
-    /** POST /profiles/me/ */
+    /** POST /profile/me/ */
     async meAdd(
         data: ProfileMeAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileMeAddResponseData>> {
-        return await this.axiosPost(`/profiles/me/`, data, config);
+        return await this.axiosPost(`/profile/me/`, data, config);
     }
 }
