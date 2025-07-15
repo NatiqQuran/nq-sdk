@@ -1,24 +1,34 @@
-import { UUID } from "../utils/globalTypes";
-
-//profie List
-interface ProfileListItem {
-    uuid: UUID;
-    email: string | null;
-    username: string;
-    first_name: string | null;
-    last_name: string | null;
-    birthday: string | null;
-    profile_image: string | null;
-    language: string | null;
+//Prifile View
+export interface PrifileViewRequestParams {
+    uuid: string;
 }
-export type ProfileListResponseData = ProfileListItem[];
-
-//profile Edit
-export interface ProfileEditRequestData {
+export interface ProfileViewResponseData {
+    username: string[];
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+}
+//Profile Me
+//Profile Me List
+interface ProfileMeListResponseItem {
     username: string;
-    first_name: string | null;
-    last_name: string | null;
-    birthday: string | null;
-    language: string | null;
-    profile_image: string | null;
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+}
+export type ProfileMeListResponseData = ProfileMeListResponseItem[];
+
+// Profile Me Add
+export interface ProfileMeAddRequestData {
+    username: string[];
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+}
+
+export interface ProfileMeAddResponseData {
+    username: string[];
+    email?: string;
+    first_name?: string;
+    last_name?: string;
 }
