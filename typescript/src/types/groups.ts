@@ -9,7 +9,7 @@ export type GroupsListResponseData = GroupsListResponseItem[];
 
 // Groups View
 export interface GroupsViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface GroupsViewResponseData {
     url: string;
@@ -23,7 +23,7 @@ export interface GroupsAddRequestData {
 
 // Groups Edit
 export interface GroupsEditRequestParams {
-    id: number;
+    uuid: string;
 }
 
 export interface GroupsEditRequestData {
@@ -32,7 +32,7 @@ export interface GroupsEditRequestData {
 
 // Groups Update
 export interface GroupsUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface GroupsUpdateRequestData {
     name?: string;

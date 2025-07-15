@@ -9,7 +9,7 @@ export type UsersListResponseData = UsersListResponseItem[];
 
 //Users View
 export interface UsersViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface UsersViewResponseData {
     username: string;
@@ -30,7 +30,7 @@ export interface UsersAddRequestData {
 
 //Users Edit
 export interface UsersEditRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface UsersEditRequestData {
     username: string;
@@ -49,7 +49,7 @@ export interface UsersEditResponseData {
 
 //Users Update
 export interface UsersUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface UsersUpdateRequestData {
     username?: string;

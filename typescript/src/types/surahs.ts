@@ -4,13 +4,13 @@ import { Sajdah, Period } from "../utils/globalTypes.js";
 
 //Surah List
 interface MushafDetails {
-    id: number;
+uuid: string;
     short_name: string;
     name: string;
     source: string;
 }
 export interface SurahListResponseItem {
-    id: number;
+uuid: string;
     mushaf: MushafDetails[];
     names: string;
     number: number;
@@ -22,10 +22,10 @@ export type SurahListResponseData = SurahListResponseItem[];
 
 //Surah View
 export interface SurahViewRequestParams {
-    id: number;
+uuid: string;
 }
 interface SurahViewResponseAyah {
-    id: number;
+uuid: string;
     number: string;
     sajdah: Sajdah;
     text: string;
@@ -34,7 +34,7 @@ interface SurahViewResponseAyah {
     surah: string;
 }
 export interface SurahViewResponseData {
-    id: number;
+uuid: string;
     mushaf: MushafDetails[];
     names: string;
     number: number;
@@ -53,7 +53,7 @@ export interface SurahAddRequestData {
 
 //Surah Edit
 export interface SurahsEditRequestParams {
-    id: number;
+uuid: string;
 }
 export interface SurahsEditRequestData {
     number: number;
@@ -63,7 +63,7 @@ export interface SurahsEditRequestData {
 
 //Surah Update
 export interface SurahsUpdateRequestParams {
-    id: number;
+uuid: string;
 }
 export interface SurahsUpdateRequestData {
     number?: number;

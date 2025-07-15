@@ -1,7 +1,7 @@
 //Translation List
 
 interface TranslationsListResponseItem {
-    id: number;
+    uuid: string;
     mushaf: number;
     translator: string;
     language: string;
@@ -13,10 +13,10 @@ export type TranslationsListResponseData = TranslationsListResponseItem[];
 
 //Translation View
 export interface TranslationsViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface TranslationViewResponseData {
-    id: number;
+    uuid: string;
     mushaf: number;
     translator: string;
     language: string;
@@ -37,7 +37,7 @@ export interface TranslationsAddRequestData {
 
 //Translation Edit
 export interface TranslationsEditRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface TranslationsEditRequestData {
     mushaf: number;
@@ -50,10 +50,10 @@ export interface TranslationsEditRequestData {
 
 //Translation Update
 export interface TrasnlationsUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface TranslationsUpdateRequestData {
-    id: number;
+    uuid: string;
     mushaf: number;
     translator: number;
     language: string;

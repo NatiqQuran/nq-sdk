@@ -1,18 +1,18 @@
 //Word List
 interface WordListResponseItem {
-    id: number;
-    ayah_id: number;
+    uuid: string;
+    ayah_uuid: string;
     text: string;
 }
 export type WordListResponseData = WordListResponseItem[];
 
 //Word View
 export interface WordViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface WordViewResponseData {
-    id: number;
-    ayah_id: number;
+    uuid: string;
+    ayah_uuid: string;
     text: string;
 }
 
@@ -21,33 +21,33 @@ export interface WordAddRequestData {
     text: string;
 }
 export interface WordAddResponseData {
-    id: number;
-    ayah_id: number;
+    uuid: string;
+    ayah_uuid: string;
     text: string;
 }
 
 //Word Edit
 export interface WordEditRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface WordEditRequestData {
     text: string;
 }
 export interface WordEditResponseData {
-    id: number;
-    ayah_id: number;
+    uuid: string;
+    ayah_uuid: string;
     text: string;
 }
 
 //Word Update
 export interface WordUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface WordUpdateRequestData {
     text?: string;
 }
 export interface WordUpdateResponseData {
-    id: number;
-    ayah_id: number;
+    uuid: string;
+    ayah_uuid: string;
     text: string;
 }

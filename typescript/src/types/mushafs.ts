@@ -2,19 +2,20 @@
 
 //Mushaf List
 export interface MushafsListResponseItem {
-    id: number;
+    uuid: string;
     short_name: string;
     name: string;
     source: string;
+    status?: 'draft' | 'pending_review' | 'published';
 }
 export type MushafsListResponseData = MushafsListResponseItem[];
 
 //Mushaf View
 export interface MushafsViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface MushafViewResponseData {
-    id: number;
+    uuid: string;
     short_name: string;
     name: string;
     source: string;
@@ -30,7 +31,7 @@ export interface MushasfAddRequestData {
 
 //Mushaf Edit
 export interface MushafsEditRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface MushafsEditRequestData {
     short_name?: string;
@@ -40,7 +41,7 @@ export interface MushafsEditRequestData {
 
 //Mushaf Update
 export interface MushafsUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface MushafasUpdateRequestData {
     short_name: string;

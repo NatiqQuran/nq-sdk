@@ -4,10 +4,10 @@ import { Sajdah } from "../utils/globalTypes";
 
 // Ayahs List
 export interface AyahsListRequestParams {
-    surah_id?: number;
+    surah_uuid?:string;
 }
 interface AyahsListResponseItem {
-    id: number;
+    uuid: string;
     number: number;
     sajdah: Sajdah;
     text: string;
@@ -19,19 +19,19 @@ export type AyahsListResponseData = AyahsListResponseItem[];
 
 //Ayah View
 export interface AyahsViewRequestParams {
-    id: number;
+    uuid: string;
 }
 interface SurahInAyah {
-    id: number;
+    uuid: string;
     names: string;
 }
 interface Word {
-    id: number;
-    ayah_id: number;
+    uuid: string;
+    ayah_uuid: string;
     text: string;
 }
 export interface AyahsViewResponseData {
-    id: number;
+    uuid: string;
     number: number;
     sajdah: Sajdah;
     text: string;
@@ -44,7 +44,7 @@ export interface AyahsViewResponseData {
 
 // Ayah Add
 export interface AyahsAddRequestData {
-    surah_id: number;
+    surah_uuid: string;
     text: string;
     is_bismillah?: boolean;
     bismillah_text?: string;
@@ -52,7 +52,7 @@ export interface AyahsAddRequestData {
 }
 
 export interface AyahsAddResponseData {
-    id: number;
+    uuid: string;
     number: number;
     sajdah: Sajdah;
     text: string;
@@ -63,7 +63,7 @@ export interface AyahsAddResponseData {
 
 //Ayah Edit | Update
 export interface AyahsEditRequestParams {
-    id: number;
+    uuid: string;
 }
 
 export interface AyahsEditRequestData {
@@ -72,7 +72,7 @@ export interface AyahsEditRequestData {
 }
 
 export interface AyahsEditResponseData {
-    id: number;
+    uuid: string;
     number: number;
     sajdah: Sajdah;
     text: string;
@@ -82,7 +82,7 @@ export interface AyahsEditResponseData {
 }
 
 export interface AyahsUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 
 export interface AyahsUpdateRequestData {
@@ -91,7 +91,7 @@ export interface AyahsUpdateRequestData {
 }
 
 export interface AyahsUpdateResponseData {
-    id: number;
+    uuid: string;
     number: number;
     sajdah: Sajdah;
     text: string;
@@ -103,9 +103,9 @@ export interface AyahsUpdateResponseData {
 //Ayahs/Traslation
 //Ayahs/Traslation List
 interface AyahsTraslationResponseItem {
-    id: number;
-    traslation_id: number;
-    ayah_id: number;
+    uuid: string;
+    traslation_uuid: string;
+    ayah_uuid: string;
     text: string;
     bismillah?: string;
 }
@@ -113,12 +113,12 @@ export type AyahsTraslationListResponseData = AyahsTraslationResponseItem[];
 
 //Ayahs/Traslation view
 export interface AyahsTraslationViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface AyahsTraslationViewResponseData {
-    id: number;
-    traslation_id: number;
-    ayah_id: number;
+    uuid: string;
+    traslation_uuid: string;
+    ayah_uuid: string;
     text: string;
     bismillah?: string;
 }
@@ -130,7 +130,7 @@ export interface AyahsTraslationAddRequestData {
 }
 //Ayahs/Traslation Edit
 export interface AyahsTraslationEditRequestParams {
-    id: number;
+    uuid: string;
 }
 
 export interface AyahsTraslationEditRequestData {
@@ -138,14 +138,14 @@ export interface AyahsTraslationEditRequestData {
     bismillah?: string;
 }
 export interface AyahsTraslationEditResponseData {
-    id: number;
-    traslation_id: number;
-    ayah_id: number;
+    uuid: string;
+    traslation_uuid: string;
+    ayah_uuid: string;
     text: string;
     bismillah?: string;
 }
 export interface AyahsTraslationUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 
 export interface AyahsTraslationUpdateRequestData {
@@ -153,9 +153,9 @@ export interface AyahsTraslationUpdateRequestData {
     bismillah?: string;
 }
 export interface AyahsTraslationUpdateResponseData {
-    id: number;
-    traslation_id: number;
-    ayah_id: number;
+    uuid: string;
+    traslation_uuid: string;
+    ayah_uuid: string;
     text: string;
     bismillah?: string;
 }

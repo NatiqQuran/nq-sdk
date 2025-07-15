@@ -3,7 +3,7 @@
 type Status = "draft" | "pending_review" | "published";
 
 interface RecitationsListItem {
-    id: number;
+    uuid: string;
     mushaf: number;
     surah: number;
     status: Status;
@@ -19,10 +19,10 @@ export type RecitationsListResponseData = RecitationsListItem[];
 
 //Recitations View
 export interface RecitationsViewRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface RecitationsViewResponseData {
-    id: number;
+    uuid: string;
     mushaf: number;
     surah: number;
     status: Status;
@@ -59,7 +59,7 @@ export interface RecitationsAddRequestData {
     words_timestamps: WordsTimestampsItem[];
 }
 export interface RecitationsAddResponseDate {
-    id: number;
+    uuid: string;
     mushaf: number;
     surah: number;
     status: Status;
@@ -75,7 +75,7 @@ export interface RecitationsAddResponseDate {
 
 //Recitations Edit
 export interface RecitationsEditRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface RecitationsEditRequestData {
     mushaf: number;
@@ -90,7 +90,7 @@ export interface RecitationsEditRequestData {
     words_timestamps: WordsTimestampsItem[];
 }
 export interface RecitationsEditResponseData {
-    id: number;
+    uuid: string;
     mushaf: number;
     surah: number;
     status: Status;
@@ -106,7 +106,7 @@ export interface RecitationsEditResponseData {
 
 //Recitations Update
 export interface RecitationsUpdateRequestParams {
-    id: number;
+    uuid: string;
 }
 export interface RecitationsUpdateRequestData {
     mushaf?: number;
