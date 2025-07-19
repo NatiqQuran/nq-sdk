@@ -1,5 +1,4 @@
-// Groups
-
+// Group
 // Groups List
 interface GroupsListResponseItem {
     url: string;
@@ -9,7 +8,7 @@ export type GroupsListResponseData = GroupsListResponseItem[];
 
 // Groups View
 export interface GroupsViewRequestParams {
-    uuid: string;
+    id: string;
 }
 export interface GroupsViewResponseData {
     url: string;
@@ -20,20 +19,32 @@ export interface GroupsViewResponseData {
 export interface GroupsAddRequestData {
     name: string;
 }
+export interface GroupsAddResponsetData {
+    url: string;
+    name: string;
+}
 
 // Groups Edit
 export interface GroupsEditRequestParams {
-    uuid: string;
+    id: string;
 }
 
 export interface GroupsEditRequestData {
     name: string;
 }
+export interface GroupsEditResponsetData {
+    url: string;
+    name: string;
+}
 
 // Groups Update
 export interface GroupsUpdateRequestParams {
-    uuid: string;
+    id: string;
 }
 export interface GroupsUpdateRequestData {
     name?: string;
+}
+export interface GroupsUpdateResponsetData {
+    url: string;
+    name: string;
 }

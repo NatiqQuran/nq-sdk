@@ -6,10 +6,13 @@ import {
     MushafsViewRequestParams,
     MushafViewResponseData,
     MushasfAddRequestData,
+    MushafAddResponseData,
     MushafsEditRequestParams,
     MushafsEditRequestData,
+    MushafEditResponseData,
     MushafsUpdateRequestParams,
     MushafasUpdateRequestData,
+    MushafUpdateResponseData,
 } from "../types/mushafs";
 import { BaseController } from "../utils/baseController";
 
@@ -30,14 +33,14 @@ export class ControllerMushafs extends BaseController {
         params: MushafsViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.axiosGet(`/mushafs/${params.uuid}`, config);
+        return await this.axiosGet(`/mushafs/${params.uuid}/`, config);
     }
 
     /** POST /mushafs/ */
     async add(
         data: MushasfAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
+    ): Promise<AxiosResponse<MushafAddResponseData>> {
         return await this.axiosPost(`/mushafs`, data, config);
     }
 
@@ -46,8 +49,8 @@ export class ControllerMushafs extends BaseController {
         params: MushafsEditRequestParams,
         data: MushafsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.axiosPut(`/mushafs/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<MushafEditResponseData>> {
+        return await this.axiosPut(`/mushafs/${params.uuid}/`, data, config);
     }
 
     /** PATCH /mushafs/{uuid}/ */
@@ -55,8 +58,8 @@ export class ControllerMushafs extends BaseController {
         params: MushafsUpdateRequestParams,
         data: MushafasUpdateRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
-        return await this.axiosPatch(`/mushafs/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<MushafUpdateResponseData>> {
+        return await this.axiosPatch(`/mushafs/${params.uuid}/`, data, config);
     }
 
     /** DELETE /mushafs/{uuid}/ */
@@ -64,6 +67,7 @@ export class ControllerMushafs extends BaseController {
         params: MushafsEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/mushafs/${params.uuid}`, config);
+        return await this.axiosDelete(`/mushafs/${params.uuid}/`, config);
     }
 }
+

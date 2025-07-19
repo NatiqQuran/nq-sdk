@@ -1,4 +1,5 @@
-//Prifile View
+//Profile 
+//Profile View
 export interface PrifileViewRequestParams {
     uuid: string;
 }

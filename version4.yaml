@@ -8,6 +8,7 @@ paths:
     post:
       operationId: auth_login_create
       description: Login with username and password. Returns Knox token.
+      summary: Login with username and password to obtain a Knox token
       tags:
       - auth
       requestBody:
@@ -63,6 +64,7 @@ paths:
     post:
       operationId: auth_register_create
       description: Register a new user with username, password, and email.
+      summary: Register a new user account
       tags:
       - auth
       requestBody:
@@ -98,6 +100,10 @@ paths:
   /ayah-translations/:
     get:
       operationId: ayah_translations_list
+      description: |-
+        ViewSet for AyahTranslation objects (translations of individual Ayahs).
+        Allows filtering by translation or ayah, and supports upsert on create.
+      summary: List all Ayah Translations
       parameters:
       - in: query
         name: ayah_uuid
@@ -111,6 +117,18 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -127,18 +145,19 @@ paths:
       - ayah-translations
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AyahTranslation'
+                $ref: '#/components/schemas/PaginatedAyahTranslationList'
           description: ''
     post:
       operationId: ayah_translations_create
+      description: |-
+        ViewSet for AyahTranslation objects (translations of individual Ayahs).
+        Allows filtering by translation or ayah, and supports upsert on create.
+      summary: Create a new Ayah Translation record
       parameters:
       - in: query
         name: ayah_uuid
@@ -178,6 +197,10 @@ paths:
   /ayah-translations/{uuid}/:
     get:
       operationId: ayah_translations_retrieve
+      description: |-
+        ViewSet for AyahTranslation objects (translations of individual Ayahs).
+        Allows filtering by translation or ayah, and supports upsert on create.
+      summary: Retrieve a specific Ayah Translation by UUID
       parameters:
       - in: path
         name: uuid
@@ -189,7 +212,6 @@ paths:
       - ayah-translations
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -199,6 +221,10 @@ paths:
           description: ''
     put:
       operationId: ayah_translations_update
+      description: |-
+        ViewSet for AyahTranslation objects (translations of individual Ayahs).
+        Allows filtering by translation or ayah, and supports upsert on create.
+      summary: Update an existing Ayah Translation record
       parameters:
       - in: query
         name: ayah_uuid
@@ -243,6 +269,10 @@ paths:
           description: ''
     patch:
       operationId: ayah_translations_partial_update
+      description: |-
+        ViewSet for AyahTranslation objects (translations of individual Ayahs).
+        Allows filtering by translation or ayah, and supports upsert on create.
+      summary: Partially update an Ayah Translation record
       parameters:
       - in: query
         name: ayah_uuid
@@ -286,6 +316,10 @@ paths:
           description: ''
     delete:
       operationId: ayah_translations_destroy
+      description: |-
+        ViewSet for AyahTranslation objects (translations of individual Ayahs).
+        Allows filtering by translation or ayah, and supports upsert on create.
+      summary: Delete an Ayah Translation record
       parameters:
       - in: path
         name: uuid
@@ -303,6 +337,7 @@ paths:
   /ayahs/:
     get:
       operationId: ayahs_list
+      summary: List all Ayahs (Quran verses)
       parameters:
       - name: ordering
         required: false
@@ -310,6 +345,18 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -325,18 +372,16 @@ paths:
       - ayahs
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ayah'
+                $ref: '#/components/schemas/PaginatedAyahList'
           description: ''
     post:
       operationId: ayahs_create
+      summary: Create a new Ayah record
       tags:
       - ayahs
       requestBody:
@@ -363,6 +408,7 @@ paths:
   /ayahs/{uuid}/:
     get:
       operationId: ayahs_retrieve
+      summary: Retrieve a specific Ayah by UUID
       parameters:
       - in: path
         name: uuid
@@ -374,7 +420,6 @@ paths:
       - ayahs
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -384,6 +429,7 @@ paths:
           description: ''
     put:
       operationId: ayahs_update
+      summary: Update an existing Ayah record
       parameters:
       - in: path
         name: uuid
@@ -416,6 +462,7 @@ paths:
           description: ''
     patch:
       operationId: ayahs_partial_update
+      summary: Partially update an Ayah record
       parameters:
       - in: path
         name: uuid
@@ -447,6 +494,7 @@ paths:
           description: ''
     delete:
       operationId: ayahs_destroy
+      summary: Delete an Ayah record
       parameters:
       - in: path
         name: uuid
@@ -464,7 +512,7 @@ paths:
   /groups/:
     get:
       operationId: groups_list
-      description: API endpoint that allows groups to be viewed or edited.
+      summary: List all groups
       tags:
       - groups
       security:
@@ -480,7 +528,7 @@ paths:
           description: ''
     post:
       operationId: groups_create
-      description: API endpoint that allows groups to be viewed or edited.
+      summary: Create a new group
       tags:
       - groups
       requestBody:
@@ -507,7 +555,7 @@ paths:
   /groups/{id}/:
     get:
       operationId: groups_retrieve
-      description: API endpoint that allows groups to be viewed or edited.
+      summary: Retrieve a specific group by ID
       parameters:
       - in: path
         name: id
@@ -528,7 +576,7 @@ paths:
           description: ''
     put:
       operationId: groups_update
-      description: API endpoint that allows groups to be viewed or edited.
+      summary: Update an existing group
       parameters:
       - in: path
         name: id
@@ -561,7 +609,7 @@ paths:
           description: ''
     patch:
       operationId: groups_partial_update
-      description: API endpoint that allows groups to be viewed or edited.
+      summary: Partially update a group
       parameters:
       - in: path
         name: id
@@ -593,7 +641,7 @@ paths:
           description: ''
     delete:
       operationId: groups_destroy
-      description: API endpoint that allows groups to be viewed or edited.
+      summary: Delete a group
       parameters:
       - in: path
         name: id
@@ -611,6 +659,11 @@ paths:
   /mushafs/:
     get:
       operationId: mushafs_list
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: List all Mushafs (Quranic manuscripts/editions)
       parameters:
       - name: ordering
         required: false
@@ -618,6 +671,18 @@ paths:
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -628,18 +693,20 @@ paths:
       - mushafs
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Mushaf'
+                $ref: '#/components/schemas/PaginatedMushafList'
           description: ''
     post:
       operationId: mushafs_create
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: Create a new Mushaf record
       tags:
       - mushafs
       requestBody:
@@ -666,6 +733,11 @@ paths:
   /mushafs/{uuid}/:
     get:
       operationId: mushafs_retrieve
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: Retrieve a specific Mushaf by UUID
       parameters:
       - in: path
         name: uuid
@@ -677,7 +749,6 @@ paths:
       - mushafs
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -687,6 +758,11 @@ paths:
           description: ''
     put:
       operationId: mushafs_update
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: Update an existing Mushaf record
       parameters:
       - in: path
         name: uuid
@@ -719,6 +795,11 @@ paths:
           description: ''
     patch:
       operationId: mushafs_partial_update
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: Partially update a Mushaf record
       parameters:
       - in: path
         name: uuid
@@ -750,6 +831,11 @@ paths:
           description: ''
     delete:
       operationId: mushafs_destroy
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: Delete a Mushaf record
       parameters:
       - in: path
         name: uuid
@@ -764,9 +850,41 @@ paths:
       responses:
         '204':
           description: No response body
+  /mushafs/import/:
+    post:
+      operationId: mushafs_import_create
+      description: |-
+        ViewSet for managing Mushaf objects (Quranic manuscripts/editions).
+        Supports listing, creating, updating, and retrieving Mushaf records.
+        Enforces permissions and restricts editing of published Mushafs.
+      summary: Import a Mushaf from a JSON file upload
+      tags:
+      - mushafs
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: JSON file containing the Mushaf data
+              required:
+              - file
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mushaf'
+          description: ''
   /phrases/:
     get:
       operationId: phrases_list
+      summary: List all phrases
       tags:
       - phrases
       security:
@@ -783,6 +901,7 @@ paths:
           description: ''
     post:
       operationId: phrases_create
+      summary: Create a new phrase
       tags:
       - phrases
       requestBody:
@@ -806,15 +925,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Phrase'
           description: ''
-  /phrases/{id}/:
+  /phrases/{uuid}/:
     get:
       operationId: phrases_retrieve
+      summary: Retrieve a specific phrase by UUID
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this phrase.
+          type: string
+          format: uuid
         required: true
       tags:
       - phrases
@@ -830,12 +950,13 @@ paths:
           description: ''
     put:
       operationId: phrases_update
+      summary: Update an existing phrase
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this phrase.
+          type: string
+          format: uuid
         required: true
       tags:
       - phrases
@@ -862,12 +983,13 @@ paths:
           description: ''
     patch:
       operationId: phrases_partial_update
+      summary: Partially update a phrase
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this phrase.
+          type: string
+          format: uuid
         required: true
       tags:
       - phrases
@@ -893,12 +1015,13 @@ paths:
           description: ''
     delete:
       operationId: phrases_destroy
+      summary: Delete a phrase
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this phrase.
+          type: string
+          format: uuid
         required: true
       tags:
       - phrases
@@ -910,6 +1033,16 @@ paths:
   /phrases/modify/:
     post:
       operationId: phrases_modify_create
+      description: Modify phrase translations for a given language. The 'language'
+        query parameter is required.
+      summary: Modify phrase translations
+      parameters:
+      - in: query
+        name: language
+        schema:
+          type: string
+        description: Language code for the translation (required).
+        required: true
       tags:
       - phrases
       requestBody:
@@ -933,15 +1066,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/PhraseModify'
           description: ''
-  /profile/{id}/:
+  /profile/{uuid}/:
     get:
       operationId: profile_retrieve
+      summary: Retrieve the user's profile by uuid
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this user.
+          type: string
+          format: uuid
         required: true
       tags:
       - profile
@@ -957,6 +1091,9 @@ paths:
   /profile/me/:
     get:
       operationId: profile_me_retrieve
+      description: 'GET: Retrieve the current user''s profile. POST: Update the current
+        user''s profile information.'
+      summary: Get or update the current user's profile
       tags:
       - profile
       security:
@@ -970,6 +1107,9 @@ paths:
           description: ''
     post:
       operationId: profile_me_create
+      description: 'GET: Retrieve the current user''s profile. POST: Update the current
+        user''s profile information.'
+      summary: Get or update the current user's profile
       tags:
       - profile
       requestBody:
@@ -996,13 +1136,41 @@ paths:
   /recitations/:
     get:
       operationId: recitations_list
+      description: |-
+        ViewSet for Recitation objects (audio recitations of the Quran).
+        Supports filtering by Mushaf and reciter, and restricts editing of published recitations.
+      summary: List all Recitations (audio recordings)
       parameters:
+      - in: query
+        name: mushaf_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Mushaf to filter Recitations by.
       - name: ordering
         required: false
         in: query
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: reciter_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Reciter to filter Recitations by.
       - name: search
         required: false
         in: query
@@ -1013,18 +1181,19 @@ paths:
       - recitations
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Recitation'
+                $ref: '#/components/schemas/PaginatedRecitationList'
           description: ''
     post:
       operationId: recitations_create
+      description: |-
+        ViewSet for Recitation objects (audio recitations of the Quran).
+        Supports filtering by Mushaf and reciter, and restricts editing of published recitations.
+      summary: Create a new Recitation record
       tags:
       - recitations
       requestBody:
@@ -1051,6 +1220,10 @@ paths:
   /recitations/{uuid}/:
     get:
       operationId: recitations_retrieve
+      description: |-
+        ViewSet for Recitation objects (audio recitations of the Quran).
+        Supports filtering by Mushaf and reciter, and restricts editing of published recitations.
+      summary: Retrieve a specific Recitation by UUID
       parameters:
       - in: path
         name: uuid
@@ -1062,7 +1235,6 @@ paths:
       - recitations
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -1072,6 +1244,10 @@ paths:
           description: ''
     put:
       operationId: recitations_update
+      description: |-
+        ViewSet for Recitation objects (audio recitations of the Quran).
+        Supports filtering by Mushaf and reciter, and restricts editing of published recitations.
+      summary: Update an existing Recitation record
       parameters:
       - in: path
         name: uuid
@@ -1104,6 +1280,10 @@ paths:
           description: ''
     patch:
       operationId: recitations_partial_update
+      description: |-
+        ViewSet for Recitation objects (audio recitations of the Quran).
+        Supports filtering by Mushaf and reciter, and restricts editing of published recitations.
+      summary: Partially update a Recitation record
       parameters:
       - in: path
         name: uuid
@@ -1135,6 +1315,10 @@ paths:
           description: ''
     delete:
       operationId: recitations_destroy
+      description: |-
+        ViewSet for Recitation objects (audio recitations of the Quran).
+        Supports filtering by Mushaf and reciter, and restricts editing of published recitations.
+      summary: Delete a Recitation record
       parameters:
       - in: path
         name: uuid
@@ -1152,13 +1336,34 @@ paths:
   /surahs/:
     get:
       operationId: surahs_list
+      description: |-
+        ViewSet for Surah (chapter) objects of the Quran.
+        Allows filtering by Mushaf, searching by name, and auto-increments Surah number on creation.
+      summary: List all Surahs (Quran chapters)
       parameters:
+      - in: query
+        name: mushaf
+        schema:
+          type: string
+        description: Short name of the Mushaf to filter Surahs by.
       - name: ordering
         required: false
         in: query
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -1169,18 +1374,19 @@ paths:
       - surahs
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Surah'
+                $ref: '#/components/schemas/PaginatedSurahList'
           description: ''
     post:
       operationId: surahs_create
+      description: |-
+        ViewSet for Surah (chapter) objects of the Quran.
+        Allows filtering by Mushaf, searching by name, and auto-increments Surah number on creation.
+      summary: Create a new Surah record
       tags:
       - surahs
       requestBody:
@@ -1207,6 +1413,10 @@ paths:
   /surahs/{uuid}/:
     get:
       operationId: surahs_retrieve
+      description: |-
+        ViewSet for Surah (chapter) objects of the Quran.
+        Allows filtering by Mushaf, searching by name, and auto-increments Surah number on creation.
+      summary: Retrieve a specific Surah by UUID
       parameters:
       - in: path
         name: uuid
@@ -1218,7 +1428,6 @@ paths:
       - surahs
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -1228,6 +1437,10 @@ paths:
           description: ''
     put:
       operationId: surahs_update
+      description: |-
+        ViewSet for Surah (chapter) objects of the Quran.
+        Allows filtering by Mushaf, searching by name, and auto-increments Surah number on creation.
+      summary: Update an existing Surah record
       parameters:
       - in: path
         name: uuid
@@ -1260,6 +1473,10 @@ paths:
           description: ''
     patch:
       operationId: surahs_partial_update
+      description: |-
+        ViewSet for Surah (chapter) objects of the Quran.
+        Allows filtering by Mushaf, searching by name, and auto-increments Surah number on creation.
+      summary: Partially update a Surah record
       parameters:
       - in: path
         name: uuid
@@ -1291,6 +1508,10 @@ paths:
           description: ''
     delete:
       operationId: surahs_destroy
+      description: |-
+        ViewSet for Surah (chapter) objects of the Quran.
+        Allows filtering by Mushaf, searching by name, and auto-increments Surah number on creation.
+      summary: Delete a Surah record
       parameters:
       - in: path
         name: uuid
@@ -1308,13 +1529,40 @@ paths:
   /translations/:
     get:
       operationId: translations_list
+      description: |-
+        ViewSet for managing Translation objects (Quran translations).
+        Supports filtering by Mushaf and language, and restricts editing of published translations.
+      summary: List all Quran Translations
       parameters:
+      - in: query
+        name: language
+        schema:
+          type: string
+        description: Language code to filter Translations by.
+      - in: query
+        name: mushaf_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Mushaf to filter Translations by.
       - name: ordering
         required: false
         in: query
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -1325,18 +1573,19 @@ paths:
       - translations
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Translation'
+                $ref: '#/components/schemas/PaginatedTranslationList'
           description: ''
     post:
       operationId: translations_create
+      description: |-
+        ViewSet for managing Translation objects (Quran translations).
+        Supports filtering by Mushaf and language, and restricts editing of published translations.
+      summary: Create a new Translation record
       tags:
       - translations
       requestBody:
@@ -1363,6 +1612,10 @@ paths:
   /translations/{uuid}/:
     get:
       operationId: translations_retrieve
+      description: |-
+        ViewSet for managing Translation objects (Quran translations).
+        Supports filtering by Mushaf and language, and restricts editing of published translations.
+      summary: Retrieve a specific Translation by UUID
       parameters:
       - in: path
         name: uuid
@@ -1374,7 +1627,6 @@ paths:
       - translations
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -1384,6 +1636,10 @@ paths:
           description: ''
     put:
       operationId: translations_update
+      description: |-
+        ViewSet for managing Translation objects (Quran translations).
+        Supports filtering by Mushaf and language, and restricts editing of published translations.
+      summary: Update an existing Translation record
       parameters:
       - in: path
         name: uuid
@@ -1416,6 +1672,10 @@ paths:
           description: ''
     patch:
       operationId: translations_partial_update
+      description: |-
+        ViewSet for managing Translation objects (Quran translations).
+        Supports filtering by Mushaf and language, and restricts editing of published translations.
+      summary: Partially update a Translation record
       parameters:
       - in: path
         name: uuid
@@ -1447,6 +1707,10 @@ paths:
           description: ''
     delete:
       operationId: translations_destroy
+      description: |-
+        ViewSet for managing Translation objects (Quran translations).
+        Supports filtering by Mushaf and language, and restricts editing of published translations.
+      summary: Delete a Translation record
       parameters:
       - in: path
         name: uuid
@@ -1461,8 +1725,38 @@ paths:
       responses:
         '204':
           description: No response body
+  /translations/import/:
+    post:
+      operationId: translations_import_create
+      description: |-
+        Import a Translation from an uploaded JSON file.
+        Expects a file field in the multipart/form-data.
+      summary: Import a Translation from a JSON file upload
+      tags:
+      - translations
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: JSON file containing the Translation data
+              required:
+              - file
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Translation'
+          description: ''
   /upload/:
-    put:
+    post:
       operationId: upload_file
       description: Uploads a file to S3 with public access, categorizing it based
         on the
@@ -1479,8 +1773,14 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: string
-              format: binary
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Max upload size depends on the subject
+              required:
+              - file
       security:
       - knoxApiToken: []
       responses:
@@ -1488,18 +1788,37 @@ paths:
           description: No response body
   /upload/subjects/:
     get:
-      operationId: upload_subjects_retrieve
+      operationId: upload_subjects_list
+      description: Returns a list of allowed subjects and their file types for file
+        uploads. max size format is in bytes
+      summary: List allowed upload subjects
       tags:
       - upload
       security:
       - knoxApiToken: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UploadSubjectListResponse'
+              examples:
+                AllowedUploadSubjects:
+                  value:
+                  - subject: recitations
+                    type: mp3
+                    description: Audio recitations of Quran
+                    max_size: 26214400
+                  summary: Allowed upload subjects
+                  description: Example response showing allowed subjects and their
+                    file types.
+          description: ''
   /users/:
     get:
       operationId: users_list
-      description: API endpoint that allows users to be viewed or edited.
+      summary: List all users
       tags:
       - users
       security:
@@ -1515,7 +1834,7 @@ paths:
           description: ''
     post:
       operationId: users_create
-      description: API endpoint that allows users to be viewed or edited.
+      summary: Create a new user
       tags:
       - users
       requestBody:
@@ -1539,16 +1858,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
           description: ''
-  /users/{id}/:
+  /users/{uuid}/:
     get:
       operationId: users_retrieve
-      description: API endpoint that allows users to be viewed or edited.
+      summary: Retrieve a specific user by UUID
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this user.
+          type: string
+          format: uuid
         required: true
       tags:
       - users
@@ -1563,13 +1882,13 @@ paths:
           description: ''
     put:
       operationId: users_update
-      description: API endpoint that allows users to be viewed or edited.
+      summary: Update an existing user
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this user.
+          type: string
+          format: uuid
         required: true
       tags:
       - users
@@ -1596,13 +1915,13 @@ paths:
           description: ''
     patch:
       operationId: users_partial_update
-      description: API endpoint that allows users to be viewed or edited.
+      summary: Partially update a user
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this user.
+          type: string
+          format: uuid
         required: true
       tags:
       - users
@@ -1628,13 +1947,13 @@ paths:
           description: ''
     delete:
       operationId: users_destroy
-      description: API endpoint that allows users to be viewed or edited.
+      summary: Delete a user
       parameters:
       - in: path
-        name: id
+        name: uuid
         schema:
-          type: integer
-        description: A unique integer value identifying this user.
+          type: string
+          format: uuid
         required: true
       tags:
       - users
@@ -1646,13 +1965,35 @@ paths:
   /words/:
     get:
       operationId: words_list
+      description: |-
+        ViewSet for Word objects (words within Ayahs).
+        Allows filtering by Ayah and searching by word text.
+      summary: List all Words in Ayahs
       parameters:
+      - in: query
+        name: ayah_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Ayah to filter Words by.
       - name: ordering
         required: false
         in: query
         description: Which field to use when ordering the results.
         schema:
           type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
       - name: search
         required: false
         in: query
@@ -1663,18 +2004,27 @@ paths:
       - words
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Word'
+                $ref: '#/components/schemas/PaginatedWordList'
           description: ''
     post:
       operationId: words_create
+      description: |-
+        ViewSet for Word objects (words within Ayahs).
+        Allows filtering by Ayah and searching by word text.
+      summary: Create a new Word record
+      parameters:
+      - in: query
+        name: ayah_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Ayah to associate the new Word with (if ayah_id is
+          not provided in the body).
       tags:
       - words
       requestBody:
@@ -1701,6 +2051,10 @@ paths:
   /words/{uuid}/:
     get:
       operationId: words_retrieve
+      description: |-
+        ViewSet for Word objects (words within Ayahs).
+        Allows filtering by Ayah and searching by word text.
+      summary: Retrieve a specific Word by UUID
       parameters:
       - in: path
         name: uuid
@@ -1712,7 +2066,6 @@ paths:
       - words
       security:
       - knoxApiToken: []
-      - {}
       responses:
         '200':
           content:
@@ -1722,6 +2075,10 @@ paths:
           description: ''
     put:
       operationId: words_update
+      description: |-
+        ViewSet for Word objects (words within Ayahs).
+        Allows filtering by Ayah and searching by word text.
+      summary: Update an existing Word record
       parameters:
       - in: path
         name: uuid
@@ -1754,6 +2111,10 @@ paths:
           description: ''
     patch:
       operationId: words_partial_update
+      description: |-
+        ViewSet for Word objects (words within Ayahs).
+        Allows filtering by Ayah and searching by word text.
+      summary: Partially update a Word record
       parameters:
       - in: path
         name: uuid
@@ -1785,6 +2146,10 @@ paths:
           description: ''
     delete:
       operationId: words_destroy
+      description: |-
+        ViewSet for Word objects (words within Ayahs).
+        Allows filtering by Ayah and searching by word text.
+      summary: Delete a Word record
       parameters:
       - in: path
         name: uuid
@@ -1856,6 +2221,34 @@ components:
       required:
       - surah_uuid
       - text
+    AyahInSurah:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        number:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sajdah:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/SajdahEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        is_bismillah:
+          type: boolean
+        bismillah_text:
+          type: string
+          nullable: true
+        text:
+          type: string
+          readOnly: true
+      required:
+      - number
+      - text
+      - uuid
     AyahSerializerView:
       type: object
       properties:
@@ -1909,21 +2302,23 @@ components:
           type: string
           format: uuid
           readOnly: true
-        translation_id:
-          type: integer
-          readOnly: true
-        ayah_id:
-          type: integer
-          readOnly: true
+        translation_uuid:
+          type: string
+          format: uuid
+          writeOnly: true
+        ayah_uuid:
+          type: string
+          format: uuid
+          writeOnly: true
         text:
           type: string
         bismillah:
           type: string
           nullable: true
       required:
-      - ayah_id
+      - ayah_uuid
       - text
-      - translation_id
+      - translation_uuid
       - uuid
     BlankEnum:
       enum:
@@ -1974,6 +2369,34 @@ components:
     NullEnum:
       enum:
       - null
+    PaginatedAyahList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Ayah'
+    PaginatedAyahTranslationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AyahTranslation'
+    PaginatedMushafList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Mushaf'
+    PaginatedRecitationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Recitation'
+    PaginatedSurahList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Surah'
+    PaginatedTranslationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Translation'
+    PaginatedWordList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Word'
     PatchedAyah:
       type: object
       properties:
@@ -2009,12 +2432,14 @@ components:
           type: string
           format: uuid
           readOnly: true
-        translation_id:
-          type: integer
-          readOnly: true
-        ayah_id:
-          type: integer
-          readOnly: true
+        translation_uuid:
+          type: string
+          format: uuid
+          writeOnly: true
+        ayah_uuid:
+          type: string
+          format: uuid
+          writeOnly: true
         text:
           type: string
         bismillah:
@@ -2049,8 +2474,9 @@ components:
     PatchedPhrase:
       type: object
       properties:
-        id:
-          type: integer
+        uuid:
+          type: string
+          format: uuid
           readOnly: true
         phrase:
           type: string
@@ -2061,10 +2487,12 @@ components:
           type: string
           format: uuid
           readOnly: true
-        mushaf:
-          type: integer
-        surah:
-          type: integer
+        mushaf_uuid:
+          type: string
+          format: uuid
+        surah_uuid:
+          type: string
+          format: uuid
         status:
           $ref: '#/components/schemas/StatusEnum'
         reciter_account:
@@ -2144,10 +2572,12 @@ components:
           type: string
           format: uuid
           readOnly: true
-        mushaf:
-          type: integer
-        translator:
-          type: integer
+        mushaf_uuid:
+          type: string
+          readOnly: true
+        translator_uuid:
+          type: string
+          readOnly: true
         language:
           type: string
           maxLength: 5
@@ -2194,9 +2624,10 @@ components:
           type: string
           format: uuid
           readOnly: true
-        ayah_id:
-          type: integer
-          readOnly: true
+        ayah_uuid:
+          type: string
+          format: uuid
+          writeOnly: true
         text:
           type: string
     PeriodEnum:
@@ -2210,14 +2641,15 @@ components:
     Phrase:
       type: object
       properties:
-        id:
-          type: integer
+        uuid:
+          type: string
+          format: uuid
           readOnly: true
         phrase:
           type: string
       required:
-      - id
       - phrase
+      - uuid
     PhraseModify:
       type: object
       properties:
@@ -2256,10 +2688,12 @@ components:
           type: string
           format: uuid
           readOnly: true
-        mushaf:
-          type: integer
-        surah:
-          type: integer
+        mushaf_uuid:
+          type: string
+          format: uuid
+        surah_uuid:
+          type: string
+          format: uuid
         status:
           $ref: '#/components/schemas/StatusEnum'
         reciter_account:
@@ -2300,12 +2734,12 @@ components:
       - created_at
       - duration
       - file
-      - mushaf
+      - mushaf_uuid
       - recitation_date
       - recitation_location
       - recitation_type
       - reciter_account
-      - surah
+      - surah_uuid
       - updated_at
       - uuid
       - words_timestamps
@@ -2409,7 +2843,7 @@ components:
         ayahs:
           type: array
           items:
-            $ref: '#/components/schemas/Ayah'
+            $ref: '#/components/schemas/AyahInSurah'
           readOnly: true
       required:
       - ayahs
@@ -2440,10 +2874,12 @@ components:
           type: string
           format: uuid
           readOnly: true
-        mushaf:
-          type: integer
-        translator:
-          type: integer
+        mushaf_uuid:
+          type: string
+          readOnly: true
+        translator_uuid:
+          type: string
+          readOnly: true
         language:
           type: string
           maxLength: 5
@@ -2459,9 +2895,25 @@ components:
           $ref: '#/components/schemas/StatusEnum'
       required:
       - language
-      - mushaf
-      - translator
+      - mushaf_uuid
+      - translator_uuid
       - uuid
+    UploadSubjectListResponse:
+      type: object
+      properties:
+        subject:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        max_size:
+          type: integer
+      required:
+      - description
+      - max_size
+      - subject
+      - type
     User:
       type: object
       properties:
@@ -2500,13 +2952,14 @@ components:
           type: string
           format: uuid
           readOnly: true
-        ayah_id:
-          type: integer
-          readOnly: true
+        ayah_uuid:
+          type: string
+          format: uuid
+          writeOnly: true
         text:
           type: string
       required:
-      - ayah_id
+      - ayah_uuid
       - text
       - uuid
   securitySchemes:

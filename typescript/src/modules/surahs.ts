@@ -6,10 +6,13 @@ import {
     SurahViewRequestParams,
     SurahViewResponseData,
     SurahAddRequestData,
+    SurahAddResponseItem,
     SurahsEditRequestParams,
     SurahsEditRequestData,
+    SurahEditResponseItem,
     SurahsUpdateRequestParams,
     SurahsUpdateRequestData,
+    SurahUpdateResponseItem,
 } from "../types/surahs";
 import { BaseController } from "../utils/baseController";
 
@@ -30,14 +33,14 @@ export class ControllerSurahs extends BaseController {
         params: SurahViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<SurahViewResponseData>> {
-        return await this.axiosGet(`/surahs/${params.uuid}`, config);
+        return await this.axiosGet(`/surahs/${params.uuid}/`, config);
     }
 
     /** POST /surahs/ */
     async add(
         data: SurahAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahViewResponseData>> {
+    ): Promise<AxiosResponse<SurahAddResponseItem>> {
         return await this.axiosPost(`/surahs`, data, config);
     }
 
@@ -46,8 +49,8 @@ export class ControllerSurahs extends BaseController {
         params: SurahsEditRequestParams,
         data: SurahsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahViewResponseData>> {
-        return await this.axiosPut(`/surahs/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<SurahEditResponseItem>> {
+        return await this.axiosPut(`/surahs/${params.uuid}/`, data, config);
     }
 
     /** PATCH /surahs/{uuid}/ */
@@ -55,8 +58,8 @@ export class ControllerSurahs extends BaseController {
         params: SurahsUpdateRequestParams,
         data: SurahsUpdateRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahViewResponseData>> {
-        return await this.axiosPatch(`/surahs/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<SurahUpdateResponseItem>> {
+        return await this.axiosPatch(`/surahs/${params.uuid}/`, data, config);
     }
 
     /** DELETE /surahs/{uuid}/ */
@@ -64,6 +67,6 @@ export class ControllerSurahs extends BaseController {
         params: SurahsEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/surahs/${params.uuid}`, config);
+        return await this.axiosDelete(`/surahs/${params.uuid}/`, config);
     }
 }

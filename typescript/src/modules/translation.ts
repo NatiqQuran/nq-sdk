@@ -6,10 +6,13 @@ import {
     TranslationsViewRequestParams,
     TranslationViewResponseData,
     TranslationsAddRequestData,
+    TranslationAddResponseData,
     TranslationsEditRequestParams,
     TranslationsEditRequestData,
+    TranslationEditResponseData,
     TrasnlationsUpdateRequestParams,
     TranslationsUpdateRequestData,
+    TranslationUpdateResponseData,
 } from "../types/translations";
 import { BaseController } from "../utils/baseController";
 
@@ -30,14 +33,14 @@ export class ControllerTranslations extends BaseController {
         params: TranslationsViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<TranslationViewResponseData>> {
-        return await this.axiosGet(`/translations/${params.uuid}`, config);
+        return await this.axiosGet(`/translations/${params.uuid}/`, config);
     }
 
     /** POST /translations/ */
     async add(
         data: TranslationsAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationViewResponseData>> {
+    ): Promise<AxiosResponse<TranslationAddResponseData>> {
         return await this.axiosPost(`/translations`, data, config);
     }
 
@@ -46,8 +49,8 @@ export class ControllerTranslations extends BaseController {
         params: TranslationsEditRequestParams,
         data: TranslationsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationViewResponseData>> {
-        return await this.axiosPut(`/translations/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<TranslationEditResponseData>> {
+        return await this.axiosPut(`/translations/${params.uuid}/`, data, config);
     }
 
     /** PATCH /translations/{uuid}/ */
@@ -55,8 +58,8 @@ export class ControllerTranslations extends BaseController {
         params: TrasnlationsUpdateRequestParams,
         data: TranslationsUpdateRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationViewResponseData>> {
-        return await this.axiosPatch(`/translations/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<TranslationUpdateResponseData>> {
+        return await this.axiosPatch(`/translations/${params.uuid}/`, data, config);
     }
 
     /** DELETE /translations/{uuid}/ */
@@ -64,6 +67,6 @@ export class ControllerTranslations extends BaseController {
         params: TranslationsEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/translations/${params.uuid}`, config);
+        return await this.axiosDelete(`/translations/${params.uuid}/`, config);
     }
 }
