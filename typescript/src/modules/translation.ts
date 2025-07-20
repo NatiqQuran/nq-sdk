@@ -25,7 +25,7 @@ export class ControllerTranslations extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<TranslationsListResponseData>> {
-        return await this.axiosGet(`/translations`, config);
+        return await this.axiosGet(`/translations/`, config);
     }
 
     /** GET /translations/{uuid}/ */
@@ -41,7 +41,7 @@ export class ControllerTranslations extends BaseController {
         data: TranslationsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<TranslationAddResponseData>> {
-        return await this.axiosPost(`/translations`, data, config);
+        return await this.axiosPost(`/translations/`, data, config);
     }
 
     /** PUT /translations/{uuid}/ */

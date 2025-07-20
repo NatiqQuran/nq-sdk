@@ -25,7 +25,7 @@ export class ControllerSurahs extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<SurahListResponseData>> {
-        return await this.axiosGet(`/surahs`, config);
+        return await this.axiosGet(`/surahs/`, config);
     }
 
     /** GET /surahs/{uuid}/ */
@@ -41,7 +41,7 @@ export class ControllerSurahs extends BaseController {
         data: SurahAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<SurahAddResponseItem>> {
-        return await this.axiosPost(`/surahs`, data, config);
+        return await this.axiosPost(`/surahs/`, data, config);
     }
 
     /** PUT /surahs/{uuid}/ */

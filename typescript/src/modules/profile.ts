@@ -20,7 +20,7 @@ export class ControllerProfile extends BaseController {
         params: PrifileViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileViewResponseData>> {
-        return await this.axiosGet(`/profile/${params.uuid}`, config);
+        return await this.axiosGet(`/profile/${params.uuid}/`, config);
     }
 
     /** GET /profile/me/ */

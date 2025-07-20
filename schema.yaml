@@ -881,6 +881,246 @@ paths:
               schema:
                 $ref: '#/components/schemas/Mushaf'
           description: ''
+  /notifications/:
+    get:
+      operationId: notifications_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - notifications
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationList'
+          description: ''
+    post:
+      operationId: notifications_create
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+  /notifications/{id}/:
+    get:
+      operationId: notifications_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - notifications
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    put:
+      operationId: notifications_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    patch:
+      operationId: notifications_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    delete:
+      operationId: notifications_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - notifications
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /notifications/me/:
+    get:
+      operationId: notifications_me_list
+      description: Returns a paginated list of the current user's notifications. Marks
+        notifications in the current page as 'got_notification' if not already marked.
+      summary: Get the current user's notifications (paginated)
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - notifications
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNotificationList'
+          description: ''
+  /notifications/opened/:
+    get:
+      operationId: notifications_opened_retrieve
+      description: Marks a specific notification as 'opened_notification' using its
+        uuid (provided as a query parameter).
+      summary: Mark a notification as opened
+      parameters:
+      - in: query
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the notification to mark as opened.
+        required: true
+      tags:
+      - notifications
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /notifications/viewed/:
+    get:
+      operationId: notifications_viewed_retrieve
+      description: Marks all notifications with status 'got_notification' as 'viewed_notification'
+        for the current user.
+      summary: Mark notifications as viewed
+      tags:
+      - notifications
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
   /phrases/:
     get:
       operationId: phrases_list
@@ -2346,6 +2586,18 @@ components:
       required:
       - password
       - username
+    MessageTypeEnum:
+      enum:
+      - success
+      - failed
+      - warning
+      - pending
+      type: string
+      description: |-
+        * `success` - Success
+        * `failed` - Failed
+        * `warning` - Warning
+        * `pending` - Pending
     Mushaf:
       type: object
       properties:
@@ -2361,11 +2613,60 @@ components:
         source:
           type: string
         status:
-          $ref: '#/components/schemas/StatusEnum'
+          $ref: '#/components/schemas/Status115Enum'
       required:
       - name
       - short_name
       - uuid
+    Notification:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        resource_controller:
+          type: string
+          maxLength: 128
+        resource_action:
+          type: string
+          maxLength: 128
+        resource_uuid:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          $ref: '#/components/schemas/NotificationStatusEnum'
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        message:
+          type: string
+          nullable: true
+        message_type:
+          $ref: '#/components/schemas/MessageTypeEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - resource_action
+      - resource_controller
+      - uuid
+    NotificationStatusEnum:
+      enum:
+      - nothing_happened
+      - got_notification
+      - viewed_notification
+      - opened_notification
+      type: string
+      description: |-
+        * `nothing_happened` - Nothing Happened
+        * `got_notification` - User Got Notification
+        * `viewed_notification` - User Viewed Notification
+        * `opened_notification` - User Opened Notification
     NullEnum:
       enum:
       - null
@@ -2381,6 +2682,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Mushaf'
+    PaginatedNotificationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Notification'
     PaginatedRecitationList:
       type: array
       items:
@@ -2470,7 +2775,39 @@ components:
         source:
           type: string
         status:
-          $ref: '#/components/schemas/StatusEnum'
+          $ref: '#/components/schemas/Status115Enum'
+    PatchedNotification:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        resource_controller:
+          type: string
+          maxLength: 128
+        resource_action:
+          type: string
+          maxLength: 128
+        resource_uuid:
+          type: string
+          format: uuid
+          nullable: true
+        status:
+          $ref: '#/components/schemas/NotificationStatusEnum'
+        description:
+          type: string
+          nullable: true
+          maxLength: 255
+        message:
+          type: string
+          nullable: true
+        message_type:
+          $ref: '#/components/schemas/MessageTypeEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
     PatchedPhrase:
       type: object
       properties:
@@ -2490,13 +2827,22 @@ components:
         mushaf_uuid:
           type: string
           format: uuid
+          writeOnly: true
+        get_mushaf_uuid:
+          type: string
+          readOnly: true
         surah_uuid:
           type: string
           format: uuid
+          writeOnly: true
+        get_surah_uuid:
+          type: string
+          readOnly: true
         status:
-          $ref: '#/components/schemas/StatusEnum'
-        reciter_account:
-          type: integer
+          $ref: '#/components/schemas/Status115Enum'
+        reciter_account_uuid:
+          type: string
+          readOnly: true
         recitation_date:
           type: string
           format: date
@@ -2590,7 +2936,7 @@ components:
           nullable: true
           maxLength: 300
         status:
-          $ref: '#/components/schemas/StatusEnum'
+          $ref: '#/components/schemas/Status115Enum'
     PatchedUser:
       type: object
       properties:
@@ -2691,13 +3037,22 @@ components:
         mushaf_uuid:
           type: string
           format: uuid
+          writeOnly: true
+        get_mushaf_uuid:
+          type: string
+          readOnly: true
         surah_uuid:
           type: string
           format: uuid
+          writeOnly: true
+        get_surah_uuid:
+          type: string
+          readOnly: true
         status:
-          $ref: '#/components/schemas/StatusEnum'
-        reciter_account:
-          type: integer
+          $ref: '#/components/schemas/Status115Enum'
+        reciter_account_uuid:
+          type: string
+          readOnly: true
         recitation_date:
           type: string
           format: date
@@ -2734,11 +3089,13 @@ components:
       - created_at
       - duration
       - file
+      - get_mushaf_uuid
+      - get_surah_uuid
       - mushaf_uuid
       - recitation_date
       - recitation_location
       - recitation_type
-      - reciter_account
+      - reciter_account_uuid
       - surah_uuid
       - updated_at
       - uuid
@@ -2748,7 +3105,7 @@ components:
       - none
       type: string
       description: '* `none` - None'
-    StatusEnum:
+    Status115Enum:
       enum:
       - draft
       - pending_review
@@ -2892,7 +3249,7 @@ components:
           nullable: true
           maxLength: 300
         status:
-          $ref: '#/components/schemas/StatusEnum'
+          $ref: '#/components/schemas/Status115Enum'
       required:
       - language
       - mushaf_uuid

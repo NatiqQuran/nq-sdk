@@ -25,7 +25,7 @@ export class ControllerGroups extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsListResponseData>> {
-        return await this.axiosGet(`/groups`, config);
+        return await this.axiosGet(`/groups/`, config);
     }
 
     /** GET /groups/{id}/ */
@@ -41,7 +41,7 @@ export class ControllerGroups extends BaseController {
         data: GroupsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsAddResponsetData>> {
-        return await this.axiosPost(`/groups`, data, config);
+        return await this.axiosPost(`/groups/`, data, config);
     }
 
     /** PUT /groups/{id}/ */

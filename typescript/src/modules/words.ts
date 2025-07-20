@@ -25,7 +25,7 @@ export class ControllerWords extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<WordListResponseData>> {
-        return await this.axiosGet(`/words`, config);
+        return await this.axiosGet(`/words/`, config);
     }
 
     /** GET /words/{uuid}/ */
@@ -41,7 +41,7 @@ export class ControllerWords extends BaseController {
         data: WordAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<WordAddResponseData>> {
-        return await this.axiosPost(`/words`, data, config);
+        return await this.axiosPost(`/words/`, data, config);
     }
 
     /** PUT /words/{uuid}/ */

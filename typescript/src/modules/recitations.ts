@@ -25,7 +25,7 @@ export class ControllerRecitations extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsListResponseData>> {
-        return await this.axiosGet(`/recitations`, config);
+        return await this.axiosGet(`/recitations/`, config);
     }
 
     /** GET /recitations/{uuid}/ */
@@ -41,7 +41,7 @@ export class ControllerRecitations extends BaseController {
         data: RecitationsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsAddResponseDate>> {
-        return await this.axiosPost(`/recitations`, data, config);
+        return await this.axiosPost(`/recitations/`, data, config);
     }
 
     /** PUT /recitations/{uuid}/ */
