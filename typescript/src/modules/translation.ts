@@ -50,7 +50,11 @@ export class ControllerTranslations extends BaseController {
         data: TranslationsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<TranslationEditResponseData>> {
-        return await this.axiosPut(`/translations/${params.uuid}/`, data, config);
+        return await this.axiosPut(
+            `/translations/${params.uuid}/`,
+            data,
+            config
+        );
     }
 
     /** PATCH /translations/{uuid}/ */
@@ -59,7 +63,11 @@ export class ControllerTranslations extends BaseController {
         data: TranslationsUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<TranslationUpdateResponseData>> {
-        return await this.axiosPatch(`/translations/${params.uuid}/`, data, config);
+        return await this.axiosPatch(
+            `/translations/${params.uuid}/`,
+            data,
+            config
+        );
     }
 
     /** DELETE /translations/{uuid}/ */

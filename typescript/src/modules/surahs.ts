@@ -2,17 +2,15 @@ import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
-    SurahListResponseData,
-    SurahViewRequestParams,
-    SurahViewResponseData,
-    SurahAddRequestData,
-    SurahAddResponseItem,
-    SurahsEditRequestParams,
+    SurahsListRequestParams,
+    SurahsListResponseData,
+    SurahsViewResponseData,
+    SurahsAddRequestData,
+    SurahsAddResponseData,
     SurahsEditRequestData,
-    SurahEditResponseItem,
-    SurahsUpdateRequestParams,
+    SurahsEditResponseData,
     SurahsUpdateRequestData,
-    SurahUpdateResponseItem,
+    SurahsUpdateResponseData,
 } from "../types/surahs";
 import { BaseController } from "../utils/baseController";
 
@@ -23,50 +21,50 @@ export class ControllerSurahs extends BaseController {
 
     /** GET /surahs/ */
     async list(
-        config?: RequestConfig
-    ): Promise<AxiosResponse<SurahListResponseData>> {
+        config?: RequestConfig<SurahsListRequestParams>
+    ): Promise<AxiosResponse<SurahsListResponseData>> {
         return await this.axiosGet(`/surahs/`, config);
     }
 
     /** GET /surahs/{uuid}/ */
     async view(
-        params: SurahViewRequestParams,
+        uuid: string,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahViewResponseData>> {
-        return await this.axiosGet(`/surahs/${params.uuid}/`, config);
+    ): Promise<AxiosResponse<SurahsViewResponseData>> {
+        return await this.axiosGet(`/surahs/${uuid}/`, config);
     }
 
     /** POST /surahs/ */
     async add(
-        data: SurahAddRequestData,
+        data: SurahsAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahAddResponseItem>> {
+    ): Promise<AxiosResponse<SurahsAddResponseData>> {
         return await this.axiosPost(`/surahs/`, data, config);
     }
 
     /** PUT /surahs/{uuid}/ */
     async edit(
-        params: SurahsEditRequestParams,
+        uuid: string,
         data: SurahsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahEditResponseItem>> {
-        return await this.axiosPut(`/surahs/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<SurahsEditResponseData>> {
+        return await this.axiosPut(`/surahs/${uuid}/`, data, config);
     }
 
     /** PATCH /surahs/{uuid}/ */
-    async partialEdit(
-        params: SurahsUpdateRequestParams,
+    async update(
+        uuid: string,
         data: SurahsUpdateRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahUpdateResponseItem>> {
-        return await this.axiosPatch(`/surahs/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<SurahsUpdateResponseData>> {
+        return await this.axiosPatch(`/surahs/${uuid}/`, data, config);
     }
 
     /** DELETE /surahs/{uuid}/ */
     async delete(
-        params: SurahsEditRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/surahs/${params.uuid}/`, config);
+        return await this.axiosDelete(`/surahs/${uuid}/`, config);
     }
 }
