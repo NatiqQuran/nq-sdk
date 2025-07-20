@@ -14,10 +14,13 @@ import {
     AyahsUpdateRequestParams,
     AyahsUpdateRequestData,
     AyahsUpdateResponseData,
+    AyahsTraslationRequestParams,
     AyahsTraslationListResponseData,
     AyahsTraslationViewRequestParams,
     AyahsTraslationViewResponseData,
-    AyahsTraslationAddRequestData,
+    AyahsTraslationAddRequestParams,
+    AyahsTraslationAddRequestDate,
+    AyahsTraslationAddResponsetDate,
     AyahsTraslationEditRequestParams,
     AyahsTraslationEditRequestData,
     AyahsTraslationEditResponseData,
@@ -85,7 +88,7 @@ export class ControllerAyahs extends BaseController {
 
     /** GET /ayahs/translation/ */
     async listTranslations(
-        config?: RequestConfig
+        config?: RequestConfig<AyahsTraslationRequestParams>
     ): Promise<AxiosResponse<AyahsTraslationListResponseData>> {
         return this.axiosGet(`/ayahs/translation`, config);
     }
@@ -100,7 +103,7 @@ export class ControllerAyahs extends BaseController {
 
     /** POST /ayahs/translation/ */
     async addTranslation(
-        data: AyahsTraslationAddRequestData,
+        data: AyahsTraslationAddRequestDate,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsTraslationEditResponseData>> {
         return this.axiosPost(`/ayahs/translation`, data, config);

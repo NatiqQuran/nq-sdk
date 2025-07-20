@@ -6,11 +6,12 @@ import {
     UsersViewRequestParams,
     UsersViewResponseData,
     UsersAddRequestData,
+    UsersAddResponseData,
     UsersEditRequestParams,
     UsersEditRequestData,
+    UsersEditResponseData,
     UsersUpdateRequestParams,
     UsersUpdateRequestData,
-    UsersEditResponseData,
     UsersUpdateResponseData,
 } from "../types/users";
 import { BaseController } from "../utils/baseController";
@@ -32,14 +33,14 @@ export class ControllerUsers extends BaseController {
         params: UsersViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersViewResponseData>> {
-        return await this.axiosGet(`/users/${params.uuid}`, config);
+        return await this.axiosGet(`/users/${params.uuid}/`, config);
     }
 
     /** POST /users/ */
     async add(
         data: UsersAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<UsersViewResponseData>> {
+    ): Promise<AxiosResponse<UsersAddResponseData>> {
         return await this.axiosPost(`/users`, data, config);
     }
 
@@ -49,7 +50,7 @@ export class ControllerUsers extends BaseController {
         data: UsersEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersEditResponseData>> {
-        return await this.axiosPut(`/users/${params.uuid}`, data, config);
+        return await this.axiosPut(`/users/${params.uuid}/`, data, config);
     }
 
     /** PATCH /users/{uuid}/ */
@@ -58,7 +59,7 @@ export class ControllerUsers extends BaseController {
         data: UsersUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersUpdateResponseData>> {
-        return await this.axiosPatch(`/users/${params.uuid}`, data, config);
+        return await this.axiosPatch(`/users/${params.uuid}/`, data, config);
     }
 
     /** DELETE /users/{uuid}/ */
@@ -66,6 +67,6 @@ export class ControllerUsers extends BaseController {
         params: UsersEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/users/${params.uuid}`, config);
+        return await this.axiosDelete(`/users/${params.uuid}/`, config);
     }
 }

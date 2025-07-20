@@ -33,7 +33,7 @@ export class ControllerRecitations extends BaseController {
         params: RecitationsViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsViewResponseData>> {
-        return await this.axiosGet(`/recitations/${params.uuid}`, config);
+        return await this.axiosGet(`/recitations/${params.uuid}/`, config);
     }
 
     /** POST /recitations/ */
@@ -50,7 +50,7 @@ export class ControllerRecitations extends BaseController {
         data: RecitationsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsEditResponseData>> {
-        return await this.axiosPut(`/recitations/${params.uuid}`, data, config);
+        return await this.axiosPut(`/recitations/${params.uuid}/`, data, config);
     }
 
     /** PATCH /recitations/{uuid}/ */
@@ -59,7 +59,7 @@ export class ControllerRecitations extends BaseController {
         data: RecitationsUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsUpdateResponseData>> {
-        return await this.axiosPatch(`/recitations/${params.uuid}`, data, config);
+        return await this.axiosPatch(`/recitations/${params.uuid}/`, data, config);
     }
 
     /** DELETE /recitations/{uuid}/ */
@@ -67,6 +67,6 @@ export class ControllerRecitations extends BaseController {
         params: RecitationsEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/recitations/${params.uuid}`, config);
+        return await this.axiosDelete(`/recitations/${params.uuid}/`, config);
     }
 }

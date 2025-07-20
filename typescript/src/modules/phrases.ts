@@ -6,10 +6,14 @@ import {
     PhrasesViewRequestParams,
     PhrasesViewResponseData,
     PhrasesAddRequestData,
+    PhrasesAddResponseData,
     PhrasesEditRequestParams,
     PhrasesEditRequestData,
+    PhrasesEditResponseData,
     PhrasesUpdateRequestParams,
     PhrasesUpdateRequestData,
+    PhrasesUpdateResponseData,
+    PhrasesModifyRequestParams,
     PhrasesModifyRequestData,
     PhrasesModifyResponseData,
 } from "../types/phrases";
@@ -32,14 +36,14 @@ export class ControllerPhrases extends BaseController {
         params: PhrasesViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<PhrasesViewResponseData>> {
-        return await this.axiosGet(`/phrases/${params.uuid}`, config);
+        return await this.axiosGet(`/phrases/${params.uuid}/`, config);
     }
 
     /** POST /phrases/ */
     async add(
         data: PhrasesAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhrasesViewResponseData>> {
+    ): Promise<AxiosResponse<PhrasesAddResponseData>> {
         return await this.axiosPost(`/phrases`, data, config);
     }
 
@@ -48,8 +52,8 @@ export class ControllerPhrases extends BaseController {
         params: PhrasesEditRequestParams,
         data: PhrasesEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhrasesViewResponseData>> {
-        return await this.axiosPut(`/phrases/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<PhrasesEditResponseData>> {
+        return await this.axiosPut(`/phrases/${params.uuid}/`, data, config);
     }
 
     /** PATCH /phrases/{uuid}/ */
@@ -57,8 +61,8 @@ export class ControllerPhrases extends BaseController {
         params: PhrasesUpdateRequestParams,
         data: PhrasesUpdateRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhrasesViewResponseData>> {
-        return await this.axiosPatch(`/phrases/${params.uuid}`, data, config);
+    ): Promise<AxiosResponse<PhrasesUpdateResponseData>> {
+        return await this.axiosPatch(`/phrases/${params.uuid}/`, data, config);
     }
 
     /** DELETE /phrases/{uuid}/ */
@@ -66,14 +70,15 @@ export class ControllerPhrases extends BaseController {
         params: PhrasesEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/phrases/${params.uuid}`, config);
+        return await this.axiosDelete(`/phrases/${params.uuid}/`, config);
     }
 
     /** POST /phrases/modify/ */
     async modify(
+        params: PhrasesModifyRequestParams,
         data: PhrasesModifyRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<PhrasesModifyResponseData>> {
-        return await this.axiosPost(`/phrases/modify`, data, config);
+        return await this.axiosPost(`/phrases/modify/?language=${params.language}`, data, config);
     }
 }

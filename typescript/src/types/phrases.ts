@@ -1,16 +1,17 @@
+//Phrases
 //Phrases List
 interface PhrasesListItem {
-uuid: string;
+    uuid: string;
     phrase: string;
 }
 export type PhrasesListResponseData = PhrasesListItem[];
 
 //Phrases View
 export interface PhrasesViewRequestParams {
-uuid: string;
+    uuid: string;
 }
 export interface PhrasesViewResponseData {
-uuid: string;
+    uuid: string;
     phrase: string;
 }
 
@@ -18,30 +19,46 @@ uuid: string;
 export interface PhrasesAddRequestData {
     phrase: string;
 }
+export interface PhrasesAddResponseData {
+    uuid: string;
+    phrase: string;
+}
 
 //Phrases Edit
 export interface PhrasesEditRequestParams {
-uuid: string;
+    uuid: string;
 }
 export interface PhrasesEditRequestData {
+    phrase: string;
+}
+export interface PhrasesEditResponseData {
+    uuid: string;
     phrase: string;
 }
 
 //Phrases Update
 export interface PhrasesUpdateRequestParams {
-uuid: string;
+    uuid: string;
 }
 export interface PhrasesUpdateRequestData {
     phrase?: string;
 }
+export interface PhrasesUpdateResponseData {
+    uuid: string;
+    phrase: string;
+}
 
 // Phrases Modify
+export interface PhrasesModifyRequestParams {
+    language:string
+}
 export interface PhrasesModifyRequestData {
     phrases: {
         [key: string]: string;
     };
 }
 export interface PhrasesModifyResponseData {
-    success: boolean;
-    message: string;
+    phrases: {
+        [key: string]: string;
+    };
 }

@@ -25,15 +25,7 @@ export class ControllerWords extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<WordListResponseData>> {
-        return await this.axiosGet(`/words/`, config);
-    }
-
-    /** POST /words/ */
-    async create(
-        data: WordAddRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<WordAddResponseData>> {
-        return await this.axiosPost(`/words/`, data, config);
+        return await this.axiosGet(`/words`, config);
     }
 
     /** GET /words/{uuid}/ */
@@ -42,6 +34,14 @@ export class ControllerWords extends BaseController {
         config?: RequestConfig
     ): Promise<AxiosResponse<WordViewResponseData>> {
         return await this.axiosGet(`/words/${params.uuid}/`, config);
+    }
+
+    /** POST /words/ */
+    async add(
+        data: WordAddRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<WordAddResponseData>> {
+        return await this.axiosPost(`/words`, data, config);
     }
 
     /** PUT /words/{uuid}/ */

@@ -1,3 +1,4 @@
+// Users 
 // Users List
 interface UsersListResponseItem {
     username: string;
@@ -23,6 +24,12 @@ export interface UsersAddRequestData {
     username: string;
     password: string;
     password2: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+}
+export interface UsersAddResponseData {
+    username: string;
     email: string;
     first_name?: string;
     last_name?: string;

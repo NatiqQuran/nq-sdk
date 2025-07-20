@@ -37,4 +37,6 @@ export class ControllerProfile extends BaseController {
     ): Promise<AxiosResponse<ProfileMeAddResponseData>> {
         return await this.axiosPost(`/profile/me/`, data, config);
     }
+
+   
 }
