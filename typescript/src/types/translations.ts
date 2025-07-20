@@ -1,9 +1,9 @@
-import { ListQueryParams, Status } from "../utils/globalTypes";
-//Translation 
+import { FilterQueryParams, Status } from "../utils/globalTypes";
+//Translation
 //Translation List
-export interface TranslationsListRequestParams extends ListQueryParams {
+export interface TranslationsListRequestParams extends FilterQueryParams {
     language: string;
-    mushaf_uuid:string
+    mushaf_uuid: string;
 }
 interface TranslationsListResponseItem {
     uuid: string;
@@ -12,14 +12,11 @@ interface TranslationsListResponseItem {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }
 export type TranslationsListResponseData = TranslationsListResponseItem[];
 
 //Translation View
-export interface TranslationsViewRequestParams {
-    uuid: string;
-}
 export interface TranslationViewResponseData {
     uuid: string;
     mushaf_uuid: string;
@@ -27,7 +24,7 @@ export interface TranslationViewResponseData {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }
 
 //Translation Add
@@ -35,7 +32,7 @@ export interface TranslationsAddRequestData {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status
+    status?: Status;
 }
 export interface TranslationAddResponseData {
     uuid: string;
@@ -44,18 +41,15 @@ export interface TranslationAddResponseData {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }
 
 //Translation Edit
-export interface TranslationsEditRequestParams {
-    uuid: string;
-}
 export interface TranslationsEditRequestData {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }
 export interface TranslationEditResponseData {
     uuid: string;
@@ -64,17 +58,14 @@ export interface TranslationEditResponseData {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }
 //Translation Update
-export interface TrasnlationsUpdateRequestParams {
-    uuid: string;
-}
 export interface TranslationsUpdateRequestData {
     language?: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }
 export interface TranslationUpdateResponseData {
     uuid: string;
@@ -83,5 +74,5 @@ export interface TranslationUpdateResponseData {
     language: string;
     release_date?: string;
     source?: string;
-    status?:Status;
+    status?: Status;
 }

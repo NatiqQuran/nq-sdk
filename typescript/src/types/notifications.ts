@@ -1,25 +1,22 @@
-
-import { ListQueryParams } from "../utils/globalTypes";
-
+import { FilterQueryParams } from "../utils/globalTypes";
 
 // Notifications
 // Notifications List
 export interface NotificationsListRequestParams {
-    page:number;
-    page_size:number;
-  
+    page: number;
+    page_size: number;
 }
 export type NotificationStatus =
-  | 'nothing_happened'
-  | 'got_notification'
-  | 'viewed_notification'
-  | 'opened_notification';
+    | "nothing_happened"
+    | "got_notification"
+    | "viewed_notification"
+    | "opened_notification";
 
 export type NotificationMessageType =
-  | 'success'
-  | 'failed'
-  | 'warning'
-  | 'pending';
+    | "success"
+    | "failed"
+    | "warning"
+    | "pending";
 
 interface NotificationsListResponseItem {
     uuid: string;
@@ -31,7 +28,6 @@ interface NotificationsListResponseItem {
     message?: string;
     message_type?: NotificationMessageType;
     created_at: string;
- 
 }
 
 export type NotificationsListResponseData = NotificationsListResponseItem[];
@@ -129,8 +125,8 @@ export interface NotificationsUpdateResponseData {
 }
 
 // /notifications/me/
-export interface NotificationsMeListRequestParams extends ListQueryParams {}
-export interface NotificationsMeListResponseData{
+export interface NotificationsMeListRequestParams extends FilterQueryParams {}
+export interface NotificationsMeListResponseData {
     uuid: string;
     resource_controller: string;
     resource_action: string;
@@ -140,11 +136,11 @@ export interface NotificationsMeListResponseData{
     message?: string;
     message_type?: NotificationMessageType;
     created_at: string;
-};
+}
 
 // /notifications/opened/
 export interface NotificationsOpenedRequestParams {
-  uuid: string;
+    uuid: string;
 }
 export type NotificationsOpenedResponseData = Record<string, unknown>;
 
