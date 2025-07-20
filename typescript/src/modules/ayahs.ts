@@ -39,7 +39,7 @@ export class ControllerAyahs extends BaseController {
     async list(
         config?: RequestConfig<AyahsListRequestParams>
     ): Promise<AxiosResponse<AyahsListResponseData>> {
-        return this.axiosGet(`/ayahs`, config);
+        return this.axiosGet(`/ayahs/`, config);
     }
 
     /** GET /ayahs/{uuid}/ */
@@ -55,7 +55,7 @@ export class ControllerAyahs extends BaseController {
         data: AyahsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsAddResponseData>> {
-        return this.axiosPost(`/ayahs`, data, config);
+        return this.axiosPost(`/ayahs/`, data, config);
     }
 
     /** PUT /ayahs/{uuid}/ */
@@ -90,7 +90,7 @@ export class ControllerAyahs extends BaseController {
     async listTranslations(
         config?: RequestConfig<AyahsTraslationRequestParams>
     ): Promise<AxiosResponse<AyahsTraslationListResponseData>> {
-        return this.axiosGet(`/ayahs/translation`, config);
+        return this.axiosGet(`/ayahs/translation/`, config);
     }
 
     /** GET /ayahs/translation/{uuid}/ */
@@ -106,7 +106,7 @@ export class ControllerAyahs extends BaseController {
         data: AyahsTraslationAddRequestDate,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsTraslationEditResponseData>> {
-        return this.axiosPost(`/ayahs/translation`, data, config);
+        return this.axiosPost(`/ayahs/translation/`, data, config);
     }
 
     /** PUT /ayahs/translation/{uuid}/ */

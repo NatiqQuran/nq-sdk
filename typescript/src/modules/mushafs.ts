@@ -25,7 +25,7 @@ export class ControllerMushafs extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafsListResponseData>> {
-        return await this.axiosGet(`/mushafs`, config);
+        return await this.axiosGet(`/mushafs/`, config);
     }
 
     /** GET /mushafs/{uuid}/ */
@@ -41,7 +41,7 @@ export class ControllerMushafs extends BaseController {
         data: MushasfAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafAddResponseData>> {
-        return await this.axiosPost(`/mushafs`, data, config);
+        return await this.axiosPost(`/mushafs/`, data, config);
     }
 
     /** PUT /mushafs/{uuid}/ */

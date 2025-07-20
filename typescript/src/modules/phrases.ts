@@ -28,14 +28,14 @@ export class ControllerPhrases extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<PhrasesListResponseData>> {
-        return await this.axiosGet(`/phrases`, config);
+        return await this.axiosGet(`/phrases/`, config);
     }
 
     /** GET /phrases/{uuid}/ */
     async view(
         params: PhrasesViewRequestParams,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhrasesViewResponseData>> {
+    ): Promise<AxiosResponse<PhrasesViewResponseData>   > {
         return await this.axiosGet(`/phrases/${params.uuid}/`, config);
     }
 
@@ -44,7 +44,7 @@ export class ControllerPhrases extends BaseController {
         data: PhrasesAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<PhrasesAddResponseData>> {
-        return await this.axiosPost(`/phrases`, data, config);
+        return await this.axiosPost(`/phrases/`, data, config);
     }
 
     /** PUT /phrases/{uuid}/ */

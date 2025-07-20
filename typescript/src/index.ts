@@ -8,6 +8,7 @@ export * from "./types/surahs";
 export * from "./types/ayahs";
 export * from "./types/translations";
 export * from "./types/words";
+export * from "./types/notifications";
 
 // Client
 export * from "./client/connection";
@@ -21,6 +22,7 @@ export * from "./modules/surahs";
 export * from "./modules/ayahs";
 export * from "./modules/words";
 export * from "./modules/translation";
+export * from "./modules/notifications";
 
 // Utils
 export * from "./utils/globalTypes";

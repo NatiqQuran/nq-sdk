@@ -25,7 +25,7 @@ export class ControllerUsers extends BaseController {
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersListResponseData>> {
-        return await this.axiosGet(`/users`, config);
+        return await this.axiosGet(`/users/`, config);
     }
 
     /** GET /users/{uuid}/ */
@@ -41,7 +41,7 @@ export class ControllerUsers extends BaseController {
         data: UsersAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersAddResponseData>> {
-        return await this.axiosPost(`/users`, data, config);
+        return await this.axiosPost(`/users/`, data, config);
     }
 
     /** PUT /users/{uuid}/ */
