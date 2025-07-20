@@ -13,7 +13,7 @@ interface SurahsDefaultRequestData {
     period?: Period;
     search_terms?: string[];
 }
-interface SurahsDefaultResponseItem {
+interface SurahsDefaultResponseData {
     uuid: string;
     mushaf: {
         uuid: string;
@@ -37,7 +37,7 @@ interface SurahsDefaultResponseItem {
 export interface SurahsListRequestParams extends FilterQueryParams {
     mushaf: string;
 }
-export type SurahsListResponseItem = SurahsDefaultResponseItem;
+export type SurahsListResponseItem = SurahsDefaultResponseData;
 export type SurahsListResponseData = SurahsListResponseItem[];
 
 //Surahs View
@@ -49,18 +49,18 @@ export interface SurahsViewResponseAyah {
     bismillah_text: string;
     text: string;
 }
-export interface SurahsViewResponseData extends SurahsDefaultResponseItem {
+export interface SurahsViewResponseData extends SurahsDefaultResponseData {
     ayahs: SurahsViewResponseAyah[];
 }
 
 //Surahs Add
 export type SurahsAddRequestData = SurahsDefaultRequestData;
-export type SurahsAddResponseData = SurahsDefaultResponseItem;
+export type SurahsAddResponseData = SurahsDefaultResponseData;
 
 //Surahs Edit
 export type SurahsEditRequestData = SurahsDefaultRequestData;
-export type SurahsEditResponseData = SurahsDefaultResponseItem;
+export type SurahsEditResponseData = SurahsDefaultResponseData;
 
-//Surahs Update
-export type SurahsUpdateRequestData = Partial<SurahsDefaultRequestData>;
-export type SurahsUpdateResponseData = SurahsDefaultResponseItem;
+//Surahs PartialEdit
+export type SurahsPartialEditRequestData = Partial<SurahsDefaultRequestData>;
+export type SurahsPartialEditResponseData = SurahsDefaultResponseData;

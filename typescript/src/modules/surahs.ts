@@ -9,8 +9,8 @@ import {
     SurahsAddResponseData,
     SurahsEditRequestData,
     SurahsEditResponseData,
-    SurahsUpdateRequestData,
-    SurahsUpdateResponseData,
+    SurahsPartialEditRequestData,
+    SurahsPartialEditResponseData,
 } from "../types/surahs";
 import { BaseController } from "../utils/baseController";
 
@@ -52,11 +52,11 @@ export class ControllerSurahs extends BaseController {
     }
 
     /** PATCH /surahs/{uuid}/ */
-    async update(
+    async partialEdit(
         uuid: string,
-        data: SurahsUpdateRequestData,
+        data: SurahsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<SurahsUpdateResponseData>> {
+    ): Promise<AxiosResponse<SurahsPartialEditResponseData>> {
         return await this.axiosPatch(`/surahs/${uuid}/`, data, config);
     }
 

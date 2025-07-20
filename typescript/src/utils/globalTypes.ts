@@ -4,17 +4,18 @@ export interface RequestConfig<P = undefined>
     extends Omit<AxiosRequestConfig, "url" | "baseUrl" | "method" | "data"> {
     params?: P;
 }
+
+export type UUID = string;
+export type Sajdah = "vajib" | "mustahab";
+export type Period = "makki" | "madani";
+export type Status = "draft" | "pending_review" | "published";
+
 export interface FilterQueryParams {
     ordering?: "asc" | "desc";
     page?: number;
     page_size?: number;
     search?: string;
 }
-
-export type UUID = string;
-export type Sajdah = "vajib" | "mustahab";
-export type Period = "makki" | "madani";
-export type Status = "draft" | "pending_review" | "published";
 
 export type DefaultResponseData = string;
 export interface ErrorResponseData {

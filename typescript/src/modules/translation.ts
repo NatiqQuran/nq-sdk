@@ -2,15 +2,15 @@ import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
-    TranslationsListResponseData,
-    TranslationViewResponseData,
-    TranslationsAddRequestData,
-    TranslationAddResponseData,
-    TranslationsEditRequestData,
-    TranslationEditResponseData,
-    TranslationsUpdateRequestData,
-    TranslationUpdateResponseData,
     TranslationsListRequestParams,
+    TranslationsListResponseData,
+    TranslationsViewResponseData,
+    TranslationsAddRequestData,
+    TranslationsAddResponseData,
+    TranslationsEditRequestData,
+    TranslationsEditResponseData,
+    TranslationsPartialEditRequestData,
+    TranslationsPartialEditResponseData,
 } from "../types/translations";
 import { BaseController } from "../utils/baseController";
 
@@ -30,7 +30,7 @@ export class ControllerTranslations extends BaseController {
     async view(
         uuid: string,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationViewResponseData>> {
+    ): Promise<AxiosResponse<TranslationsViewResponseData>> {
         return await this.axiosGet(`/translations/${uuid}/`, config);
     }
 
@@ -38,7 +38,7 @@ export class ControllerTranslations extends BaseController {
     async add(
         data: TranslationsAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationAddResponseData>> {
+    ): Promise<AxiosResponse<TranslationsAddResponseData>> {
         return await this.axiosPost(`/translations/`, data, config);
     }
 
@@ -47,16 +47,16 @@ export class ControllerTranslations extends BaseController {
         uuid: string,
         data: TranslationsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationEditResponseData>> {
+    ): Promise<AxiosResponse<TranslationsEditResponseData>> {
         return await this.axiosPut(`/translations/${uuid}/`, data, config);
     }
 
     /** PATCH /translations/{uuid}/ */
-    async update(
+    async partialEdit(
         uuid: string,
-        data: TranslationsUpdateRequestData,
+        data: TranslationsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationUpdateResponseData>> {
+    ): Promise<AxiosResponse<TranslationsPartialEditResponseData>> {
         return await this.axiosPatch(`/translations/${uuid}/`, data, config);
     }
 
