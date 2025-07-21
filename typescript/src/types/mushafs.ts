@@ -1,11 +1,10 @@
-import { ListQueryParams } from "../utils/globalTypes";
+import { FilterQueryParams } from "../utils/globalTypes";
 
 // Mushaf
 
 //Mushaf List
-export interface MushafsListRequestParams extends ListQueryParams {
-}
-type Status='draft' | 'pending_review' | 'published';
+export interface MushafsListRequestParams extends FilterQueryParams {}
+type Status = "draft" | "pending_review" | "published";
 export interface MushafsListResponseItem {
     uuid: string;
     short_name: string;
@@ -25,7 +24,6 @@ export interface MushafViewResponseData {
     name: string;
     source?: string;
     status?: Status;
-    
 }
 
 //Mushaf Add
@@ -34,7 +32,6 @@ export interface MushasfAddRequestData {
     name: string;
     source?: string;
     status?: Status;
-
 }
 export interface MushafAddResponseData {
     uuid: string;
@@ -42,7 +39,6 @@ export interface MushafAddResponseData {
     name: string;
     source?: string;
     status?: Status;
-    
 }
 
 //Mushaf Edit
@@ -54,7 +50,6 @@ export interface MushafsEditRequestData {
     name: string;
     source?: string;
     status?: Status;
-
 }
 export interface MushafEditResponseData {
     uuid: string;
@@ -62,7 +57,6 @@ export interface MushafEditResponseData {
     name: string;
     source?: string;
     status?: Status;
-    
 }
 
 //Mushaf Update
@@ -81,16 +75,16 @@ export interface MushafUpdateResponseData {
     name: string;
     source?: string;
     status?: Status;
-    
 }
 
 //Mushaf Import
 export interface MushafImportRequestData {
     file: File | Blob;
-  }
-export interface MushafImportResponseData{    uuid: string;
+}
+export interface MushafImportResponseData {
+    uuid: string;
     short_name: string;
     name: string;
     source?: string;
     status?: Status;
-};
+}

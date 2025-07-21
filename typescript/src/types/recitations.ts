@@ -1,19 +1,19 @@
-import { ListQueryParams } from "../utils/globalTypes";
-//Recitations 
+import { FilterQueryParams } from "../utils/globalTypes";
+//Recitations
 //Recitations List
 
 type Status = "draft" | "pending_review" | "published";
 
-export interface RecitationsListRequestParams extends ListQueryParams {
+export interface RecitationsListRequestParams extends FilterQueryParams {
     mushaf_uuid: string;
-    reciter_uuid:string;
+    reciter_uuid: string;
 }
 interface RecitationsListItem {
     uuid: string;
-    get_mushaf_uuid:string;
-    get_surah_uuid:string;
-    status?:Status;
-    reciter_account_uuid:string;    
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    status?: Status;
+    reciter_account_uuid: string;
     recitation_date: string;
     recitation_location: string;
     duration: string;
@@ -30,10 +30,10 @@ export interface RecitationsViewRequestParams {
 }
 export interface RecitationsViewResponseData {
     uuid: string;
-    get_mushaf_uuid:string;
-    get_surah_uuid:string;
-    status?:Status;
-    reciter_account_uuid:string;    
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    status?: Status;
+    reciter_account_uuid: string;
     recitation_date: string;
     recitation_location: string;
     duration: string;
@@ -56,7 +56,7 @@ interface FileObject {
 export interface RecitationsAddRequestData {
     mushaf_uuid: string;
     surah_uuid: string;
-    status?:Status;
+    status?: Status;
     recitation_date: string;
     recitation_location: string;
     duration: string;
@@ -66,10 +66,10 @@ export interface RecitationsAddRequestData {
 }
 export interface RecitationsAddResponseDate {
     uuid: string;
-    get_mushaf_uuid:string;
-    get_surah_uuid:string;
-    status?:Status;
-    reciter_account_uuid:string;    
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    status?: Status;
+    reciter_account_uuid: string;
     recitation_date: string;
     recitation_location: string;
     duration: string;
@@ -86,7 +86,7 @@ export interface RecitationsEditRequestParams {
 export interface RecitationsEditRequestData {
     mushaf_uuid: string;
     surah_uuid: string;
-    status?:Status;
+    status?: Status;
     recitation_date: string;
     recitation_location: string;
     duration: string;
@@ -96,10 +96,10 @@ export interface RecitationsEditRequestData {
 }
 export interface RecitationsEditResponseData {
     uuid: string;
-    get_mushaf_uuid:string;
-    get_surah_uuid:string;
-    status?:Status;
-    reciter_account_uuid:string;   
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    status?: Status;
+    reciter_account_uuid: string;
     recitation_date: string;
     recitation_location: string;
     duration: string;
@@ -123,14 +123,13 @@ export interface RecitationsUpdateRequestData {
     file?: FileObject;
     recitation_type?: string;
     words_timestamps?: WordsTimestampsItem[];
-
 }
 export interface RecitationsUpdateResponseData {
     uuid: string;
-    get_mushaf_uuid:string;
-    get_surah_uuid:string;
-    status?:Status;
-    reciter_account_uuid:string;   
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    status?: Status;
+    reciter_account_uuid: string;
     recitation_date: string;
     recitation_location: string;
     duration: string;

@@ -1,7 +1,7 @@
-import { ListQueryParams } from "../utils/globalTypes";
-//Word 
+import { FilterQueryParams } from "../utils/globalTypes";
+//Word
 //Word List
-export interface WordViewRequestParams extends ListQueryParams {
+export interface WordViewRequestParams extends FilterQueryParams {
     ayah_uuid?: string;
 }
 interface WordListResponseItem {
@@ -31,7 +31,6 @@ export interface WordAddResponseData {
     uuid: string;
     text: string;
 }
-
 
 //Word Edit
 export interface WordEditRequestParams {

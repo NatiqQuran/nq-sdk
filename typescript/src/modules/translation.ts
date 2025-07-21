@@ -2,17 +2,15 @@ import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
+    TranslationsListRequestParams,
     TranslationsListResponseData,
-    TranslationsViewRequestParams,
-    TranslationViewResponseData,
+    TranslationsViewResponseData,
     TranslationsAddRequestData,
-    TranslationAddResponseData,
-    TranslationsEditRequestParams,
+    TranslationsAddResponseData,
     TranslationsEditRequestData,
-    TranslationEditResponseData,
-    TrasnlationsUpdateRequestParams,
-    TranslationsUpdateRequestData,
-    TranslationUpdateResponseData,
+    TranslationsEditResponseData,
+    TranslationsPartialEditRequestData,
+    TranslationsPartialEditResponseData,
 } from "../types/translations";
 import { BaseController } from "../utils/baseController";
 
@@ -23,50 +21,50 @@ export class ControllerTranslations extends BaseController {
 
     /** GET /translations/ */
     async list(
-        config?: RequestConfig
+        config?: RequestConfig<TranslationsListRequestParams>
     ): Promise<AxiosResponse<TranslationsListResponseData>> {
         return await this.axiosGet(`/translations/`, config);
     }
 
     /** GET /translations/{uuid}/ */
     async view(
-        params: TranslationsViewRequestParams,
+        uuid: string,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationViewResponseData>> {
-        return await this.axiosGet(`/translations/${params.uuid}/`, config);
+    ): Promise<AxiosResponse<TranslationsViewResponseData>> {
+        return await this.axiosGet(`/translations/${uuid}/`, config);
     }
 
     /** POST /translations/ */
     async add(
         data: TranslationsAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationAddResponseData>> {
+    ): Promise<AxiosResponse<TranslationsAddResponseData>> {
         return await this.axiosPost(`/translations/`, data, config);
     }
 
     /** PUT /translations/{uuid}/ */
     async edit(
-        params: TranslationsEditRequestParams,
+        uuid: string,
         data: TranslationsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationEditResponseData>> {
-        return await this.axiosPut(`/translations/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<TranslationsEditResponseData>> {
+        return await this.axiosPut(`/translations/${uuid}/`, data, config);
     }
 
     /** PATCH /translations/{uuid}/ */
     async partialEdit(
-        params: TrasnlationsUpdateRequestParams,
-        data: TranslationsUpdateRequestData,
+        uuid: string,
+        data: TranslationsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<TranslationUpdateResponseData>> {
-        return await this.axiosPatch(`/translations/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<TranslationsPartialEditResponseData>> {
+        return await this.axiosPatch(`/translations/${uuid}/`, data, config);
     }
 
     /** DELETE /translations/{uuid}/ */
     async delete(
-        params: TranslationsEditRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/translations/${params.uuid}/`, config);
+        return await this.axiosDelete(`/translations/${uuid}/`, config);
     }
 }

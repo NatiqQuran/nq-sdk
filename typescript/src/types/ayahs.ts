@@ -1,11 +1,11 @@
 import { Sajdah } from "../utils/globalTypes";
-import { ListQueryParams } from "../utils/globalTypes";
+import { FilterQueryParams } from "../utils/globalTypes";
 
 //Ayah
 
 // Ayahs List
-export interface AyahsListRequestParams extends ListQueryParams {
-    surah_uuid?:string;
+export interface AyahsListRequestParams extends FilterQueryParams {
+    surah_uuid?: string;
 }
 interface AyahsListResponseItem {
     uuid: string;
@@ -100,14 +100,14 @@ export interface AyahsUpdateResponseData {
 
 //Ayahs/Traslation
 //Ayahs/Traslation List
-export interface AyahsTraslationRequestParams extends ListQueryParams{
+export interface AyahsTraslationRequestParams extends FilterQueryParams {
     ayah_uuid?: string;
     translation_uuid?: string;
 }
 interface AyahsTraslationResponseItem {
-  uuid:string;
-  text:string;
-  bismillah?:string;
+    uuid: string;
+    text: string;
+    bismillah?: string;
 }
 export type AyahsTraslationListResponseData = AyahsTraslationResponseItem[];
 
@@ -139,10 +139,9 @@ export interface AyahsTraslationAddResponsetDate {
 }
 //Ayahs/Traslation Edit
 export interface AyahsTraslationEditRequestParams {
-    ayah_uuid?: string;    
+    ayah_uuid?: string;
     traslation_uuid?: string;
     uuid: string;
-
 }
 
 export interface AyahsTraslationEditRequestData {
@@ -159,7 +158,7 @@ export interface AyahsTraslationEditResponseData {
 
 //Ayahs/Traslation Update
 export interface AyahsTraslationUpdateRequestParams {
-    ayah_uuid?: string;    
+    ayah_uuid?: string;
     traslation_uuid?: string;
     uuid: string;
 }
