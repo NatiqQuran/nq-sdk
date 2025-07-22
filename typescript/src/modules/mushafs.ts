@@ -4,7 +4,7 @@ import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     MushafsListResponseData,
     MushafsViewRequestParams,
-    MushafViewResponseData,
+    MushafsViewResponseData,
     MushasfAddRequestData,
     MushafAddResponseData,
     MushafsEditRequestParams,
@@ -32,7 +32,7 @@ export class ControllerMushafs extends BaseController {
     async view(
         params: MushafsViewRequestParams,
         config?: RequestConfig
-    ): Promise<AxiosResponse<MushafViewResponseData>> {
+    ): Promise<AxiosResponse<MushafsViewResponseData>> {
         return await this.axiosGet(`/mushafs/${params.uuid}/`, config);
     }
 

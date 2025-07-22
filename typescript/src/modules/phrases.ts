@@ -10,9 +10,9 @@ import {
     PhrasesEditRequestParams,
     PhrasesEditRequestData,
     PhrasesEditResponseData,
-    PhrasesUpdateRequestParams,
-    PhrasesUpdateRequestData,
-    PhrasesUpdateResponseData,
+    PhrasesPartialEditRequestParams,
+    PhrasesPartialEditRequestData,
+    PhrasesPartialEditResponseData,
     PhrasesModifyRequestParams,
     PhrasesModifyRequestData,
     PhrasesModifyResponseData,
@@ -58,10 +58,10 @@ export class ControllerPhrases extends BaseController {
 
     /** PATCH /phrases/{uuid}/ */
     async partialEdit(
-        params: PhrasesUpdateRequestParams,
-        data: PhrasesUpdateRequestData,
+        params: PhrasesPartialEditRequestParams,
+        data: PhrasesPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhrasesUpdateResponseData>> {
+    ): Promise<AxiosResponse<PhrasesPartialEditResponseData>> {
         return await this.axiosPatch(`/phrases/${params.uuid}/`, data, config);
     }
 

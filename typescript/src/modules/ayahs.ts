@@ -4,29 +4,22 @@ import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     AyahsListRequestParams,
     AyahsListResponseData,
-    AyahsViewRequestParams,
     AyahsViewResponseData,
     AyahsAddRequestData,
     AyahsAddResponseData,
-    AyahsEditRequestParams,
     AyahsEditRequestData,
     AyahsEditResponseData,
-    AyahsUpdateRequestParams,
-    AyahsUpdateRequestData,
-    AyahsUpdateResponseData,
-    AyahsTraslationRequestParams,
-    AyahsTraslationListResponseData,
-    AyahsTraslationViewRequestParams,
-    AyahsTraslationViewResponseData,
-    AyahsTraslationAddRequestParams,
-    AyahsTraslationAddRequestDate,
-    AyahsTraslationAddResponsetDate,
-    AyahsTraslationEditRequestParams,
-    AyahsTraslationEditRequestData,
-    AyahsTraslationEditResponseData,
-    AyahsTraslationUpdateRequestParams,
-    AyahsTraslationUpdateRequestData,
-    AyahsTraslationUpdateResponseData,
+    AyahsPartialEditRequestData,
+    AyahsPartialEditResponseData,
+    AyahsTranslationListRequestParams,
+    AyahsTranslationListResponseData,
+    AyahsTranslationViewResponseData,
+    AyahsTranslationAddRequestData,
+    AyahsTranslationAddResponseData,
+    AyahsTranslationEditRequestData,
+    AyahsTranslationEditResponseData,
+    AyahsTranslationPartialEditRequestData,
+    AyahsTranslationPartialEditResponseData,
 } from "../types/ayahs";
 import { BaseController } from "../utils/baseController";
 
@@ -44,7 +37,7 @@ export class ControllerAyahs extends BaseController {
 
     /** GET /ayahs/{uuid}/ */
     async view(
-        params: AyahsViewRequestParams,
+        params: AyahsViewResponseData,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsViewResponseData>> {
         return this.axiosGet(`/ayahs/${params.uuid}/`, config);
@@ -60,7 +53,7 @@ export class ControllerAyahs extends BaseController {
 
     /** PUT /ayahs/{uuid}/ */
     async edit(
-        params: AyahsEditRequestParams,
+        params: AyahsEditResponseData,
         data: AyahsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsEditResponseData>> {
@@ -69,16 +62,16 @@ export class ControllerAyahs extends BaseController {
 
     /** PATCH /ayahs/{uuid}/ */
     async partialEdit(
-        params: AyahsUpdateRequestParams,
-        data: AyahsUpdateRequestData,
+        params: AyahsPartialEditResponseData,
+        data: AyahsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsUpdateResponseData>> {
+    ): Promise<AxiosResponse<AyahsPartialEditResponseData>> {
         return this.axiosPatch(`/ayahs/${params.uuid}/`, data, config);
     }
 
     /** DELETE /ayahs/{uuid}/ */
     async delete(
-        params: AyahsEditRequestParams,
+        params: AyahsEditResponseData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.axiosDelete(`/ayahs/${params.uuid}/`, config);
@@ -88,42 +81,42 @@ export class ControllerAyahs extends BaseController {
 
     /** GET /ayahs/translation/ */
     async listTranslations(
-        config?: RequestConfig<AyahsTraslationRequestParams>
-    ): Promise<AxiosResponse<AyahsTraslationListResponseData>> {
+        config?: RequestConfig<AyahsTranslationListRequestParams>
+    ): Promise<AxiosResponse<AyahsTranslationListResponseData>> {
         return this.axiosGet(`/ayahs/translation/`, config);
     }
 
     /** GET /ayahs/translation/{uuid}/ */
     async viewTranslation(
-        params: AyahsTraslationViewRequestParams,
+        params: AyahsTranslationViewResponseData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsTraslationViewResponseData>> {
+    ): Promise<AxiosResponse<AyahsTranslationViewResponseData>> {
         return this.axiosGet(`/ayahs/translation/${params.uuid}/`, config);
     }
 
     /** POST /ayahs/translation/ */
     async addTranslation(
-        data: AyahsTraslationAddRequestDate,
+        data: AyahsTranslationAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsTraslationEditResponseData>> {
+    ): Promise<AxiosResponse<AyahsTranslationAddResponseData>> {
         return this.axiosPost(`/ayahs/translation/`, data, config);
     }
 
     /** PUT /ayahs/translation/{uuid}/ */
     async editTranslation(
-        params: AyahsTraslationEditRequestParams,
-        data: AyahsTraslationEditRequestData,
+        params: AyahsTranslationEditResponseData,
+        data: AyahsTranslationEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsTraslationEditResponseData>> {
+    ): Promise<AxiosResponse<AyahsTranslationEditResponseData>> {
         return this.axiosPut(`/ayahs/translation/${params.uuid}/`, data, config);
     }
 
     /** PATCH /ayahs/translation/{uuid}/ */
     async partialEditTranslation(
-        params: AyahsTraslationUpdateRequestParams,
-        data: AyahsTraslationUpdateRequestData,
+                params: AyahsTranslationPartialEditResponseData,
+        data: AyahsTranslationPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsTraslationUpdateResponseData>> {
+    ): Promise<AxiosResponse<AyahsTranslationPartialEditResponseData>> {
         return this.axiosPatch(
             `/ayahs/translation/${params.uuid}/`,
             data,
@@ -133,7 +126,7 @@ export class ControllerAyahs extends BaseController {
 
     /** DELETE /ayahs/translation/{uuid}/ */
     async deleteTranslation(
-        params: AyahsTraslationEditRequestParams,
+        params: AyahsTranslationEditResponseData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return this.axiosDelete(`/ayahs/translation/${params.uuid}/`, config);

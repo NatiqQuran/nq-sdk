@@ -1,6 +1,32 @@
 import { FilterQueryParams } from "../utils/globalTypes";
 
 // Notifications
+export type NotificationsDefaultRequestParams = {
+    id: string;
+}
+export type NotificationsDefaultRequestData = {
+    resource_controller?: string;
+    resource_action?: string;
+    resource_uuid?: string;
+    status?: NotificationStatus;
+    description?: string;
+    message?: string;
+    message_type?: NotificationMessageType;
+}
+export type NotificationsDefaultResponseData = {
+    uuid: string;
+    resource_controller: string;
+    resource_action: string;
+    resource_uuid?: string;
+    status?: NotificationStatus;
+    description?: string;
+    message?: string;
+    message_type?: NotificationMessageType;
+    created_at: string;
+    
+}
+
+
 // Notifications List
 export interface NotificationsListRequestParams {
     page: number;
@@ -33,116 +59,36 @@ interface NotificationsListResponseItem {
 export type NotificationsListResponseData = NotificationsListResponseItem[];
 
 // Notifications View
-export interface NotificationsViewRequestParams {
-    id: string;
-}
-
-export interface NotificationsViewResponseData {
-    uuid: string;
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-    created_at: string;
-}
+export type NotificationsViewRequestParams = NotificationsDefaultRequestParams;
+export type NotificationsViewResponseData = NotificationsDefaultResponseData;
 
 // Notifications Add
-export interface NotificationsAddRequestData {
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-}
-
-export interface NotificationsAddResponseData {
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-    created_at: string;
-}
+export type NotificationsAddRequestData = NotificationsDefaultRequestData;
+export type NotificationsAddResponseData = NotificationsDefaultResponseData;
 
 // Notifications Edit
-export interface NotificationsEditRequestParams {
-    id: string;
-}
+export type NotificationsEditRequestParams = NotificationsDefaultRequestParams;
+export type NotificationsEditRequestData = NotificationsDefaultRequestData;
 
-export interface NotificationsEditRequestData {
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-}
+export type NotificationsEditResponseData = NotificationsDefaultResponseData;
 
-export interface NotificationsEditResponseData {
-    uuid: string;
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-    created_at: string;
-}
+// Notification Partial Edit
+export type NotificationsPartialEditRequestParams = NotificationsDefaultRequestParams;
+export type NotificationsPartialEditRequestData = Partial<NotificationsDefaultRequestData>;
 
-// Notifications Update
-export interface NotificationsUpdateRequestParams {
-    id: string;
-}
+export type NotificationsPartialEditResponseData = NotificationsDefaultResponseData;
 
-export interface NotificationsUpdateRequestData {
-    resource_controller?: string;
-    resource_action?: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-}
 
-export interface NotificationsUpdateResponseData {
-    uuid: string;
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-    created_at: string;
-}
+
 
 // /notifications/me/
-export interface NotificationsMeListRequestParams extends FilterQueryParams {}
-export interface NotificationsMeListResponseData {
-    uuid: string;
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
-    created_at: string;
-}
+export type NotificationsMeListRequestParams = FilterQueryParams;
+export type NotificationsMeListResponseData = NotificationsDefaultResponseData[];
+
 
 // /notifications/opened/
-export interface NotificationsOpenedRequestParams {
-    uuid: string;
-}
-export type NotificationsOpenedResponseData = Record<string, unknown>;
+export type NotificationsOpenedRequestParams = NotificationsDefaultRequestParams;
+export type NotificationsOpenedResponseData = NotificationsDefaultResponseData;
 
 // /notifications/viewed/
 export type NotificationsViewedResponseData = Record<string, unknown>;

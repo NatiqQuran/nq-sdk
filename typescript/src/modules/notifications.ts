@@ -11,14 +11,14 @@ import {
   NotificationsEditRequestParams,
   NotificationsEditRequestData,
   NotificationsEditResponseData,
-  NotificationsUpdateRequestParams,
-  NotificationsUpdateRequestData,
-  NotificationsUpdateResponseData,
+  NotificationsPartialEditRequestData,
+  NotificationsPartialEditResponseData,
   NotificationsMeListRequestParams,
   NotificationsMeListResponseData,
   NotificationsOpenedRequestParams,
   NotificationsOpenedResponseData,
   NotificationsViewedResponseData,
+  NotificationsPartialEditRequestParams,
 } from "../types/notifications";
 
 import { BaseController } from "../utils/baseController";
@@ -63,10 +63,10 @@ export class ControllerNotifications extends BaseController {
 
   /** PATCH /notifications/{id}/ */
   async partialEdit(
-    params: NotificationsUpdateRequestParams,
-    data: NotificationsUpdateRequestData,
+    params: NotificationsPartialEditRequestParams,
+    data: NotificationsPartialEditRequestData,
     config?: RequestConfig
-  ): Promise<AxiosResponse<NotificationsUpdateResponseData>> {
+  ): Promise<AxiosResponse<NotificationsPartialEditResponseData>> {
     return await this.axiosPatch(`/notifications/${params.id}/`, data, config);
   }
 

@@ -1,90 +1,48 @@
 import { FilterQueryParams } from "../utils/globalTypes";
 
-// Mushaf
+// Mushafs
+export type MushafsDefaultRequestParams = {
+    uuid: string;
+}
+export type MushafsDefaultRequestData = {
+    short_name: string;
+    name: string;
+    source?: string;
+    status?: Status;
+}
+export type MushafsDefaultResponseData = {
+    uuid: string;
+    short_name: string;
+    name: string;
+    source?: string;
+    status?: Status;
+}
 
+type Status = "draft" | "pending_review" | "published";
 //Mushaf List
 export interface MushafsListRequestParams extends FilterQueryParams {}
-type Status = "draft" | "pending_review" | "published";
-export interface MushafsListResponseItem {
-    uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
-export type MushafsListResponseData = MushafsListResponseItem[];
+export type MushafsListResponseData = MushafsDefaultResponseData[];
 
 //Mushaf View
-export interface MushafsViewRequestParams {
-    uuid: string;
-}
-export interface MushafViewResponseData {
-    uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
+export type MushafsViewRequestParams = MushafsDefaultRequestParams;
+export type MushafsViewResponseData = MushafsDefaultResponseData;
 
 //Mushaf Add
-export interface MushasfAddRequestData {
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
-export interface MushafAddResponseData {
-    uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
+export type MushasfAddRequestData = MushafsDefaultRequestData;
+export type MushafAddResponseData = MushafsDefaultResponseData;
 
 //Mushaf Edit
-export interface MushafsEditRequestParams {
-    uuid: string;
-}
-export interface MushafsEditRequestData {
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
-export interface MushafEditResponseData {
-    uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
+export type MushafsEditRequestParams = MushafsDefaultRequestParams;
+export type MushafsEditRequestData = MushafsDefaultRequestData;
+export type MushafEditResponseData = MushafsDefaultResponseData;
 
 //Mushaf Update
-export interface MushafsUpdateRequestParams {
-    uuid: string;
-}
-export interface MushafasUpdateRequestData {
-    short_name?: string;
-    name?: string;
-    source?: string;
-    status?: Status;
-}
-export interface MushafUpdateResponseData {
-    uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
+export type MushafsUpdateRequestParams = MushafsDefaultRequestParams;
+export type MushafasUpdateRequestData = Partial<MushafsDefaultRequestData>;
+export type MushafUpdateResponseData = MushafsDefaultResponseData;
 
 //Mushaf Import
 export interface MushafImportRequestData {
     file: File | Blob;
 }
-export interface MushafImportResponseData {
-    uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    status?: Status;
-}
+export type MushafImportResponseData = MushafsDefaultResponseData;

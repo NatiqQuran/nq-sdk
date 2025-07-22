@@ -1,52 +1,40 @@
+import { FilterQueryParams } from "../utils/globalTypes";
+
 //Phrases
-//Phrases List
-interface PhrasesListItem {
+export type PhrasesDefaultRequestParams = {
     uuid: string;
-    phrase: string;
 }
-export type PhrasesListResponseData = PhrasesListItem[];
+export type PhrasesDefaultRequestData = { 
+    phrase: string;
+
+}
+export type PhrasesDefaultResponseData = { 
+    uuid:string;
+    phrase: string;
+
+}
+
+//Phrases List
+
+export type PhrasesListResponseData = PhrasesDefaultResponseData
 
 //Phrases View
-export interface PhrasesViewRequestParams {
-    uuid: string;
-}
-export interface PhrasesViewResponseData {
-    uuid: string;
-    phrase: string;
-}
+export type PhrasesViewRequestParams =PhrasesDefaultRequestParams
+export type PhrasesViewResponseData = PhrasesDefaultResponseData
 
 //Pharses Add
-export interface PhrasesAddRequestData {
-    phrase: string;
-}
-export interface PhrasesAddResponseData {
-    uuid: string;
-    phrase: string;
-}
+export type PhrasesAddRequestData = PhrasesDefaultRequestData
+export type PhrasesAddResponseData = PhrasesDefaultResponseData
 
 //Phrases Edit
-export interface PhrasesEditRequestParams {
-    uuid: string;
-}
-export interface PhrasesEditRequestData {
-    phrase: string;
-}
-export interface PhrasesEditResponseData {
-    uuid: string;
-    phrase: string;
-}
+export type PhrasesEditRequestParams = PhrasesDefaultRequestParams
+export type PhrasesEditRequestData = PhrasesDefaultRequestData
+export type PhrasesEditResponseData = PhrasesDefaultResponseData
 
-//Phrases Update
-export interface PhrasesUpdateRequestParams {
-    uuid: string;
-}
-export interface PhrasesUpdateRequestData {
-    phrase?: string;
-}
-export interface PhrasesUpdateResponseData {
-    uuid: string;
-    phrase: string;
-}
+//Phrases Partial Edit
+export type PhrasesPartialEditRequestParams = PhrasesDefaultRequestParams
+export type PhrasesPartialEditRequestData = PhrasesDefaultRequestData
+export type PhrasesPartialEditResponseData = PhrasesDefaultResponseData
 
 // Phrases Modify
 export interface PhrasesModifyRequestParams {
