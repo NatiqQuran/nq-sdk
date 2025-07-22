@@ -16,7 +16,7 @@ export * from "./client/connection";
 // Modules
 export * from "./modules/auths";
 export * from "./modules/users";
-// export * from "./modules/groups";
+export * from "./modules/groups";
 export * from "./modules/mushafs";
 export * from "./modules/surahs";
 export * from "./modules/ayahs";
