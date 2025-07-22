@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     GroupsListResponseData,
@@ -14,7 +15,6 @@ import {
     GroupsUpdateRequestData,
     GroupsUpdateResponsetData,
 } from "../types/groups";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerGroups extends BaseController {
     constructor(connection: Connection, token?: string) {

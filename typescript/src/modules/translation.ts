@@ -11,6 +11,7 @@ import {
     TranslationsEditResponseData,
     TranslationsPartialEditRequestData,
     TranslationsPartialEditResponseData,
+    TranslationsViewRequestParams,
 } from "../types/translations";
 import { BaseController } from "../utils/baseController";
 
@@ -29,7 +30,7 @@ export class ControllerTranslations extends BaseController {
     /** GET /translations/{uuid}/ */
     async view(
         uuid: string,
-        config?: RequestConfig
+        config?: RequestConfig<TranslationsViewRequestParams>
     ): Promise<AxiosResponse<TranslationsViewResponseData>> {
         return await this.axiosGet(`/translations/${uuid}/`, config);
     }

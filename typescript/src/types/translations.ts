@@ -26,7 +26,19 @@ export type TranslationsListResponseItem = TranslationsDefaultResponseData;
 export type TranslationsListResponseData = TranslationsListResponseItem[];
 
 //Translations View
-export type TranslationsViewResponseData = TranslationsDefaultResponseData;
+export interface TranslationsViewRequestParams extends FilterQueryParams {
+    surah_uuid: string;
+}
+export interface TranslationsViewAyah {
+    uuid: string;
+    ayah_uuid: string;
+    text: string;
+    bismillah?: string;
+}
+export interface TranslationsViewResponseData
+    extends TranslationsDefaultResponseData {
+    ayahs: TranslationsViewAyah[];
+}
 
 //Translations Add
 export type TranslationsAddRequestData = TranslationsDefaultRequestData;
