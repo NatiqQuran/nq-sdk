@@ -1,50 +1,33 @@
-// Group
-// Groups List
-interface GroupsListResponseItem {
+// Groups
+export type GroupsDefaultRequestParams = {
+    id: string;
+}
+export type GroupsDefaultRequestData = {
+    name: string;
+}
+export type GroupsDefaultResponseData = {
     url: string;
     name: string;
 }
-export type GroupsListResponseData = GroupsListResponseItem[];
+
+// Groups List
+export type GroupsListResponseData = GroupsDefaultResponseData[];
 
 // Groups View
-export interface GroupsViewRequestParams {
-    id: string;
-}
-export interface GroupsViewResponseData {
-    url: string;
-    name: string;
-}
+export type GroupsViewRequestParams = GroupsDefaultRequestParams;
+export type GroupsViewResponseData = GroupsDefaultResponseData;
 
 // Groups Add
-export interface GroupsAddRequestData {
-    name: string;
-}
-export interface GroupsAddResponsetData {
-    url: string;
-    name: string;
-}
+export type GroupsAddRequestData = GroupsDefaultRequestData;
+export type GroupsAddResponseData = GroupsDefaultResponseData;
 
 // Groups Edit
-export interface GroupsEditRequestParams {
-    id: string;
-}
+export type GroupsEditRequestParams = GroupsDefaultRequestParams;
+export type GroupsEditRequestData = GroupsDefaultRequestData;
+export type GroupsEditResponseData = GroupsDefaultResponseData;
 
-export interface GroupsEditRequestData {
-    name: string;
-}
-export interface GroupsEditResponsetData {
-    url: string;
-    name: string;
-}
+// Groups Partial Edit  
+export type GroupsPartialEditRequestParams = GroupsDefaultRequestParams;
+export type GroupsPartialEditRequestData = Partial<GroupsDefaultRequestData>;
+export type GroupsPartialEditResponseData = GroupsDefaultResponseData;
 
-// Groups Update
-export interface GroupsUpdateRequestParams {
-    id: string;
-}
-export interface GroupsUpdateRequestData {
-    name?: string;
-}
-export interface GroupsUpdateResponsetData {
-    url: string;
-    name: string;
-}
