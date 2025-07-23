@@ -1,20 +1,17 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     MushafsListResponseData,
-    MushafsViewRequestParams,
     MushafsViewResponseData,
     MushasfAddRequestData,
     MushafAddResponseData,
-    MushafsEditRequestParams,
     MushafsEditRequestData,
     MushafEditResponseData,
-    MushafsUpdateRequestParams,
-    MushafasUpdateRequestData,
-    MushafUpdateResponseData,
+    MushafsPartialEditRequestData,
+    MushafsPartialEditResponseData,
 } from "../types/mushafs";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerMushafs extends BaseController {
     constructor(connection: Connection, token?: string) {
@@ -30,10 +27,10 @@ export class ControllerMushafs extends BaseController {
 
     /** GET /mushafs/{uuid}/ */
     async view(
-        params: MushafsViewRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafsViewResponseData>> {
-        return await this.axiosGet(`/mushafs/${params.uuid}/`, config);
+        return await this.axiosGet(`/mushafs/${uuid}/`, config);
     }
 
     /** POST /mushafs/ */
@@ -46,28 +43,28 @@ export class ControllerMushafs extends BaseController {
 
     /** PUT /mushafs/{uuid}/ */
     async edit(
-        params: MushafsEditRequestParams,
+        uuid: string,
         data: MushafsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafEditResponseData>> {
-        return await this.axiosPut(`/mushafs/${params.uuid}/`, data, config);
+        return await this.axiosPut(`/mushafs/${uuid}/`, data, config);
     }
 
     /** PATCH /mushafs/{uuid}/ */
     async partialEdit(
-        params: MushafsUpdateRequestParams,
-        data: MushafasUpdateRequestData,
+        uuid: string,
+        data: MushafsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<MushafUpdateResponseData>> {
-        return await this.axiosPatch(`/mushafs/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<MushafsPartialEditResponseData>> {
+        return await this.axiosPatch(`/mushafs/${uuid}/`, data, config);
     }
 
     /** DELETE /mushafs/{uuid}/ */
     async delete(
-        params: MushafsEditRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/mushafs/${params.uuid}/`, config);
+        return await this.axiosDelete(`/mushafs/${uuid}/`, config);
     }
 }
 

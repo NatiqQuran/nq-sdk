@@ -1,5 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     SurahsListRequestParams,
@@ -12,7 +13,6 @@ import {
     SurahsPartialEditRequestData,
     SurahsPartialEditResponseData,
 } from "../types/surahs";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerSurahs extends BaseController {
     constructor(connection: Connection, token?: string) {

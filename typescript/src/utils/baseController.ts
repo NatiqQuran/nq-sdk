@@ -1,4 +1,4 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import {  AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { RequestConfig } from "../utils/globalTypes";
 
@@ -37,31 +37,31 @@ export class BaseController {
         return this.conn.axios.get(url, this.getAuthConfig(config));
     }
 
-    protected axiosPost<T>(
+    protected axiosPost<T, P>(
         url: string,
         data: any,
-        config?: RequestConfig
+        config?: RequestConfig<P>
     ): Promise<AxiosResponse<T>> {
         return this.conn.axios.post(url, data, this.getAuthConfig(config));
     }
 
-    protected axiosPut<T>(
+    protected axiosPut<T, P>(
         url: string,
         data: any,
-        config?: RequestConfig
+        config?: RequestConfig<P>
     ): Promise<AxiosResponse<T>> {
         return this.conn.axios.put(url, data, this.getAuthConfig(config));
     }
 
-    protected axiosPatch<T>(
+    protected axiosPatch<T, P>(
         url: string,
         data: any,
-        config?: RequestConfig
+        config?: RequestConfig<P>
     ): Promise<AxiosResponse<T>> {
         return this.conn.axios.patch(url, data, this.getAuthConfig(config));
     }
 
-    protected axiosDelete<T>(url: string, config?: RequestConfig): Promise<AxiosResponse<T>> {
+    protected axiosDelete<T, P>(url: string, config?: RequestConfig<P>): Promise<AxiosResponse<T>> {
         return this.conn.axios.delete(url, this.getAuthConfig(config));
     }
 }

@@ -1,35 +1,23 @@
-//Profile 
-//Profile View
-export interface PrifileViewRequestParams {
-    uuid: string;
-}
-export interface ProfileViewResponseData {
+//Profile
+ interface ProfileDefaultRequestData {
     username: string[];
     email?: string;
     first_name?: string;
     last_name?: string;
 }
-//Profile Me
-//Profile Me List
-interface ProfileMeListResponseItem {
-    username: string;
+ interface ProfileDefaultResponseData {
+    username: string[];
     email?: string;
     first_name?: string;
     last_name?: string;
 }
-export type ProfileMeListResponseData = ProfileMeListResponseItem[];
+//Profile View
+export type ProfileViewResponseData = ProfileDefaultResponseData;
+
+//Profile Me
+//Profile Me View
+export type ProfileMeViewResponseData = ProfileDefaultResponseData;
 
 // Profile Me Add
-export interface ProfileMeAddRequestData {
-    username: string[];
-    email?: string;
-    first_name?: string;
-    last_name?: string;
-}
-
-export interface ProfileMeAddResponseData {
-    username: string[];
-    email?: string;
-    first_name?: string;
-    last_name?: string;
-}
+export type ProfileMeAddRequestData = ProfileDefaultRequestData;
+export type ProfileMeAddResponseData = ProfileDefaultResponseData;

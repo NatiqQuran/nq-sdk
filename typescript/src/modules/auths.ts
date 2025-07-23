@@ -1,12 +1,12 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
 import { RequestConfig } from "../utils/globalTypes";
 import {
     AuthLoginRequestData,
     AuthRegisterRequestData,
     AuthRegisterResponseData,
 } from "../types/auths";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerAuth extends BaseController {
     constructor(connection: Connection, token?: string) {
