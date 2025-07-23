@@ -1,20 +1,17 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     WordListResponseData,
-    WordViewRequestParams,
     WordViewResponseData,
     WordAddRequestData,
     WordAddResponseData,
-    WordEditRequestParams,
     WordEditRequestData,
     WordEditResponseData,
-    WordUpdateRequestParams,
-    WordUpdateRequestData,
-    WordUpdateResponseData,
+    WordPartialEditRequestData,
+    WordPartialEditResponseData,
 } from "../types/words";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerWords extends BaseController {
     constructor(connection: Connection, token?: string) {
@@ -30,10 +27,10 @@ export class ControllerWords extends BaseController {
 
     /** GET /words/{uuid}/ */
     async view(
-        params: WordViewRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<WordViewResponseData>> {
-        return await this.axiosGet(`/words/${params.uuid}/`, config);
+        return await this.axiosGet(`/words/${uuid}/`, config);
     }
 
     /** POST /words/ */
@@ -46,27 +43,27 @@ export class ControllerWords extends BaseController {
 
     /** PUT /words/{uuid}/ */
     async edit(
-        params: WordEditRequestParams,
+        uuid: string,
         data: WordEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<WordEditResponseData>> {
-        return await this.axiosPut(`/words/${params.uuid}/`, data, config);
+        return await this.axiosPut(`/words/${uuid}/`, data, config);
     }
 
     /** PATCH /words/{uuid}/ */
     async partialEdit(
-        params: WordUpdateRequestParams,
-        data: WordUpdateRequestData,
+        uuid: string,
+        data: WordPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<WordUpdateResponseData>> {
-        return await this.axiosPatch(`/words/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<WordPartialEditResponseData>> {
+        return await this.axiosPatch(`/words/${uuid}/`, data, config);
     }
 
     /** DELETE /words/{uuid}/ */
     async delete(
-        params: WordEditRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/words/${params.uuid}/`, config);
+        return await this.axiosDelete(`/words/${uuid}/`, config);
     }
 }

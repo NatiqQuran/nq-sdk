@@ -1,74 +1,32 @@
 // Users 
-// Users List
-interface UsersListResponseItem {
+ interface UsersDefaultRequestData {
+    username: string;
+    password: string;
+    password2: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+}
+ interface UsersDefaultResponseData {
     username: string;
     email: string;
     first_name?: string;
     last_name?: string;
 }
-export type UsersListResponseData = UsersListResponseItem[];
+// Users List
+export type UsersListResponseData = UsersDefaultResponseData[];
 
 //Users View
-export interface UsersViewRequestParams {
-    uuid: string;
-}
-export interface UsersViewResponseData {
-    username: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
+export type UsersViewResponseData = UsersDefaultResponseData;
 
 //Users Add
-export interface UsersAddRequestData {
-    username: string;
-    password: string;
-    password2: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
-export interface UsersAddResponseData {
-    username: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
+export type UsersAddRequestData = UsersDefaultRequestData;
+export type UsersAddResponseData = UsersDefaultResponseData;
 
 //Users Edit
-export interface UsersEditRequestParams {
-    uuid: string;
-}
-export interface UsersEditRequestData {
-    username: string;
-    password: string;
-    password2: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
-export interface UsersEditResponseData {
-    username: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
+export type UsersEditRequestData = UsersDefaultRequestData;
+export type UsersEditResponseData = UsersDefaultResponseData;
 
-//Users Update
-export interface UsersUpdateRequestParams {
-    uuid: string;
-}
-export interface UsersUpdateRequestData {
-    username?: string;
-    password?: string;
-    password2?: string;
-    email?: string;
-    first_name?: string;
-    last_name?: string;
-}
-export interface UsersUpdateResponseData {
-    username: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
+//Users Partial Edit
+export type UsersPartialEditRequestData = Partial<UsersDefaultRequestData>;
+export type UsersPartialEditResponseData = UsersDefaultResponseData;

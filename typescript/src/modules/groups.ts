@@ -4,16 +4,13 @@ import { BaseController } from "../utils/baseController";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     GroupsListResponseData,
-    GroupsViewRequestParams,
     GroupsViewResponseData,
     GroupsAddRequestData,
-    GroupsAddResponsetData,
-    GroupsEditRequestParams,
+    GroupsAddResponseData,
     GroupsEditRequestData,
-    GroupsEditResponsetData,
-    GroupsUpdateRequestParams,
-    GroupsUpdateRequestData,
-    GroupsUpdateResponsetData,
+    GroupsEditResponseData,
+    GroupsPartialEditRequestData,
+    GroupsPartialEditResponseData,
 } from "../types/groups";
 
 export class ControllerGroups extends BaseController {
@@ -30,43 +27,43 @@ export class ControllerGroups extends BaseController {
 
     /** GET /groups/{id}/ */
     async view(
-        params: GroupsViewRequestParams,
+        id: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsViewResponseData>> {
-        return await this.axiosGet(`/groups/${params.id}/`, config);
+        return await this.axiosGet(`/groups/${id}/`, config);
     }
 
     /** POST /groups/ */
     async add(
         data: GroupsAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<GroupsAddResponsetData>> {
+    ): Promise<AxiosResponse<GroupsAddResponseData>> {
         return await this.axiosPost(`/groups/`, data, config);
     }
 
     /** PUT /groups/{id}/ */
     async edit(
-        params: GroupsEditRequestParams,
+        id: string,
         data: GroupsEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<GroupsEditResponsetData>> {
-        return await this.axiosPut(`/groups/${params.id}/`, data, config);
+    ): Promise<AxiosResponse<GroupsEditResponseData>> {
+        return await this.axiosPut(`/groups/${id}/`, data, config);
     }
 
     /** PATCH /groups/{id}/ */
     async partialEdit(
-        params: GroupsUpdateRequestParams,
-        data: GroupsUpdateRequestData,
+        id: string,
+        data: GroupsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<GroupsUpdateResponsetData>> {
-        return await this.axiosPatch(`/groups/${params.id}/`, data, config);
+    ): Promise<AxiosResponse<GroupsPartialEditResponseData>> {
+        return await this.axiosPatch(`/groups/${id}/`, data, config);
     }
 
     /** DELETE /groups/{id}/ */
     async delete(
-        params: GroupsEditRequestParams,
+        id: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/groups/${params.id}/`, config);
+        return await this.axiosDelete(`/groups/${id}/`, config);
     }
 }

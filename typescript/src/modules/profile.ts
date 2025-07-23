@@ -1,14 +1,13 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
-import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
+import { BaseController } from "../utils/baseController";
+import { RequestConfig } from "../utils/globalTypes";
 import {
-    PrifileViewRequestParams,
     ProfileViewResponseData,
-    ProfileMeListResponseData,
     ProfileMeAddRequestData,
     ProfileMeAddResponseData,
+    ProfileMeViewResponseData,
 } from "../types/profile";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerProfile extends BaseController {
     constructor(connection: Connection, token?: string) {
@@ -17,16 +16,16 @@ export class ControllerProfile extends BaseController {
 
     /** GET /profile/{uuid}/ */
     async view(
-        params: PrifileViewRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileViewResponseData>> {
-        return await this.axiosGet(`/profile/${params.uuid}/`, config);
+        return await this.axiosGet(`/profile/${uuid}/`, config);
     }
 
     /** GET /profile/me/ */
-    async meList(
+    async meView(
         config?: RequestConfig
-    ): Promise<AxiosResponse<ProfileMeListResponseData>> {
+    ): Promise<AxiosResponse<ProfileMeViewResponseData>> {
         return await this.axiosGet(`/profile/me/`, config);
     }
 

@@ -1,20 +1,17 @@
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
 import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
 import {
     RecitationsListResponseData,
-    RecitationsViewRequestParams,
     RecitationsViewResponseData,
     RecitationsAddRequestData,
-    RecitationsAddResponseDate,
-    RecitationsEditRequestParams,
+    RecitationsAddResponseData,
     RecitationsEditRequestData,
     RecitationsEditResponseData,
-    RecitationsUpdateRequestParams,
-    RecitationsUpdateRequestData,
-    RecitationsUpdateResponseData,
+    RecitationsPartialEditRequestData,
+    RecitationsPartialEditResponseData,
 } from "../types/recitations";
-import { BaseController } from "../utils/baseController";
 
 export class ControllerRecitations extends BaseController {
     constructor(connection: Connection, token?: string) {
@@ -30,43 +27,43 @@ export class ControllerRecitations extends BaseController {
 
     /** GET /recitations/{uuid}/ */
     async view(
-        params: RecitationsViewRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsViewResponseData>> {
-        return await this.axiosGet(`/recitations/${params.uuid}/`, config);
+        return await this.axiosGet(`/recitations/${uuid}/`, config);
     }
 
     /** POST /recitations/ */
     async add(
         data: RecitationsAddRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<RecitationsAddResponseDate>> {
+    ): Promise<AxiosResponse<RecitationsAddResponseData>> {
         return await this.axiosPost(`/recitations/`, data, config);
     }
 
     /** PUT /recitations/{uuid}/ */
     async edit(
-        params: RecitationsEditRequestParams,
+        uuid: string,
         data: RecitationsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsEditResponseData>> {
-        return await this.axiosPut(`/recitations/${params.uuid}/`, data, config);
+        return await this.axiosPut(`/recitations/${uuid}/`, data, config);
     }
 
     /** PATCH /recitations/{uuid}/ */
     async partialEdit(
-        params: RecitationsUpdateRequestParams,
-        data: RecitationsUpdateRequestData,
+        uuid: string,
+        data: RecitationsPartialEditRequestData,
         config?: RequestConfig
-    ): Promise<AxiosResponse<RecitationsUpdateResponseData>> {
-        return await this.axiosPatch(`/recitations/${params.uuid}/`, data, config);
+    ): Promise<AxiosResponse<RecitationsPartialEditResponseData>> {
+        return await this.axiosPatch(`/recitations/${uuid}/`, data, config);
     }
 
     /** DELETE /recitations/{uuid}/ */
     async delete(
-        params: RecitationsEditRequestParams,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/recitations/${params.uuid}/`, config);
+        return await this.axiosDelete(`/recitations/${uuid}/`, config);
     }
 }

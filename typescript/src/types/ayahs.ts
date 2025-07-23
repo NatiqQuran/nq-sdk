@@ -26,9 +26,6 @@ export type AyahsListResponseItem = AyahsDefaultResponseData;
 export type AyahsListResponseData = AyahsListResponseItem[];
 
 // Ayahs View
-export interface AyahsViewRequestParams {
-    uuid: string;
-}
 export type AyahsViewResponseData = AyahsDefaultResponseData & {
     mushaf: string;
     words: { uuid: string; text: string }[];
@@ -43,9 +40,6 @@ export type AyahsEditRequestData = AyahsDefaultRequestData;
 export type AyahsEditResponseData = AyahsDefaultResponseData;
 
 // Ayahs PartialEdit
-export interface AyahsPartialEditRequestParams {
-    uuid: string;
-}
 export type AyahsPartialEditRequestData = Partial<AyahsDefaultRequestData>;
 export type AyahsPartialEditResponseData = AyahsDefaultResponseData;
 
@@ -70,17 +64,11 @@ export type AyahsTranslationListResponseItem =  AyahsTranslationDefaultResponseI
 export type AyahsTranslationListResponseData = AyahsTranslationListResponseItem;
 
 // Ayahs Translation View
-export interface AyahsTranslationViewRequestParams {
-    uuid: string;
-}
 export type AyahsTranslationViewResponseData = AyahsTranslationDefaultResponseItem; 
 export type AyahsTranslationAddRequestData = AyahsTranslationDefaultRequestData;
 export type AyahsTranslationAddResponseData = AyahsTranslationDefaultResponseItem;
 
 // Ayahs Translation Edit
-export interface AyahsTranslationEditRequestParams {
-    uuid: string;
-}
 export type AyahsTranslationEditRequestData = AyahsTranslationDefaultRequestData;
 export type AyahsTranslationEditResponseData = AyahsTranslationDefaultResponseItem;
 

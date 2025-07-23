@@ -13,21 +13,23 @@ interface SurahsDefaultRequestData {
     period?: Period;
     search_terms?: string[];
 }
+interface SurahsDefaultResponseMushaf {
+    uuid: string;
+    short_name: string;
+    name: string;
+    source?: string;
+    Status?: Status;
+}
+interface SurahsDefaultResponseNames {
+    name: string;
+    name_pronunciation: string | null;
+    name_translation: string | null;
+    name_transliteration: string | null;
+}
 interface SurahsDefaultResponseData {
     uuid: string;
-    mushaf: {
-        uuid: string;
-        short_name: string;
-        name: string;
-        source?: string;
-        Status?: Status;
-    }[];
-    names: {
-        name: string;
-        name_pronunciation: string | null;
-        name_translation: string | null;
-        name_transliteration: string | null;
-    }[];
+    mushaf: SurahsDefaultResponseMushaf[];
+    names: SurahsDefaultResponseNames[];
     number: number;
     period?: Period;
     search_terms?: string[];
