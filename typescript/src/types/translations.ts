@@ -19,7 +19,7 @@ interface TranslationsDefaultResponseData {
 
 //Translations List
 export interface TranslationsListRequestParams extends FilterQueryParams {
-    language: string;
+    language?: string;
     mushaf_uuid: string;
 }
 export type TranslationsListResponseItem = TranslationsDefaultResponseData;
