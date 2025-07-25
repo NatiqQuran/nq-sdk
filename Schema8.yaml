@@ -97,243 +97,6 @@ paths:
           description: User registered successfully, returns user data and token.
         '400':
           description: Validation error.
-  /ayah-translations/:
-    get:
-      operationId: ayah_translations_list
-      description: |-
-        ViewSet for AyahTranslation objects (translations of individual Ayahs).
-        Allows filtering by translation or ayah, and supports upsert on create.
-      summary: List all Ayah Translations
-      parameters:
-      - in: query
-        name: ayah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Ayah UUID
-      - name: ordering
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
-        schema:
-          type: string
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
-      - name: search
-        required: false
-        in: query
-        description: A search term.
-        schema:
-          type: string
-      - in: query
-        name: translation_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Translation UUID
-      tags:
-      - ayah-translations
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedAyahTranslationList'
-          description: ''
-    post:
-      operationId: ayah_translations_create
-      description: |-
-        ViewSet for AyahTranslation objects (translations of individual Ayahs).
-        Allows filtering by translation or ayah, and supports upsert on create.
-      summary: Create a new Ayah Translation record
-      parameters:
-      - in: query
-        name: ayah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Ayah UUID
-      - in: query
-        name: translation_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Translation UUID
-      tags:
-      - ayah-translations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-        required: true
-      security:
-      - knoxApiToken: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AyahTranslation'
-          description: ''
-  /ayah-translations/{uuid}/:
-    get:
-      operationId: ayah_translations_retrieve
-      description: |-
-        ViewSet for AyahTranslation objects (translations of individual Ayahs).
-        Allows filtering by translation or ayah, and supports upsert on create.
-      summary: Retrieve a specific Ayah Translation by UUID
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-        required: true
-      tags:
-      - ayah-translations
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AyahTranslation'
-          description: ''
-    put:
-      operationId: ayah_translations_update
-      description: |-
-        ViewSet for AyahTranslation objects (translations of individual Ayahs).
-        Allows filtering by translation or ayah, and supports upsert on create.
-      summary: Update an existing Ayah Translation record
-      parameters:
-      - in: query
-        name: ayah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Ayah UUID
-      - in: query
-        name: translation_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Translation UUID
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-        required: true
-      tags:
-      - ayah-translations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-        required: true
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AyahTranslation'
-          description: ''
-    patch:
-      operationId: ayah_translations_partial_update
-      description: |-
-        ViewSet for AyahTranslation objects (translations of individual Ayahs).
-        Allows filtering by translation or ayah, and supports upsert on create.
-      summary: Partially update an Ayah Translation record
-      parameters:
-      - in: query
-        name: ayah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Ayah UUID
-      - in: query
-        name: translation_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Translation UUID
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-        required: true
-      tags:
-      - ayah-translations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedAyahTranslation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedAyahTranslation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedAyahTranslation'
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AyahTranslation'
-          description: ''
-    delete:
-      operationId: ayah_translations_destroy
-      description: |-
-        ViewSet for AyahTranslation objects (translations of individual Ayahs).
-        Allows filtering by translation or ayah, and supports upsert on create.
-      summary: Delete an Ayah Translation record
-      parameters:
-      - in: path
-        name: uuid
-        schema:
-          type: string
-          format: uuid
-        required: true
-      tags:
-      - ayah-translations
-      security:
-      - knoxApiToken: []
-      responses:
-        '204':
-          description: No response body
   /ayahs/:
     get:
       operationId: ayahs_list
@@ -884,6 +647,7 @@ paths:
   /notifications/:
     get:
       operationId: notifications_list
+      summary: List all notifications
       parameters:
       - name: page
         required: false
@@ -910,6 +674,7 @@ paths:
           description: ''
     post:
       operationId: notifications_create
+      summary: Create a new notification
       tags:
       - notifications
       requestBody:
@@ -936,6 +701,7 @@ paths:
   /notifications/{id}/:
     get:
       operationId: notifications_retrieve
+      summary: Retrieve a specific notification by UUID
       parameters:
       - in: path
         name: id
@@ -956,6 +722,7 @@ paths:
           description: ''
     put:
       operationId: notifications_update
+      summary: Update an existing notification
       parameters:
       - in: path
         name: id
@@ -988,6 +755,7 @@ paths:
           description: ''
     patch:
       operationId: notifications_partial_update
+      summary: Partially update a notification
       parameters:
       - in: path
         name: id
@@ -1019,6 +787,7 @@ paths:
           description: ''
     delete:
       operationId: notifications_destroy
+      summary: Delete a notification
       parameters:
       - in: path
         name: id
@@ -1818,7 +1587,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedTranslationList'
+                $ref: '#/components/schemas/PaginatedTranslationListList'
           description: ''
     post:
       operationId: translations_create
@@ -1832,13 +1601,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Translation'
+              $ref: '#/components/schemas/TranslationList'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Translation'
+              $ref: '#/components/schemas/TranslationList'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Translation'
+              $ref: '#/components/schemas/TranslationList'
         required: true
       security:
       - knoxApiToken: []
@@ -1847,7 +1616,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Translation'
+                $ref: '#/components/schemas/TranslationList'
           description: ''
   /translations/{uuid}/:
     get:
@@ -1857,6 +1626,12 @@ paths:
         Supports filtering by Mushaf and language, and restricts editing of published translations.
       summary: Retrieve a specific Translation by UUID
       parameters:
+      - in: query
+        name: surah_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Surah to filter ayahs_translations by.
       - in: path
         name: uuid
         schema:
@@ -1893,13 +1668,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Translation'
+              $ref: '#/components/schemas/TranslationList'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Translation'
+              $ref: '#/components/schemas/TranslationList'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Translation'
+              $ref: '#/components/schemas/TranslationList'
         required: true
       security:
       - knoxApiToken: []
@@ -1908,7 +1683,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Translation'
+                $ref: '#/components/schemas/TranslationList'
           description: ''
     patch:
       operationId: translations_partial_update
@@ -1929,13 +1704,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedTranslation'
+              $ref: '#/components/schemas/PatchedTranslationList'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedTranslation'
+              $ref: '#/components/schemas/PatchedTranslationList'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedTranslation'
+              $ref: '#/components/schemas/PatchedTranslationList'
       security:
       - knoxApiToken: []
       responses:
@@ -1943,7 +1718,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Translation'
+                $ref: '#/components/schemas/TranslationList'
           description: ''
     delete:
       operationId: translations_destroy
@@ -1964,6 +1739,165 @@ paths:
       - knoxApiToken: []
       responses:
         '204':
+          description: No response body
+  /translations/{uuid}/ayah/{ayah_uuid}/:
+    post:
+      operationId: translations_ayah_create_2
+      description: Provide the ayah's UUID in the URL path and the translation's UUID
+        as the primary resource path. Body requires only `text` (and optional `bismillah`).
+        If an AyahTranslation already exists it will be updated, otherwise it will
+        be created.
+      summary: Create or update (upsert) a specific AyahTranslation
+      parameters:
+      - in: path
+        name: ayah_uuid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+    put:
+      operationId: translations_ayah_update
+      description: Provide the ayah's UUID in the URL path and the translation's UUID
+        as the primary resource path. Body requires only `text` (and optional `bismillah`).
+        If an AyahTranslation already exists it will be updated, otherwise it will
+        be created.
+      summary: Create or update (upsert) a specific AyahTranslation
+      parameters:
+      - in: path
+        name: ayah_uuid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
+  /translations/ayah/:
+    get:
+      operationId: translations_ayah_retrieve
+      description: |-
+        List AyahTranslation instances filtered by `translation_uuid`, `ayah_uuid`, or `surah_uuid`.
+        Mirrors the functionality previously provided by the AyahTranslationViewSet list endpoint.
+      summary: List Ayah Translations related to Translations
+      parameters:
+      - in: query
+        name: ayah_uuid
+        schema:
+          type: string
+          format: uuid
+        description: Ayah UUID
+      - in: query
+        name: surah_uuid
+        schema:
+          type: string
+          format: uuid
+        description: Surah UUID
+      - in: query
+        name: translation_uuid
+        schema:
+          type: string
+          format: uuid
+        description: Translation UUID
+      tags:
+      - translations
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslationList'
+          description: ''
+    post:
+      operationId: translations_ayah_create
+      description: |-
+        Create a new AyahTranslation or update it if it already exists (upsert behaviour).
+        Expects `translation_uuid`, `ayah_uuid`, and `text` in the payload (or corresponding query parameters).
+      summary: Create or update (upsert) an Ayah Translation
+      tags:
+      - translations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AyahTranslation'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
           description: No response body
   /translations/import/:
     post:
@@ -1993,7 +1927,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Translation'
+                $ref: '#/components/schemas/TranslationList'
           description: ''
   /upload/:
     post:
@@ -2674,10 +2608,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Ayah'
-    PaginatedAyahTranslationList:
-      type: array
-      items:
-        $ref: '#/components/schemas/AyahTranslation'
     PaginatedMushafList:
       type: array
       items:
@@ -2694,10 +2624,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Surah'
-    PaginatedTranslationList:
+    PaginatedTranslationListList:
       type: array
       items:
-        $ref: '#/components/schemas/Translation'
+        $ref: '#/components/schemas/TranslationList'
     PaginatedWordList:
       type: array
       items:
@@ -2730,26 +2660,6 @@ components:
         surah:
           type: string
           readOnly: true
-    PatchedAyahTranslation:
-      type: object
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        translation_uuid:
-          type: string
-          format: uuid
-          writeOnly: true
-        ayah_uuid:
-          type: string
-          format: uuid
-          writeOnly: true
-        text:
-          type: string
-        bismillah:
-          type: string
-          nullable: true
     PatchedGroup:
       type: object
       properties:
@@ -2911,7 +2821,7 @@ components:
         number_of_ayahs:
           type: string
           readOnly: true
-    PatchedTranslation:
+    PatchedTranslationList:
       type: object
       properties:
         uuid:
@@ -3255,6 +3165,37 @@ components:
       - mushaf_uuid
       - translator_uuid
       - uuid
+    TranslationList:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        mushaf_uuid:
+          type: string
+          readOnly: true
+        translator_uuid:
+          type: string
+          readOnly: true
+        language:
+          type: string
+          maxLength: 5
+        release_date:
+          type: string
+          format: date
+          nullable: true
+        source:
+          type: string
+          nullable: true
+          maxLength: 300
+        status:
+          $ref: '#/components/schemas/Status115Enum'
+      required:
+      - language
+      - mushaf_uuid
+      - translator_uuid
+      - uuid
     UploadSubjectListResponse:
       type: object
       properties:
@@ -3325,3 +3266,31 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
+tags:
+- name: auth
+  description: Authentication and authorization endpoints (login, logout, register,
+    token management)
+- name: profile
+  description: Endpoints for retrieving and updating the current user's profile
+- name: users
+  description: Admin-only endpoints to list, create, update and delete users
+- name: groups
+  description: Admin-only endpoints to manage permission groups
+- name: mushafs
+  description: Manage Quranic manuscripts / editions
+- name: surahs
+  description: Manage chapters of the Quran (Surahs)
+- name: ayahs
+  description: Manage verses of the Quran (Ayahs)
+- name: words
+  description: Manage words within Quranic verses
+- name: translations
+  description: Create, update and list Quran translations and their verse/ayah translations
+- name: recitations
+  description: Manage audio recitations of the Quran
+- name: phrases
+  description: Create and maintain phrases for the application
+- name: notifications
+  description: Endpoints related to user notifications
+- name: upload
+  description: Generic file-upload endpoints (JSON imports, subject uploads, etc.)

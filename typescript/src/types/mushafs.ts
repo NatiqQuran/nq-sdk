@@ -40,3 +40,31 @@ export interface MushafImportRequestData {
     file: File | Blob;
 }
 export type MushafImportResponseData = MushafsDefaultResponseData;
+
+// Mushaf Import Breakers
+export interface MushafImportBreakersRequestParams {
+    mushaf_uuid: string;
+    type?: "page" | "juz" | "hizb" | "ruku";
+  }
+  
+  export interface MushafImportBreakersRequestData {
+    file: File | Blob;
+  }
+  
+  
+  // Mushaf Ayah Map
+  export interface MushafAyahMapRequestParams {
+    mushaf_uuid: string;
+  }
+  
+  export interface MushafAyahMapItem {
+    uuid: string;
+    surah: number;
+    ayah: number;
+    juz: number ;
+    hizb: number ;
+    ruku: number ;
+    page: number ;
+  }
+  
+  export type MushafAyahMapResponseData = MushafAyahMapItem[];
