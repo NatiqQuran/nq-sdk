@@ -13,6 +13,12 @@ import {
     TranslationsPartialEditRequestData,
     TranslationsPartialEditResponseData,
     TranslationsViewRequestParams,
+    AyahsTranslationListRequestParams,
+    AyahsTranslationListResponseData,
+    AyahsTranslationAddRequestData,
+    TranslationImportResponseData,
+    TranslationImportRequestData,
+    
 } from "../types/translations";
 
 export class ControllerTranslations extends BaseController {
@@ -68,4 +74,47 @@ export class ControllerTranslations extends BaseController {
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosDelete(`/translations/${uuid}/`, config);
     }
+    // ===== Ayahs Translation =====
+
+    /** GET /ayahs/translation/ */
+    async listTranslations(
+        config?: RequestConfig<AyahsTranslationListRequestParams>
+    ): Promise<AxiosResponse<AyahsTranslationListResponseData>> {
+        return this.axiosGet(`/ayahs/translation/`, config);
+    }
+
+    /** POST /ayahs/translation/ */
+    async addTranslation(
+        data: AyahsTranslationAddRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse> {
+        return this.axiosPost(`/ayahs/translation/`, data, config);
+    }
+
+    /** DELETE /ayahs/translation/{uuid}/ */
+    async deleteTranslation(
+        uuid: string,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<DefaultResponseData>> {
+        return this.axiosDelete(`/ayahs/translation/${uuid}/`, config);
+    }
+
+    /** POST /translations/import/ */
+    async import (
+        data: TranslationImportRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<TranslationImportResponseData>> {
+        const formData = new FormData();
+        formData.append("file", data.file);
+
+        const importConfig = {
+            ...config,
+            headers: {
+                ...(config?.headers || {}),
+                "Content-Type": "multipart/form-data",
+            },
+        };
+        return this.axiosPost(`/translations/import/`, formData, importConfig);
+    }
 }
+

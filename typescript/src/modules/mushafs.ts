@@ -11,6 +11,12 @@ import {
     MushafEditResponseData,
     MushafsPartialEditRequestData,
     MushafsPartialEditResponseData,
+    MushafImportRequestData,
+    MushafImportResponseData,
+    MushafAyahMapResponseData,
+    MushafAyahMapRequestParams,
+    MushafImportBreakersRequestParams,
+    MushafImportBreakersRequestData,
 } from "../types/mushafs";
 
 export class ControllerMushafs extends BaseController {
@@ -66,5 +72,54 @@ export class ControllerMushafs extends BaseController {
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosDelete(`/mushafs/${uuid}/`, config);
     }
+
+    /** POST /mushafs/import/ */
+  async import (
+    data: MushafImportRequestData,
+    config?: RequestConfig
+  ): Promise<AxiosResponse<MushafImportResponseData>> {
+    const formData = new FormData();
+    formData.append("file", data.file);
+
+    const importConfig = {
+      ...config,
+      headers: {
+        ...(config?.headers || {}),
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    return await this.axiosPost(`/mushafs/import/`, formData, importConfig);
+  }
+    /** POST /mushafs/import_breakers/{mushaf_uuid}/?type=page */
+    async importBreakers(
+        params: MushafImportBreakersRequestParams,
+        data: MushafImportBreakersRequestData,
+        config?: RequestConfig
+      ): Promise<AxiosResponse> {
+        const formData = new FormData();
+        formData.append("file", data.file);
+    
+        const query = params.type ? `?type=${params.type}` : "";
+        const url = `/mushafs/import_breakers/${params.mushaf_uuid}/${query}`;
+    
+        const importConfig = {
+          ...config,
+          headers: {
+            ...(config?.headers || {}),
+            "Content-Type": "multipart/form-data",
+          },
+        };
+    
+        return await this.axiosPost(url, formData, importConfig);
+      }
+    
+      /** GET /mushafs/map/{mushaf_uuid}/ */
+      async getAyahMap(
+        params: MushafAyahMapRequestParams,
+        config?: RequestConfig
+      ): Promise<AxiosResponse<MushafAyahMapResponseData>> {
+        return await this.axiosGet(`/mushafs/map/${params.mushaf_uuid}/`, config);
+      } 
 }
 

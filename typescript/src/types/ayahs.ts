@@ -42,36 +42,3 @@ export type AyahsEditResponseData = AyahsDefaultResponseData;
 // Ayahs PartialEdit
 export type AyahsPartialEditRequestData = Partial<AyahsDefaultRequestData>;
 export type AyahsPartialEditResponseData = AyahsDefaultResponseData;
-
-// Ayahs Translation
-interface AyahsTranslationDefaultRequestData {
-    translation_uuid?: string;
-    ayah_uuid?: string;
-    text: string;   
-    bismillah?: string;
-}
-interface AyahsTranslationDefaultResponseItem{
-    uuid: string;
-    text: string;   
-    bismillah?: string;
-}
- // Ayahs Translation List
-export interface AyahsTranslationListRequestParams extends FilterQueryParams {
-    ayah_uuid?: string;
-    translation_uuid?: string;
-}
-export type AyahsTranslationListResponseItem =  AyahsTranslationDefaultResponseItem;
-export type AyahsTranslationListResponseData = AyahsTranslationListResponseItem;
-
-// Ayahs Translation View
-export type AyahsTranslationViewResponseData = AyahsTranslationDefaultResponseItem; 
-export type AyahsTranslationAddRequestData = AyahsTranslationDefaultRequestData;
-export type AyahsTranslationAddResponseData = AyahsTranslationDefaultResponseItem;
-
-// Ayahs Translation Edit
-export type AyahsTranslationEditRequestData = AyahsTranslationDefaultRequestData;
-export type AyahsTranslationEditResponseData = AyahsTranslationDefaultResponseItem;
-
-// Ayahs Translation Partial Edit
-export type AyahsTranslationPartialEditRequestData = Partial<AyahsTranslationDefaultRequestData>;
-export type AyahsTranslationPartialEditResponseData = AyahsTranslationDefaultResponseItem;
