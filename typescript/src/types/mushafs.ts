@@ -43,7 +43,6 @@ export type MushafImportResponseData = MushafsDefaultResponseData;
 
 // Mushaf Import Breakers
 export interface MushafImportBreakersRequestParams {
-    mushaf_uuid: string;
     type?: "page" | "juz" | "hizb" | "ruku";
   }
   
@@ -53,9 +52,7 @@ export interface MushafImportBreakersRequestParams {
   
   
   // Mushaf Ayah Map
-  export interface MushafAyahMapRequestParams {
-    mushaf_uuid: string;
-  }
+
   
   export interface MushafAyahMapItem {
     uuid: string;

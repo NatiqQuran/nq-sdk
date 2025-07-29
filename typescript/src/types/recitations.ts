@@ -3,27 +3,24 @@ import { FilterQueryParams } from "../utils/globalTypes";
  type Status = "draft" | "pending_review" | "published";
  interface RecitationsDefaultRequestData {
     mushaf_uuid: string;
-    surah_uuid: string;
     status?: Status;
+    reciter_account_uuid:string
     recitation_date: string;
     recitation_location: string;
     duration: string;
-    file: FileObject;
     recitation_type: string;
-    words_timestamps: WordsTimestampsItem[];
 }
  interface RecitationsDefaultResponseData {
     uuid: string;
     get_mushaf_uuid: string;
-    get_surah_uuid: string;
     status?: Status;
-    reciter_account_uuid: string;
     recitation_date: string;
     recitation_location: string;
     duration: string;
     recitation_type: string;
     created_at: string;
     updated_at: string;
+    words_timestamps: WordsTimestampsItem[];
     ayahs_timestamps: string[];
 }
 //Recitations List
@@ -31,7 +28,7 @@ import { FilterQueryParams } from "../utils/globalTypes";
 
 export interface RecitationsListRequestParams extends FilterQueryParams {
     mushaf_uuid: string;
-    reciter_uuid: string;
+    reciter_uuid?: string;
 }
 
 export type RecitationsListResponseData = RecitationsDefaultResponseData[];
@@ -59,3 +56,11 @@ export type RecitationsEditResponseData = RecitationsDefaultResponseData;
 //Recitations Partial Edit
 export type RecitationsPartialEditRequestData = Partial<RecitationsDefaultRequestData>;
 export type RecitationsPartialEditResponseData = RecitationsDefaultResponseData;
+
+//Recitations Upload
+export interface RecitationsUploadRequestParams{
+    surah_uuid:string
+}
+export interface RecitationsUploadRequestData {
+    file: File | Blob;
+  }

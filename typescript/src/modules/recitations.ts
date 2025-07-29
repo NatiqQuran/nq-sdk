@@ -11,6 +11,8 @@ import {
     RecitationsEditResponseData,
     RecitationsPartialEditRequestData,
     RecitationsPartialEditResponseData,
+    RecitationsUploadRequestParams,
+    RecitationsUploadRequestData,
 } from "../types/recitations";
 
 export class ControllerRecitations extends BaseController {
@@ -65,5 +67,26 @@ export class ControllerRecitations extends BaseController {
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosDelete(`/recitations/${uuid}/`, config);
+    }
+    async upload(
+        uuid:string,
+        data: RecitationsUploadRequestData,
+        config?: RequestConfig<RecitationsUploadRequestParams>
+    ): Promise<AxiosResponse<DefaultResponseData>> {
+        const formData = new FormData();
+        formData.append("file", data.file);
+
+        return await this.axiosPost(
+            `/recitations/upload/${uuid}/`,
+            formData,
+            {
+                ...config,
+                params:config?.params,
+                headers: {
+                    ...(config?.headers || {}),
+                    "Content-Type": "multipart/form-data",
+                },
+            }
+        );
     }
 }
