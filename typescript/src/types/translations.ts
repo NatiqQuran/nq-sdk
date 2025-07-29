@@ -54,33 +54,23 @@ export type TranslationsPartialEditResponseData =
     Partial<TranslationsDefaultResponseData>;
 
 // AyahsTranslation 
+interface AyahsTranslationDefaultParams {
+    ayah_uuid: string;
+}
+interface AyahsTranslationDefaultRequestData {
+    text: string;
+    bismillah?: string;
+}
 interface AyahsTranslationDefaultResponseData {
     uuid: string;
-    mushaf_uuid: string;
-    translator_uuid: string;
-    language: string;
-    release_date?: string;
-    source?: string;
-    status?: Status;
-  }
-  
-  // AyahsTranslation List 
-  export interface AyahsTranslationListRequestParams {
-    translation_uuid?: string;
-    ayah_uuid?: string;
-    surah_uuid?: string;
-  }
-  
-  export type AyahsTranslationListResponseItem = AyahsTranslationDefaultResponseData;
-  export type AyahsTranslationListResponseData = AyahsTranslationListResponseItem[];
-  
-  // AyahsTranslation Add
-  export interface AyahsTranslationAddRequestData {
-    translation_uuid: string;
-    ayah_uuid: string;
     text: string;
     bismillah?: string;
   }
+  
+  // AyahsTranslation Add
+  export type AyahsTranslationAddRequestParams = AyahsTranslationDefaultParams;
+  export type AyahsTranslationAddRequestData = AyahsTranslationDefaultRequestData;
+  export type AyahsTranslationAddResponseData = AyahsTranslationDefaultResponseData;
 
   // Translation Import
   export interface TranslationImportRequestData {

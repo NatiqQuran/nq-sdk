@@ -14,7 +14,6 @@ import {
     MushafImportRequestData,
     MushafImportResponseData,
     MushafAyahMapResponseData,
-    MushafAyahMapRequestParams,
     MushafImportBreakersRequestParams,
     MushafImportBreakersRequestData,
 } from "../types/mushafs";
@@ -93,15 +92,15 @@ export class ControllerMushafs extends BaseController {
   }
     /** POST /mushafs/import_breakers/{mushaf_uuid}/?type=page */
     async importBreakers(
-        params: MushafImportBreakersRequestParams,
+        uuid: string,
         data: MushafImportBreakersRequestData,
-        config?: RequestConfig
+        config?: RequestConfig<MushafImportBreakersRequestParams>
       ): Promise<AxiosResponse> {
         const formData = new FormData();
         formData.append("file", data.file);
     
-        const query = params.type ? `?type=${params.type}` : "";
-        const url = `/mushafs/import_breakers/${params.mushaf_uuid}/${query}`;
+        const query = config?.params?.type ? `?type=${config.params.type}` : "";
+        const url = `/mushafs/import_breakers/${uuid}/${query}`;
     
         const importConfig = {
           ...config,
@@ -116,10 +115,10 @@ export class ControllerMushafs extends BaseController {
     
       /** GET /mushafs/map/{mushaf_uuid}/ */
       async getAyahMap(
-        params: MushafAyahMapRequestParams,
+        uuid:string,
         config?: RequestConfig
       ): Promise<AxiosResponse<MushafAyahMapResponseData>> {
-        return await this.axiosGet(`/mushafs/map/${params.mushaf_uuid}/`, config);
+        return await this.axiosGet(`/mushafs/map/${uuid}/`, config);
       } 
 }
 
