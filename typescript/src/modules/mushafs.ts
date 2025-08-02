@@ -13,36 +13,36 @@ import {
 } from "../types/mushafs";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerMushafs extends BaseController {
+export class MushafsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
 
-    /** GET /Mushafs/ */
+    /** GET /Mushaf/ */
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafsListResponseData>> {
-        return await this.axiosGet(`/mushafs`, config);
+        return await this.axiosGet(`/mushafs/`, config);
     }
 
-    /** GET /Mushafs/{id}/ */
-    async view(
+    /** GET /Mushaf/{id}/ */
+    async retrieve(
         params: MushafsViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafViewResponseData>> {
         return await this.axiosGet(`/mushafs/${params.id}/`, config);
     }
 
-    /** POST /Mushafs/ */
-    async add(
+    /** POST /Mushaf/ */
+    async create(
         data: MushasfAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/mushafs`, data, config);
+        return await this.axiosPost(`/mushafs/`, data, config);
     }
 
-    /** PUT /Mushafs/{id}/ */
-    async Edit(
+    /** PUT /Mushaf/{id}/ */
+    async update(
         params: MushafsEditRequestParams,
         data: MushafsEditRequestData,
         config?: RequestConfig
@@ -50,8 +50,8 @@ export class ControllerMushafs extends BaseController {
         return await this.axiosPut(`/mushafs/${params.id}/`, data, config);
     }
 
-    /** PATCH /Mushafs/{id}/ */
-    async partialEdit(
+    /** PATCH /Mushaf/{id}/ */
+    async partialUpdate(
         params: MushafsUpdateRequestParams,
         data: MushafasUpdateRequestData,
         config?: RequestConfig
@@ -59,7 +59,7 @@ export class ControllerMushafs extends BaseController {
         return await this.axiosPatch(`/mushafs/${params.id}/`, data, config);
     }
 
-    /** DELETE /Mushafs/{id}/ */
+    /** DELETE /Mushaf/{id}/ */
     async delete(
         params: MushafsEditRequestParams,
         config?: RequestConfig

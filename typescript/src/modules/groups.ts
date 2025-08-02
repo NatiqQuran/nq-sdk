@@ -18,51 +18,51 @@ import {
 } from "../types/groups";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerGroups extends BaseController {
+export class GroupsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
-    /** GET /Groups/ */
+    /** GET /Group/ */
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsListResponseData>> {
         return await this.axiosGet(`/groups/`, config);
     }
-    /** GET /Groups/{id}/ */
+    /** GET /Group/{id}/ */
 
-    async view(
+    async retrieve(
         params: GroupsViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsViewResponseData>> {
         return await this.axiosGet(`/groups/${params.id}/`, config);
     }
-    /** POST /Groups/ */
+    /** POST /Group/ */
 
-    async add(
+    async create(
         data: GroupsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsViewResponseData>> {
         return await this.axiosPost(`/groups/`, data, config);
     }
-    /** PUT /Groups/{id}/ */
+    /** PUT /Group/{id}/ */
 
-    async edit(
+    async update(
         params: GroupsEditRequestParams,
         data: GroupsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsViewResponseData>> {
         return await this.axiosPut(`/groups/${params.id}/`, data, config);
     }
-    /** PATCH /Groups/{id}/ */
+    /** PATCH /Group/{id}/ */
 
-    async partialEdit(
+    async partialUpdate(
         params: GroupsUpdateRequestParams,
         data: GroupsUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsViewResponseData>> {
         return await this.axiosPatch(`/groups/${params.id}/`, data, config);
     }
-    /** DELETE /Groups/{id}/ */
+    /** DELETE /Group/{id}/ */
 
     async delete(
         params: GroupsEditRequestParams,

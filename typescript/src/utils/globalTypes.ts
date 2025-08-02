@@ -14,6 +14,7 @@ export interface Filter<S> {
 export type UUID = string;
 export type Sajdah = "vajib" | "mustahab";
 export type Period = "makki" | "madani";
+export type MushafShortName = "hafs" | string;
 
 export type DefaultResponseData = string;
 export interface ErrorResponseData {

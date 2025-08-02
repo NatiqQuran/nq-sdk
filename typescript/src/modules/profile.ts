@@ -10,31 +10,41 @@ import {
 } from "../types/profile";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerProfiles extends BaseController {
+// Me Action Class for Profile
+export class ProfileMeAction extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
 
-    /** GET /profiles/{id}/ */
-    async view(
-        params: PrifileViewRequestParams,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<ProfileViewResponseData>> {
-        return await this.axiosGet(`/profiles/${params.id}/`, config);
-    }
-
-    /** GET /profiles/me/ */
-    async meList(
+    /** GET /profile/me/ */
+    async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileMeListResponseData>> {
-        return await this.axiosGet(`/profiles/me/`, config);
+        return await this.axiosGet(`/profile/me/`, config);
     }
 
-    /** POST /profiles/me/ */
-    async meAdd(
+    /** POST /profile/me/ */
+    async retrieve(
         data: ProfileMeAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<ProfileMeAddResponseData>> {
-        return await this.axiosPost(`/profiles/me/`, data, config);
+        return await this.axiosPost(`/profile/me/`, data, config);
+    }
+}
+
+export class ProfileController extends BaseController {
+    public me: ProfileMeAction;
+
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
+        this.me = new ProfileMeAction(connection, token);
+    }
+
+    /** GET /profile/{id}/ */
+    async retrieve(
+        params: PrifileViewRequestParams,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<ProfileViewResponseData>> {
+        return await this.axiosGet(`/profile/${params.id}/`, config);
     }
 }

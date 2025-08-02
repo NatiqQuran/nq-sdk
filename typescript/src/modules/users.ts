@@ -13,57 +13,61 @@ import {
 } from "../types/users";
 import { BaseController } from "../utils/baseController";
 
-export class ControllerPhrase extends BaseController {
+export class UsersController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
 
-    /** GET /Users/ */
+    /** GET /User/ */
     async list(
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersListResponseData>> {
-        return await this.axiosGet(`/users`, config);
+        return await this.axiosGet(`/users/`, config);
     }
 
-    /** GET /Users/{id}/ */
-    async view(
+
+    /** GET /User/{id}/ */
+    async retrieve(
         params: UsersViewRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersViewResponseData>> {
-        return await this.axiosGet(`/users/${params.id}`, config);
+        return await this.axiosGet(`/users/${params.id}/`, config);
     }
 
-    /** POST /Users/ */
-    async add(
+
+    /** POST /User/ */
+    async create(
         data: UsersAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPost(`/users`, data, config);
+        return await this.axiosPost(`/users/`, data, config);
     }
 
-    /** PUT /Users/{id}/ */
-    async edit(
+
+    /** PUT /User/{id}/ */
+    async update(
         params: UsersEditRequestParams,
         data: UsersEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPut(`/users/${params.id}`, data, config);
+        return await this.axiosPut(`/users/${params.id}/`, data, config);
     }
 
-    /** PATCH /Users/{id}/ */
-    async partialEdit(
+
+    /** PATCH /User/{id}/ */
+    async partialUpdate(
         params: UsersUpdateRequestParams,
         data: UsersUpdateRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosPatch(`/users/${params.id}`, data, config);
+        return await this.axiosPatch(`/users/${params.id}/`, data, config);
     }
 
-    /** DELETE /Users/{id}/ */
+    /** DELETE /User/{id}/ */
     async delete(
         params: UsersEditRequestParams,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/users/${params.id}`, config);
+        return await this.axiosDelete(`/users/${params.id}/`, config);
     }
 }

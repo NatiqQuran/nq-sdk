@@ -1,9 +1,11 @@
+import { MushafShortName } from "../utils/globalTypes";
+
 //Mushaf
 
 //Mushaf List
 export interface MushafsListResponseItem {
     id: number;
-    short_name: string;
+    short_name: MushafShortName;
     name: string;
     source: string;
 }
@@ -15,7 +17,7 @@ export interface MushafsViewRequestParams {
 }
 export interface MushafViewResponseData {
     id: number;
-    short_name: string;
+    short_name: MushafShortName;
     name: string;
     source: string;
     bismillah_text: string;
@@ -23,7 +25,7 @@ export interface MushafViewResponseData {
 
 //Mushaf Add
 export interface MushasfAddRequestData {
-    short_name?: string;
+    short_name?: MushafShortName;
     name: string;
     source: string;
 }
@@ -33,7 +35,7 @@ export interface MushafsEditRequestParams {
     id: number;
 }
 export interface MushafsEditRequestData {
-    short_name?: string;
+    short_name?: MushafShortName;
     name: string;
     source: string;
 }
@@ -43,7 +45,7 @@ export interface MushafsUpdateRequestParams {
     id: number;
 }
 export interface MushafasUpdateRequestData {
-    short_name: string;
+    short_name: MushafShortName;
     name: string;
     source: string;
 }

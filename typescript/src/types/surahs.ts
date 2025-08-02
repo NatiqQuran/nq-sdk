@@ -1,11 +1,11 @@
-import { Sajdah, Period } from "../utils/globalTypes.js";
+import { Sajdah, Period, MushafShortName } from "../utils/globalTypes.js";
 
 //Surah
 
 //Surah List
 interface MushafDetails {
     id: number;
-    short_name: string;
+    short_name: MushafShortName;
     name: string;
     source: string;
 }
