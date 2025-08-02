@@ -13,7 +13,7 @@ import {
     WordPartialEditResponseData,
 } from "../types/words";
 
-export class ControllerWords extends BaseController {
+export class WordsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -26,7 +26,7 @@ export class ControllerWords extends BaseController {
     }
 
     /** GET /words/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<WordViewResponseData>> {
@@ -34,7 +34,7 @@ export class ControllerWords extends BaseController {
     }
 
     /** POST /words/ */
-    async add(
+    async create(
         data: WordAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<WordAddResponseData>> {
@@ -42,7 +42,7 @@ export class ControllerWords extends BaseController {
     }
 
     /** PUT /words/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: WordEditRequestData,
         config?: RequestConfig
@@ -51,7 +51,7 @@ export class ControllerWords extends BaseController {
     }
 
     /** PATCH /words/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: WordPartialEditRequestData,
         config?: RequestConfig

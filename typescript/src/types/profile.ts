@@ -18,6 +18,9 @@ export type ProfileViewResponseData = ProfileDefaultResponseData;
 //Profile Me View
 export type ProfileMeViewResponseData = ProfileDefaultResponseData;
 
+// Profile Me List
+export type ProfileMeListResponseData = ProfileDefaultResponseData[];
+
 // Profile Me Add
 export type ProfileMeAddRequestData = ProfileDefaultRequestData;
 export type ProfileMeAddResponseData = ProfileDefaultResponseData;

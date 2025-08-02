@@ -13,7 +13,7 @@ import {
     UsersPartialEditResponseData,
 } from "../types/users";
 
-export class ControllerUsers extends BaseController {
+export class UsersController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -26,7 +26,7 @@ export class ControllerUsers extends BaseController {
     }
 
     /** GET /users/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersViewResponseData>> {
@@ -34,7 +34,7 @@ export class ControllerUsers extends BaseController {
     }
 
     /** POST /users/ */
-    async add(
+    async create(
         data: UsersAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<UsersAddResponseData>> {
@@ -42,7 +42,7 @@ export class ControllerUsers extends BaseController {
     }
 
     /** PUT /users/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: UsersEditRequestData,
         config?: RequestConfig
@@ -51,7 +51,7 @@ export class ControllerUsers extends BaseController {
     }
 
     /** PATCH /users/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: UsersPartialEditRequestData,
         config?: RequestConfig

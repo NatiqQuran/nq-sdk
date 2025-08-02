@@ -20,9 +20,54 @@ import {
     
 } from "../types/translations";
 
-export class ControllerTranslations extends BaseController {
+// Ayah Translation Action Class for Translation
+export class AyahTranslationAction extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+    }
+
+    /** GET /translations/ayah/ */
+    async list(
+        config?: RequestConfig
+    ): Promise<AxiosResponse<TranslationsListResponseData>> {
+        return this.axiosGet(`/translations/ayah/`, config);
+    }
+
+    /** POST /translations/ayah/ */
+    async create(
+        data: AyahsTranslationAddRequestData,
+        config?: RequestConfig<AyahsTranslationAddRequestParams>
+    ): Promise<AxiosResponse> {
+        return this.axiosPost(`/translations/ayah/`, data, config);
+    }
+
+    /** POST /translations/{uuid}/ayah/{ayah_uuid}/ */
+    async createOrUpdate(
+        translationUuid: string,
+        ayahUuid: string,
+        data: AyahsTranslationAddRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse> {
+        return this.axiosPost(`/translations/${translationUuid}/ayah/${ayahUuid}/`, data, config);
+    }
+
+    /** PUT /translations/{uuid}/ayah/{ayah_uuid}/ */
+    async update(
+        translationUuid: string,
+        ayahUuid: string,
+        data: AyahsTranslationAddRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse> {
+        return this.axiosPut(`/translations/${translationUuid}/ayah/${ayahUuid}/`, data, config);
+    }
+}
+
+export class TranslationController extends BaseController {
+    public ayah: AyahTranslationAction;
+
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
+        this.ayah = new AyahTranslationAction(connection, token);
     }
 
     /** GET /translations/ */
@@ -33,7 +78,7 @@ export class ControllerTranslations extends BaseController {
     }
 
     /** GET /translations/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig<TranslationsViewRequestParams>
     ): Promise<AxiosResponse<TranslationsViewResponseData>> {
@@ -41,7 +86,7 @@ export class ControllerTranslations extends BaseController {
     }
 
     /** POST /translations/ */
-    async add(
+    async create(
         data: TranslationsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<TranslationsAddResponseData>> {
@@ -49,7 +94,7 @@ export class ControllerTranslations extends BaseController {
     }
 
     /** PUT /translations/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: TranslationsEditRequestData,
         config?: RequestConfig
@@ -58,7 +103,7 @@ export class ControllerTranslations extends BaseController {
     }
 
     /** PATCH /translations/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: TranslationsPartialEditRequestData,
         config?: RequestConfig
@@ -72,33 +117,6 @@ export class ControllerTranslations extends BaseController {
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
         return await this.axiosDelete(`/translations/${uuid}/`, config);
-    }
-    // ===== Ayahs Translation =====
-
-    /** POST /ayahs/translation/ */
-    async addAyahsTranslation(
-        uuid:string,
-        data: AyahsTranslationAddRequestData,
-        config?: RequestConfig<AyahsTranslationAddRequestParams>
-    ): Promise<AxiosResponse> {
-        return this.axiosPost(`/ayahs/translation/${uuid}/`, data, config);
-    }
-
-    /** PUT /ayahs/translation/{uuid}/ */
-    async editAyahsTranslation(
-        uuid: string,
-        data: AyahsTranslationAddRequestData,
-        config?: RequestConfig<AyahsTranslationAddRequestParams>
-    ): Promise<AxiosResponse> {
-        return this.axiosPut(`/ayahs/translation/${uuid}/`, data, config);
-    }   
-
-    /** DELETE /ayahs/translation/{uuid}/ */
-    async deleteAyahsTranslation(
-        uuid: string,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.axiosDelete(`/ayahs/translation/${uuid}/`, config);
     }
 
     /** POST /translations/import/ */

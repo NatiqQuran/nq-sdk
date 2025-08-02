@@ -13,7 +13,7 @@ import {
     GroupsPartialEditResponseData,
 } from "../types/groups";
 
-export class ControllerGroups extends BaseController {
+export class GroupsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -25,45 +25,45 @@ export class ControllerGroups extends BaseController {
         return await this.axiosGet(`/groups/`, config);
     }
 
-    /** GET /groups/{id}/ */
-    async view(
-        id: string,
+    /** GET /groups/{uuid}/ */
+    async retrieve(
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsViewResponseData>> {
-        return await this.axiosGet(`/groups/${id}/`, config);
+        return await this.axiosGet(`/groups/${uuid}/`, config);
     }
 
     /** POST /groups/ */
-    async add(
+    async create(
         data: GroupsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsAddResponseData>> {
         return await this.axiosPost(`/groups/`, data, config);
     }
 
-    /** PUT /groups/{id}/ */
-    async edit(
-        id: string,
+    /** PUT /groups/{uuid}/ */
+    async update(
+        uuid: string,
         data: GroupsEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsEditResponseData>> {
-        return await this.axiosPut(`/groups/${id}/`, data, config);
+        return await this.axiosPut(`/groups/${uuid}/`, data, config);
     }
 
-    /** PATCH /groups/{id}/ */
-    async partialEdit(
-        id: string,
+    /** PATCH /groups/{uuid}/ */
+    async partialUpdate(
+        uuid: string,
         data: GroupsPartialEditRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<GroupsPartialEditResponseData>> {
-        return await this.axiosPatch(`/groups/${id}/`, data, config);
+        return await this.axiosPatch(`/groups/${uuid}/`, data, config);
     }
 
-    /** DELETE /groups/{id}/ */
+    /** DELETE /groups/{uuid}/ */
     async delete(
-        id: string,
+        uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<DefaultResponseData>> {
-        return await this.axiosDelete(`/groups/${id}/`, config);
+        return await this.axiosDelete(`/groups/${uuid}/`, config);
     }
 }

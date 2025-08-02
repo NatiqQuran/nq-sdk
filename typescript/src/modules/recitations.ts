@@ -15,7 +15,7 @@ import {
     RecitationsUploadRequestData,
 } from "../types/recitations";
 
-export class ControllerRecitations extends BaseController {
+export class RecitationsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -28,7 +28,7 @@ export class ControllerRecitations extends BaseController {
     }
 
     /** GET /recitations/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsViewResponseData>> {
@@ -36,7 +36,7 @@ export class ControllerRecitations extends BaseController {
     }
 
     /** POST /recitations/ */
-    async add(
+    async create(
         data: RecitationsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<RecitationsAddResponseData>> {
@@ -44,7 +44,7 @@ export class ControllerRecitations extends BaseController {
     }
 
     /** PUT /recitations/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: RecitationsEditRequestData,
         config?: RequestConfig
@@ -53,7 +53,7 @@ export class ControllerRecitations extends BaseController {
     }
 
     /** PATCH /recitations/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: RecitationsPartialEditRequestData,
         config?: RequestConfig

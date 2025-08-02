@@ -9,6 +9,8 @@ export * from "./types/ayahs";
 export * from "./types/translations";
 export * from "./types/words";
 export * from "./types/notifications";
+export * from "./types/profile";
+export * from "./types/recitations";
 
 // Client
 export * from "./client/connection";
@@ -17,11 +19,14 @@ export * from "./client/connection";
 export * from "./modules/auths";
 export * from "./modules/users";
 export * from "./modules/groups";
+export * from "./modules/phrases";
 export * from "./modules/mushafs";
 export * from "./modules/surahs";
 export * from "./modules/ayahs";
 export * from "./modules/words";
 export * from "./modules/translation";
+export * from "./modules/profile";
+export * from "./modules/recitations";
 export * from "./modules/notifications";
 
 // Utils
