@@ -8,9 +8,27 @@ import {
     AuthRegisterResponseData,
 } from "../types/auths";
 
-export class ControllerAuth extends BaseController {
+// Logout Action Class for Auth
+export class AuthLogoutAction extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+    }
+
+    async create(config?: RequestConfig): Promise<AxiosResponse<string>> {
+        return await this.axiosPost("/auth/logout/", {}, config);
+    }
+
+    async createAll(config?: RequestConfig): Promise<AxiosResponse<string>> {
+        return await this.axiosPost("/auth/logoutall/", {}, config);
+    }
+}
+
+export class AuthController extends BaseController {
+    public logout: AuthLogoutAction;
+
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
+        this.logout = new AuthLogoutAction(connection, token);
     }
 
     async login(
@@ -25,13 +43,5 @@ export class ControllerAuth extends BaseController {
         config?: RequestConfig
     ): Promise<AxiosResponse<AuthRegisterResponseData>> {
         return await this.axiosPost("/auth/register/", data, config);
-    }
-
-    async logout(config?: RequestConfig): Promise<AxiosResponse<string>> {
-        return await this.axiosPost("/auth/logout/", {}, config);
-    }
-
-    async logoutAll(config?: RequestConfig): Promise<AxiosResponse<string>> {
-        return await this.axiosPost("/auth/logoutall/", {}, config);
     }
 }

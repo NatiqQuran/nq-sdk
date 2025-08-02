@@ -14,7 +14,7 @@ import {
     AyahsPartialEditResponseData,
 } from "../types/ayahs";
 
-export class ControllerAyahs extends BaseController {
+export class AyahsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -27,7 +27,7 @@ export class ControllerAyahs extends BaseController {
     }
 
     /** GET /ayahs/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsViewResponseData>> {
@@ -35,7 +35,7 @@ export class ControllerAyahs extends BaseController {
     }
 
     /** POST /ayahs/ */
-    async add(
+    async create(
         data: AyahsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<AyahsAddResponseData>> {
@@ -43,7 +43,7 @@ export class ControllerAyahs extends BaseController {
     }
 
     /** PUT /ayahs/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: AyahsEditRequestData,
         config?: RequestConfig
@@ -52,7 +52,7 @@ export class ControllerAyahs extends BaseController {
     }
 
     /** PATCH /ayahs/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: AyahsPartialEditRequestData,
         config?: RequestConfig

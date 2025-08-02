@@ -18,7 +18,7 @@ import {
     MushafImportBreakersRequestData,
 } from "../types/mushafs";
 
-export class ControllerMushafs extends BaseController {
+export class MushafsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -31,7 +31,7 @@ export class ControllerMushafs extends BaseController {
     }
 
     /** GET /mushafs/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafsViewResponseData>> {
@@ -39,7 +39,7 @@ export class ControllerMushafs extends BaseController {
     }
 
     /** POST /mushafs/ */
-    async add(
+    async create(
         data: MushasfAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<MushafAddResponseData>> {
@@ -47,7 +47,7 @@ export class ControllerMushafs extends BaseController {
     }
 
     /** PUT /mushafs/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: MushafsEditRequestData,
         config?: RequestConfig
@@ -56,7 +56,7 @@ export class ControllerMushafs extends BaseController {
     }
 
     /** PATCH /mushafs/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: MushafsPartialEditRequestData,
         config?: RequestConfig

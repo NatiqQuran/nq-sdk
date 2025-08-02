@@ -14,7 +14,7 @@ import {
     SurahsPartialEditResponseData,
 } from "../types/surahs";
 
-export class ControllerSurahs extends BaseController {
+export class SurahsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
@@ -27,7 +27,7 @@ export class ControllerSurahs extends BaseController {
     }
 
     /** GET /surahs/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
     ): Promise<AxiosResponse<SurahsViewResponseData>> {
@@ -35,7 +35,7 @@ export class ControllerSurahs extends BaseController {
     }
 
     /** POST /surahs/ */
-    async add(
+    async create(
         data: SurahsAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<SurahsAddResponseData>> {
@@ -43,7 +43,7 @@ export class ControllerSurahs extends BaseController {
     }
 
     /** PUT /surahs/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: SurahsEditRequestData,
         config?: RequestConfig
@@ -52,7 +52,7 @@ export class ControllerSurahs extends BaseController {
     }
 
     /** PATCH /surahs/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: SurahsPartialEditRequestData,
         config?: RequestConfig

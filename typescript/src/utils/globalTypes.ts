@@ -9,6 +9,7 @@ export type UUID = string;
 export type Sajdah = "vajib" | "mustahab";
 export type Period = "makki" | "madani";
 export type Status = "draft" | "pending_review" | "published";
+export type MushafShortName = "hafs" | string;
 
 export interface FilterQueryParams {
     ordering?: "asc" | "desc";

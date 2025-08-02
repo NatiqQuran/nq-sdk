@@ -16,9 +16,27 @@ import {
     PhrasesModifyResponseData,
 } from "../types/phrases";
 
-export class ControllerPhrases extends BaseController {
+// Modify Action Class for Phrases
+export class PhrasesModifyAction extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+    }
+
+    /** POST /phrase/modify/ */
+    async create(
+        data: PhrasesModifyRequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<PhrasesModifyResponseData>> {
+        return await this.axiosPost(`/phrases/modify/`, data, config);
+    }
+}
+
+export class PhrasesController extends BaseController {
+    public modify: PhrasesModifyAction;
+
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
+        this.modify = new PhrasesModifyAction(connection, token);
     }
 
     /** GET /phrases/ */
@@ -29,15 +47,15 @@ export class ControllerPhrases extends BaseController {
     }
 
     /** GET /phrases/{uuid}/ */
-    async view(
+    async retrieve(
         uuid: string,
         config?: RequestConfig
-    ): Promise<AxiosResponse<PhrasesViewResponseData>   > {
+    ): Promise<AxiosResponse<PhrasesViewResponseData>> {
         return await this.axiosGet(`/phrases/${uuid}/`, config);
     }
 
     /** POST /phrases/ */
-    async add(
+    async create(
         data: PhrasesAddRequestData,
         config?: RequestConfig
     ): Promise<AxiosResponse<PhrasesAddResponseData>> {
@@ -45,7 +63,7 @@ export class ControllerPhrases extends BaseController {
     }
 
     /** PUT /phrases/{uuid}/ */
-    async edit(
+    async update(
         uuid: string,
         data: PhrasesEditRequestData,
         config?: RequestConfig
@@ -54,7 +72,7 @@ export class ControllerPhrases extends BaseController {
     }
 
     /** PATCH /phrases/{uuid}/ */
-    async partialEdit(
+    async partialUpdate(
         uuid: string,
         data: PhrasesPartialEditRequestData,
         config?: RequestConfig
@@ -70,11 +88,4 @@ export class ControllerPhrases extends BaseController {
         return await this.axiosDelete(`/phrases/${uuid}/`, config);
     }
 
-    /** POST /phrases/modify/ */    
-    async modify(
-        data: PhrasesModifyRequestData,
-        config?: RequestConfig<PhrasesModifyRequestParams>
-    ): Promise<AxiosResponse<PhrasesModifyResponseData>> {
-        return await this.axiosPost(`/phrases/modify/`, data, config);
-    }
 }

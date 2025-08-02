@@ -19,7 +19,7 @@ import {
 } from "../types/notifications";
 
 
-export class ControllerNotifications extends BaseController {
+export class NotificationsController extends BaseController {
   constructor(connection: Connection, token?: string) {
     super(connection, token);
   }
@@ -31,46 +31,46 @@ export class ControllerNotifications extends BaseController {
     return await this.axiosGet(`/notifications/`, config);
   }
 
-  /** GET /notifications/{id}/ */
-  async view(
-    id: string,
+  /** GET /notifications/{uuid}/ */
+  async retrieve(
+    uuid: string,
     config?: RequestConfig
   ): Promise<AxiosResponse<NotificationsViewResponseData>> {
-    return await this.axiosGet(`/notifications/${id}/`, config);
+    return await this.axiosGet(`/notifications/${uuid}/`, config);
   }
 
   /** POST /notifications/ */
-  async add(
+  async create(
     data: NotificationsAddRequestData,
     config?: RequestConfig
   ): Promise<AxiosResponse<NotificationsAddResponseData>> {
     return await this.axiosPost(`/notifications/`, data, config);
   }
 
-  /** PUT /notifications/{id}/ */
-  async edit(
-    id: string,
+  /** PUT /notifications/{uuid}/ */
+  async update(
+    uuid: string,
     data: NotificationsEditRequestData,
     config?: RequestConfig
   ): Promise<AxiosResponse<NotificationsEditResponseData>> {
-    return await this.axiosPut(`/notifications/${id}/`, data, config);
+    return await this.axiosPut(`/notifications/${uuid}/`, data, config);
   }
 
-  /** PATCH /notifications/{id}/ */
-  async partialEdit(
-    id: string,
+  /** PATCH /notifications/{uuid}/ */
+  async partialUpdate(
+    uuid: string,
     data: NotificationsPartialEditRequestData,
     config?: RequestConfig
   ): Promise<AxiosResponse<NotificationsPartialEditResponseData>> {
-    return await this.axiosPatch(`/notifications/${id}/`, data, config);
+    return await this.axiosPatch(`/notifications/${uuid}/`, data, config);
   }
 
-  /** DELETE /notifications/{id}/ */
+  /** DELETE /notifications/{uuid}/ */
   async delete(
-    id: string,
+    uuid: string,
     config?: RequestConfig
   ): Promise<AxiosResponse<DefaultResponseData>> {
-    return await this.axiosDelete(`/notifications/${id}/`, config);
+    return await this.axiosDelete(`/notifications/${uuid}/`, config);
   }
 
   /** GET /notifications/me/ */

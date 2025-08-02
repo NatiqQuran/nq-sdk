@@ -1,16 +1,16 @@
-import { FilterQueryParams } from "../utils/globalTypes";
+import { FilterQueryParams, MushafShortName } from "../utils/globalTypes";
 
 // Mushafs
 type Status = "draft" | "pending_review" | "published";
  interface MushafsDefaultRequestData {
-    short_name: string;
+    short_name: MushafShortName;
     name: string;
     source?: string;
     status?: Status;
 }
  interface MushafsDefaultResponseData {
     uuid: string;
-    short_name: string;
+    short_name: MushafShortName;
     name: string;
     source?: string;
     status?: Status;
