@@ -18,7 +18,7 @@ class Parser():
         controller = Controller(path.split("/")[1]) # Check For correctness
 
         for (method, router_data) in routers.items():
-            pass
+            controller.add_router(self.parse_router(path, method, router_data))
 
         return controller
 

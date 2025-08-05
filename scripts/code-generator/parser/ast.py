@@ -20,6 +20,16 @@ class RouterParameter():
         self.description = description
         self.schema = schema
 
+
+class RequestBodyContent():
+    def __init__(self, type: str, schema):
+        pass
+    
+class RouterRequestBody():
+    def __init__(self, content: List[RequestBodyContent], required: bool):
+        self.content = content
+        self.required = required
+
 class Router():
     """Router for AST
     path ex. '/accounts/'
