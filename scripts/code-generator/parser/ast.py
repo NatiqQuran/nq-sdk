@@ -22,14 +22,20 @@ class RouterParameter:
     schema: RouterParamenterSchema
 
 @dataclass
-class RequestBodyContent:
+class BodyContent:
     content_type: str
     schema: dict
     
 @dataclass
 class RouterRequestBody:
-    content: List[RequestBodyContent]
+    content: List[BodyContent]
     required: bool
+
+@dataclass
+class RouterResponse:
+    content: List[BodyContent]
+    description: str
+    status_code: str
 
 @dataclass
 class Router:
@@ -41,9 +47,13 @@ class Router:
     method: str
     parameters: List[RouterParameter]
     request_body: Optional[RouterRequestBody] = None
+    responses: List[RouterResponse] = None
     
     def add_param(self, param: RouterParameter):
         self.parameters.append(param)
+
+    def add_response(self, response: RouterResponse):
+        self.responses.append(response)
 
 @dataclass
 class Controller:

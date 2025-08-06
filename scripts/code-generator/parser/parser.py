@@ -1,5 +1,5 @@
-from .ast import Ast, Controller, Router, RouterMetaData, RouterParamenterSchema, RouterParameter, RouterRequestBody, RequestBodyContent
-from typing import Dict,Any
+from .ast import Ast, Controller, Router, RouterMetaData, RouterParamenterSchema, RouterParameter, RouterRequestBody,BodyContent,RouterResponse
+from typing import Dict,Any,List
 
 class Parser():
     """
@@ -9,10 +9,11 @@ class Parser():
         self.ast = Ast()
         self.schema = schema
     
-    def parse(self):
+    def parse(self) -> Ast:
         paths: Dict[str, Any] = self.schema.get("paths", {})
         for (path, routers) in paths.items():
             self.ast.add_controller(self.parse_controller(path, routers))
+        return self.ast
     
     def parse_controller(self, path: str, routers: Dict[Any, Any]) -> Controller:
         controller = Controller(path.split("/")[1]) # Check For correctness
@@ -42,7 +43,7 @@ class Parser():
             return resolved
         return schema
 
-    def parse_request_body(self, data: Dict[Any, Any]):
+    def parse_request_body(self, data: Dict[Any, Any]) -> RouterRequestBody:
         if "requestBody" not in data:
             return None
         rb = data["requestBody"]
@@ -51,10 +52,10 @@ class Parser():
         for content_type, content_schema in content.items():
             # Resolve the schema reference if present
             resolved_schema = self.resolve_schema(content_schema.get("schema", {}))
-            content_list.append(RequestBodyContent(content_type, resolved_schema))
+            content_list.append(BodyContent(content_type, resolved_schema))
         return RouterRequestBody(content_list, rb.get("required", False))
 
-    def parse_router_parameters(self, data: Dict[Any, Any]):
+    def parse_router_parameters(self, data: Dict[Any, Any]) -> List[RouterParameter]:
         parameters = []
         for param in data.get("parameters", []):
             schema = param.get("schema", {})
@@ -70,6 +71,17 @@ class Parser():
             ))
         return parameters
 
+    def parse_router_responses(self, data: Dict[Any, Any]) -> List[RouterResponse]:
+        responses = []
+        for status_code, response_data in data.get("responses", {}).items():
+            content_list = []
+            content = response_data.get("content", {})
+            for content_type, content_schema in content.items():
+                resolved_schema = self.resolve_schema(content_schema.get("schema", {}))
+                content_list.append(BodyContent(content_type, resolved_schema))
+            responses.append(RouterResponse(content_list, response_data.get("description", ""), status_code))
+        return responses
+
     def parse_router(self, path: str, method: str, data: Dict[Any, Any]) -> Router:
         meta = RouterMetaData(
             data.get("description", "no description"),
@@ -78,5 +90,6 @@ class Parser():
         )
         parameters = self.parse_router_parameters(data)
         request_body = self.parse_request_body(data)
-        router = Router(meta, path, method, parameters, request_body)
+        responses = self.parse_router_responses(data)
+        router = Router(meta, path, method, parameters, request_body, responses)
         return router
