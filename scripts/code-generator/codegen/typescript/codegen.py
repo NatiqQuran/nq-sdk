@@ -6,7 +6,7 @@ class Codegen():
     """
     def __init__(self, ast: Ast):
         self.ast = ast
-        self.template = Template(open("templates/controller.jinja2").read())
+        self.template = Template(open("codegen/typescript/templates/controller.jinja2").read())
 
     def generate(self) -> str:
         return self.template.render(ast=self.ast)

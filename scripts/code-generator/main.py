@@ -3,6 +3,7 @@ import json
 import yaml
 from dataclasses import asdict
 from parser.parser import Parser
+from codegen.typescript.codegen import Codegen
 
 def handle_compile(file_path, language):
     # Open file path and parse the yaml file
@@ -11,7 +12,8 @@ def handle_compile(file_path, language):
     
     parser = Parser(file_content)
     ast = parser.parse()
-    print(json.dumps(asdict(ast), indent=2))
+    codegen = Codegen(ast)
+    print(codegen.generate())
 
 parser = argparse.ArgumentParser(prog="Code generator", description="Code generator for sdk")
 parser.add_argument("filepath", help="File path of yaml file (open-api schema).")

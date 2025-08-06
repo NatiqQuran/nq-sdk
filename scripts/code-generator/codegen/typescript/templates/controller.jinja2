@@ -1,0 +1,16 @@
+{% for controller in ast.controllers %}
+export class {{ controller.name.capitalize() }} extends BaseController {
+    constructor(connection: Connection, token?: string) {
+        super(connection, token);
+    }
+
+    {% for router in controller.routers %}
+    async {{ router.method.lower() }}(
+        data: {{ router.method.lower() }}RequestData,
+        config?: RequestConfig
+    ): Promise<AxiosResponse<any>> {
+        return await this.axios{{ router.method.capitalize() }}("{{ router.path }}", data, config);
+    }
+    {% endfor %}
+}
+{% endfor %}
