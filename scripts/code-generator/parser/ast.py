@@ -1,59 +1,69 @@
-from typing import List
+from typing import List, Optional
+from dataclasses import dataclass
 
-class RouterMetaData():
-    def __init__(self, description: str, tags: List[str], operation_id = None, summary = None):
-        self.description = description
-        self.tags = tags
-        self.operation_id = operation_id
-        self.summary = summary
+@dataclass
+class RouterMetaData:
+    description: str
+    tags: List[str]
+    operation_id: Optional[str] = None
+    summary: Optional[str] = None
         
-class RouterParamenterSchema():
-    def __init__(self, type, format):
-        self.type = type
-        self.format = format
+@dataclass
+class RouterParamenterSchema:
+    type: Optional[str]
+    format: Optional[str]
 
-class RouterParameter():
-    def __init__(self, name: str, required: bool, position: str, description: str, schema: RouterParamenterSchema):
-        self.name = name
-        self.required = required
-        self.position = position
-        self.description = description
-        self.schema = schema
+@dataclass
+class RouterParameter:
+    name: str
+    required: bool
+    position: str
+    description: str
+    schema: RouterParamenterSchema
 
-
-class RequestBodyContent():
-    def __init__(self, type: str, schema):
-        pass
+@dataclass
+class RequestBodyContent:
+    content_type: str
+    schema: dict
     
-class RouterRequestBody():
-    def __init__(self, content: List[RequestBodyContent], required: bool):
-        self.content = content
-        self.required = required
+@dataclass
+class RouterRequestBody:
+    content: List[RequestBodyContent]
+    required: bool
 
-class Router():
+@dataclass
+class Router:
     """Router for AST
     path ex. '/accounts/'
     """
-    def __init__(self, metadata: RouterMetaData, path: str, method: str, parameters: List[RouterParameter]):
-        self.meta = metadata
-        self.path = path
-        self.method = method
-        self.parameters = parameters
+    meta: RouterMetaData
+    path: str
+    method: str
+    parameters: List[RouterParameter]
+    request_body: Optional[RouterRequestBody] = None
     
     def add_param(self, param: RouterParameter):
         self.parameters.append(param)
 
-class Controller():
-    def __init__(self, name: str, routers: List[Router] = []):
-        self.name = name
-        self.routers = routers
+@dataclass
+class Controller:
+    name: str
+    routers: List[Router] = None
+    
+    def __post_init__(self):
+        if self.routers is None:
+            self.routers = []
 
     def add_router(self, router: Router):
         self.routers.append(router)
 
-class Ast():
-    def __init__(self):
-        self.controllers = []
+@dataclass
+class Ast:
+    controllers: List[Controller] = None
+    
+    def __post_init__(self):
+        if self.controllers is None:
+            self.controllers = []
     
     def add_controller(self, controller: Controller):
         self.controllers.append(controller)
