@@ -1,8 +1,6 @@
 import argparse
-import json
 import yaml
 import os
-from dataclasses import asdict
 from parser.parser import Parser
 from codegen.typescript.codegen import Codegen
 from parser.postprocessor import PostProcessor
@@ -38,7 +36,7 @@ def handle_compile(file_path, language, output_dir=None):
                     f.write(type["content"])
                 
     else:
-        raise RuntimeError()
+        raise Exception(f"Language not supported! {language}")
 
 parser = argparse.ArgumentParser(prog="Code generator", description="Code generator for sdk")
 parser.add_argument("filepath", help="File path of yaml file (open-api schema).")
