@@ -1,4 +1,5 @@
-{% for controller in ast.controllers %}
+import * as {{ controller.controller.name.capitalize() }}Type from "./types/{{controller.controller.name}}.ts";
+
 export class {{ controller.controller.name.capitalize() }}Controller extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
@@ -11,16 +12,15 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
         {{ router.path_params | join(', ') }}: string
         {%- endif %}
         {%- if router.request_type %}
-        {%- if router.path_params %}, {% endif %}data: {{ router.request_type.name }}
+        {%- if router.path_params %}, {% endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ router.request_type.name }}
         {%- endif %}
         {%- if router.params_type %}
-        {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig<{{ router.params_type.name }}>
+        {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ router.params_type.name }}>
         {%- else %}
         {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig
         {%- endif %}
-    ): Promise<AxiosResponse<{% if router.response_type %}{{ router.response_type.name }}{% else %}any{% endif %}>> {
+    ): Promise<AxiosResponse<{% if router.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{% else %}any{% endif %}>> {
         return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{% if router.request_type %}, data{% endif %}, config);
     }
     {% endfor %}
 }
-{% endfor %}

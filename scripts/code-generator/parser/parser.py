@@ -43,7 +43,7 @@ class Parser():
             return resolved
         return schema
 
-    def parse_request_body(self, data: Dict[Any, Any]) -> RouterRequestBody:
+    def parse_request_body(self, data: Dict[Any, Any]) -> RouterRequestBody | None:
         if "requestBody" not in data:
             return None
         rb = data["requestBody"]
