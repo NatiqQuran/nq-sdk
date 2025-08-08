@@ -1,4 +1,8 @@
 import * as {{ controller.controller.name.capitalize() }}Type from "./types/{{controller.controller.name}}.ts";
+import { AxiosResponse } from "axios";
+import { Connection } from "../client/connection";
+import { BaseController } from "../utils/baseController";
+import { RequestConfig } from "../utils/globalTypes";
 
 export class {{ controller.controller.name.capitalize() }}Controller extends BaseController {
     constructor(connection: Connection, token?: string) {
