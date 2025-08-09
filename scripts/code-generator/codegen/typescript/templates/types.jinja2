@@ -1,4 +1,3 @@
-{%- for controller in ast.controllers %}
 {%- for router in controller.routers %}
 {%- if router.request_type %}
 export interface {{ router.request_type.name }} {
@@ -33,5 +32,4 @@ export interface {{ router.params_type.name }} {
 {%- endfor %}
 }
 {%- endif %}
-{%- endfor %}
 {%- endfor %}

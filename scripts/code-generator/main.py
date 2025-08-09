@@ -1,8 +1,6 @@
 import argparse
-import json
 import yaml
 import os
-from dataclasses import asdict
 from parser.parser import Parser
 from codegen.typescript.codegen import Codegen
 from parser.postprocessor import PostProcessor
@@ -19,36 +17,26 @@ def handle_compile(file_path, language, output_dir=None):
     if language == "typescript":
         codegen = Codegen(ast)
         result = codegen.generate()
-        
+
         if output_dir:
             # Create output directory if it doesn't exist
-            os.makedirs(output_dir, exist_ok=True)
-            
-            # Write types file
-            types_file = os.path.join(output_dir, "generated_types.ts")
-            with open(types_file, 'w') as f:
-                f.write(result["types"])
-            print(f"Types generated: {types_file}")
+            os.makedirs(f'{output_dir}/types', exist_ok=True)
             
             # Write controllers file
-            controllers_file = os.path.join(output_dir, "generated_controllers.ts")
-            with open(controllers_file, 'w') as f:
-                f.write(result["controllers"])
-            print(f"Controllers generated: {controllers_file}")
-        else:
-            # Print both types and controllers
-            print("\n// --- Generated Types ---\n")
-            print(result["types"])
-            print("\n// --- Generated Controllers ---\n")
-            print(result["controllers"])
+            for controller in result["controllers"]:
+                controllers_file = os.path.join(output_dir, f"{controller['name']}.ts")
+                with open(controllers_file, 'w') as f:
+                    f.write(controller['content'])
+                print(f"Controllers generated: {controllers_file}")
+                
+            for type in result["types"]:
+                # Write types file
+                types_file = os.path.join(output_dir, f"types/{type['name']}.ts")
+                with open(types_file, 'w') as f:
+                    f.write(type["content"])
+                
     else:
-        # Fallback to old behavior for other languages
-        for controller in ast.controllers:
-            single_ast = type(ast)()  # Ast()
-            single_ast.add_controller(controller)
-            codegen = Codegen(single_ast)
-            print(f"\n// --- Controller: {controller.name} ---\n")
-            print(codegen.generate())
+        raise Exception(f"Language not supported! {language}")
 
 parser = argparse.ArgumentParser(prog="Code generator", description="Code generator for sdk")
 parser.add_argument("filepath", help="File path of yaml file (open-api schema).")

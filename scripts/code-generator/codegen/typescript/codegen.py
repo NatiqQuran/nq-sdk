@@ -1,4 +1,4 @@
-from parser.ast import Ast
+from parser.ast import Ast, Controller
 from .typescript_processor import TypeScriptProcessor, TypeScriptAst
 from jinja2 import Template
 import os
@@ -13,15 +13,28 @@ class Codegen():
         self.controller_template = Template(open("codegen/typescript/templates/controller.jinja2").read())
         self.types_template = Template(open("codegen/typescript/templates/types.jinja2").read())
 
-    def generate_controllers(self) -> str:
-        return self.controller_template.render(ast=self.ts_ast)
+    def generate_controller(self, controller) -> str:
+        return self.controller_template.render(controller=controller)
 
-    def generate_types(self) -> str:
-        return self.types_template.render(ast=self.ts_ast)
+    def generate_types(self, controller) -> str:
+        return self.types_template.render(controller=controller)
 
     def generate(self) -> dict:
         """Generate both controllers and types"""
+        controllers = []
+        types = []
+        for controller in self.ts_ast.controllers:
+            controllers.append({
+                'name': controller.controller.name,
+                'content': self.generate_controller(controller)
+            })
+        
+        for controller in self.ts_ast.controllers:
+            types.append({
+                'name': controller.controller.name,
+                'content': self.generate_types(controller)
+            })
         return {
-            "controllers": self.generate_controllers(),
-            "types": self.generate_types()
+            "controllers": controllers,
+            "types": types
         }
