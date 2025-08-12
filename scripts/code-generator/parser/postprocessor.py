@@ -1,17 +1,22 @@
-from .ast import Ast, Controller, Router
+from .ast import Ast, Controller
 
 class PostProcessor:
     def __init__(self, ast: Ast):
         self.ast = ast
 
     def process(self) -> Ast:
-        """Process the AST to combine duplicate controllers"""
+        """Process the AST to combine duplicate controllers, preserving routers and actions"""
         controllers_by_name = {}
         for controller in self.ast.controllers:
             name = controller.name
             if name not in controllers_by_name:
                 controllers_by_name[name] = Controller(name)
             controllers_by_name[name].routers.extend(controller.routers)
+            # Merge actions as well
+            if hasattr(controller, 'actions') and controller.actions:
+                if not hasattr(controllers_by_name[name], 'actions') or controllers_by_name[name].actions is None:
+                    controllers_by_name[name].actions = []
+                controllers_by_name[name].actions.extend(controller.actions)
         
         new_ast = type(self.ast)()
         for controller in controllers_by_name.values():

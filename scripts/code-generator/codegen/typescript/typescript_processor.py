@@ -1,7 +1,9 @@
+
 import re
-from typing import Dict, Any, List, Optional
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 from parser.ast import Ast, Controller, Router
+
 
 @dataclass
 class TypeScriptTypeDefinition:
@@ -11,9 +13,9 @@ class TypeScriptTypeDefinition:
     required_properties: List[str]
     description: Optional[str] = None
 
+
 @dataclass
 class TypeScriptRouter:
-    """TypeScript-specific router information"""
     router: Router
     method_name: str
     path_params: List[str]
@@ -22,11 +24,17 @@ class TypeScriptRouter:
     response_type: Optional[TypeScriptTypeDefinition] = None
     params_type: Optional[TypeScriptTypeDefinition] = None
 
+# Action dataclass after TypeScriptRouter
+@dataclass
+class TypeScriptAction(TypeScriptRouter):
+    action_name: str = ""
+
 @dataclass
 class TypeScriptController:
     """TypeScript-specific controller information"""
     controller: Controller
     routers: List[TypeScriptRouter]
+    actions: Optional[List[TypeScriptAction]] = None
 
 @dataclass
 class TypeScriptAst:
@@ -35,9 +43,33 @@ class TypeScriptAst:
 
 class TypeScriptProcessor:
     """Processes the generic AST and adds TypeScript-specific information"""
-    
+
     def __init__(self, ast: Ast):
         self.ast = ast
+    def extract_action_type(self, action, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
+        """Extract response type for an action (if available)"""
+        # This is a placeholder; adjust as per your AST structure for actions
+        if hasattr(action, 'response_schema') and action.response_schema:
+            type_name = f"{controller_name.capitalize()}{action.name.capitalize()}ActionResponseData"
+            return self.create_type_definition(
+                type_name,
+                action.response_schema,
+                f"Response data for action {action.name} in {controller_name}"
+            )
+        return None
+
+    def extract_action_parameters(self, action) -> tuple[Dict[str, str], List[str]]:
+        """Extract parameters and required fields from an action (if available)"""
+        # This is a placeholder; adjust as per your AST structure for actions
+        properties = {}
+        required = []
+        if hasattr(action, 'parameters') and action.parameters:
+            for param in action.parameters:
+                param_type = self.extract_schema_type(getattr(param, 'schema', {'type': 'any'}))
+                properties[param.name] = param_type
+                if getattr(param, 'required', False):
+                    required.append(param.name)
+        return properties, required
 
     def get_method_name(self, router: Router) -> str:
         """Determine the method name based on HTTP method and path"""
@@ -125,60 +157,55 @@ class TypeScriptProcessor:
             description=description
         )
 
-    def extract_request_type(self, router: Router, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
-        """Extract request type from router"""
+    def extract_request_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
+        """Extract request type from router or action"""
         if not router.request_body or not router.request_body.content:
             return None
-        
         # Find JSON content
         json_content = None
         for content in router.request_body.content:
             if content.content_type == "application/json":
                 json_content = content
                 break
-        
         if not json_content:
             return None
-        
         method = router.method.lower()
-        if method == "patch":
+        if action_name:
+            type_name = f"{controller_name.capitalize()}{action_name}RequestData"
+        elif method == "patch":
             type_name = f"{controller_name.capitalize()}PartialEditRequestData"
         else:
             type_name = f"{controller_name.capitalize()}{method.capitalize()}RequestData"
-        
         return self.create_type_definition(
             type_name,
             json_content.schema,
             f"Request data for {router.method} {router.path}"
         )
 
-    def extract_response_type(self, router: Router, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
-        """Extract response type from router"""
+    def extract_response_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
+        """Extract response type from router or action"""
         if not router.responses:
             return None
-        
         # Find 200/201 response
         success_response = None
         for response in router.responses:
             if response.status_code in ["200", "201"]:
                 success_response = response
                 break
-        
         if not success_response or not success_response.content:
             return None
-        
         # Find JSON content
         json_content = None
         for content in success_response.content:
             if content.content_type == "application/json":
                 json_content = content
                 break
-        
         if not json_content:
             return None
-        
         method = router.method.lower()
-        if method == "get" and self.extract_path_params(router.path):
+        if action_name:
+            type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
+        elif method == "get" and self.extract_path_params(router.path):
             type_name = f"{controller_name.capitalize()}ViewResponseData"
         elif method == "get":
             type_name = f"{controller_name.capitalize()}ListResponseData"
@@ -186,26 +213,22 @@ class TypeScriptProcessor:
             type_name = f"{controller_name.capitalize()}PartialEditResponseData"
         else:
             type_name = f"{controller_name.capitalize()}{method.capitalize()}ResponseData"
-        
         return self.create_type_definition(
             type_name,
             json_content.schema,
             f"Response data for {router.method} {router.path}"
         )
 
-    def extract_params_type(self, router: Router, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
-        """Extract query parameters type from router"""
+    def extract_params_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
+        """Extract query parameters type from router or action"""
         query_params = []
         for param in router.parameters:
             if param.position == "query":
                 query_params.append(param)
-        
         if not query_params:
             return None
-        
         properties = {}
         required = []
-        
         for param in query_params:
             param_type = self.extract_schema_type({
                 "type": param.schema.type,
@@ -214,18 +237,17 @@ class TypeScriptProcessor:
             properties[param.name] = param_type
             if param.required:
                 required.append(param.name)
-        
         if not properties:
             return None
-        
         method = router.method.lower()
-        if method == "get" and self.extract_path_params(router.path):
+        if action_name:
+            type_name = f"{controller_name.capitalize()}{action_name}RequestParams"
+        elif method == "get" and self.extract_path_params(router.path):
             type_name = f"{controller_name.capitalize()}ViewRequestParams"
         elif method == "get":
             type_name = f"{controller_name.capitalize()}ListRequestParams"
         else:
             type_name = f"{controller_name.capitalize()}{method.capitalize()}RequestParams"
-        
         return TypeScriptTypeDefinition(
             name=type_name,
             properties=properties,
@@ -234,22 +256,21 @@ class TypeScriptProcessor:
         )
 
     def process(self) -> TypeScriptAst:
-        """Process the AST and create TypeScript-specific AST"""
+        """Process the AST and create TypeScript-specific AST, including actions"""
         ts_controllers = []
-        
+
         for controller in self.ast.controllers:
             ts_routers = []
-            
             for router in controller.routers:
                 method_name = self.get_method_name(router)
                 path_params = self.extract_path_params(router.path)
                 ts_path = self.typescript_path(router.path)
-                
+
                 # Extract types
                 request_type = self.extract_request_type(router, controller.name)
                 response_type = self.extract_response_type(router, controller.name)
                 params_type = self.extract_params_type(router, controller.name)
-                
+
                 ts_router = TypeScriptRouter(
                     router=router,
                     method_name=method_name,
@@ -260,11 +281,39 @@ class TypeScriptProcessor:
                     params_type=params_type
                 )
                 ts_routers.append(ts_router)
-            
+
+            # --- Extract actions as routers if present ---
+            ts_actions = []
+            for action in controller.actions:
+                # Derive action_name from path: e.g., /mushafs/import -> Import
+                path = getattr(action, 'path', None) or (action.router.path if hasattr(action, 'router') and hasattr(action.router, 'path') else None)
+                if path:
+                    action_name = path.rstrip('/').split('/')[-1].capitalize()
+                else:
+                    action_name = getattr(action, 'name', None) or 'Action'
+                method_name = getattr(action, 'name', None) or self.get_method_name(action)
+                path_params = self.extract_path_params(getattr(action, 'path', '')) if hasattr(action, 'path') else []
+                ts_path = self.typescript_path(getattr(action, 'path', '')) if hasattr(action, 'path') else ''
+                request_type = self.extract_request_type(action, controller.name, action_name) if hasattr(action, 'request_body') else None
+                response_type = self.extract_response_type(action, controller.name, action_name)
+                params_type = self.extract_params_type(action, controller.name, action_name) if hasattr(action, 'parameters') else None
+                ts_action = TypeScriptAction(
+                    router=action,
+                    method_name=method_name,
+                    path_params=path_params,
+                    ts_path=ts_path,
+                    request_type=request_type,
+                    response_type=response_type,
+                    params_type=params_type,
+                    action_name=action_name
+                )
+                ts_actions.append(ts_action)
+
             ts_controller = TypeScriptController(
                 controller=controller,
-                routers=ts_routers
+                routers=ts_routers,
+                actions=ts_actions
             )
             ts_controllers.append(ts_controller)
-        
+
         return TypeScriptAst(controllers=ts_controllers)

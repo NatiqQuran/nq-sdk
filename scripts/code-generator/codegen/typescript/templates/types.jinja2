@@ -1,3 +1,40 @@
+{%- if controller.actions %}
+{%- for action in controller.actions %}
+{%- if action.request_type %}
+export interface {{ action.request_type.name }} {
+{%- for prop_name, prop_type in action.request_type.properties.items() %}
+    {%- if prop_name in action.request_type.required_properties %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+{%- endif %}
+{%- if action.response_type %}
+export interface {{ action.response_type.name }} {
+{%- for prop_name, prop_type in action.response_type.properties.items() %}
+    {%- if prop_name in action.response_type.required_properties %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+{%- endif %}
+{%- if action.params_type %}
+export interface {{ action.params_type.name }} {
+{%- for prop_name, prop_type in action.params_type.properties.items() %}
+    {%- if prop_name in action.params_type.required_properties %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+{%- endif %}
+{%- endfor %}
+{%- endif %}
 {%- for router in controller.routers %}
 {%- if router.request_type %}
 export interface {{ router.request_type.name }} {
