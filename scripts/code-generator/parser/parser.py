@@ -11,8 +11,28 @@ class Parser():
     
     def parse(self) -> Ast:
         paths: Dict[str, Any] = self.schema.get("paths", {})
+        controllers_by_name = {}
+        # First pass: collect all controllers
         for (path, routers) in paths.items():
-            self.ast.add_controller(self.parse_controller(path, routers))
+            resource = path.strip('/').split('/')[0]
+            if resource not in controllers_by_name:
+                controllers_by_name[resource] = Controller(resource)
+        # Second pass: assign routers and actions
+        for (path, routers) in paths.items():
+            parts = path.strip('/').split('/')
+            resource = parts[0]
+            controller = controllers_by_name[resource]
+            # Action: /resource/action/ (length 2)
+            if len(parts) == 2 and parts[1] not in ("{uuid}", "{id}"):
+                for method, router_data in routers.items():
+                    controller.actions.append(self.parse_router(path, method, router_data))
+            else:
+                # Normal router
+                for method, router_data in routers.items():
+                    controller.add_router(self.parse_router(path, method, router_data))
+        # Add all controllers to AST
+        for controller in controllers_by_name.values():
+            self.ast.add_controller(controller)
         return self.ast
     
     def parse_controller(self, path: str, routers: Dict[Any, Any]) -> Controller:

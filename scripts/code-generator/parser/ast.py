@@ -58,11 +58,14 @@ class Router:
 @dataclass
 class Controller:
     name: str
-    routers: List[Router] = None
-    
+    routers: list = None
+    actions: list = None
+
     def __post_init__(self):
         if self.routers is None:
             self.routers = []
+        if self.actions is None:
+            self.actions = []
 
     def add_router(self, router: Router):
         self.routers.append(router)

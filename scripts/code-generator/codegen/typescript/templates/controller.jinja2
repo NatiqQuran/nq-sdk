@@ -1,8 +1,36 @@
+
 import * as {{ controller.controller.name.capitalize() }}Type from "./types/{{controller.controller.name}}.ts";
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { BaseController } from "../utils/baseController";
 import { RequestConfig } from "../utils/globalTypes";
+
+// --- Action classes ---
+{% if controller.actions %}
+{% for action in controller.actions %}
+export class {{ controller.controller.name.capitalize() }}{{ action.action_name }} extends BaseController {
+    constructor(conn: Connection, token?: string) {
+        super(conn, token);
+    }
+    /** {{ action.router.method.upper() }} {{ action.router.path }} */
+    async {{ action.method_name }}(
+        {%- if action.path_params %}
+        {{ action.path_params | join(', ') }}: string
+        {%- endif %}
+        {%- if action.request_type %}
+        {%- if action.path_params %}, {% endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ action.request_type.name }}
+        {%- endif %}
+        {%- if action.params_type %}
+        {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ action.params_type.name }}>
+        {%- else %}
+        {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig
+        {%- endif %}
+    ): Promise<AxiosResponse<{% if action.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ action.response_type.name }}{% else %}any{% endif %}>> {
+        return await this.conn.axios{{ action.router.method.capitalize() }}(`{{ action.ts_path }}`{% if action.request_type %}, data{% endif %}, config);
+    }
+}
+{% endfor %}
+{% endif %}
 
 export class {{ controller.controller.name.capitalize() }}Controller extends BaseController {
     constructor(connection: Connection, token?: string) {
@@ -27,4 +55,12 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
         return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{% if router.request_type %}, data{% endif %}, config);
     }
     {% endfor %}
+    {% if controller.actions %}
+    // --- Action methods ---
+    {% for action in controller.actions %}
+    {{ action.action_name|lower }}() {
+        return new {{ controller.controller.name.capitalize() }}{{ action.action_name }}(this.conn);
+    }
+    {% endfor %}
+    {% endif %}
 }
