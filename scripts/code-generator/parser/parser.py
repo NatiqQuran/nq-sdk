@@ -1,13 +1,24 @@
 from .ast import Ast, Controller, Router, RouterMetaData, RouterParamenterSchema, RouterParameter, RouterRequestBody,BodyContent,RouterResponse
 from typing import Dict,Any,List
+import warnings
 
 class Parser():
     """
     Parser
     """
-    def __init__(self, schema: Dict[str, Any]):
+    def __init__(self, schema: Dict[str, Any], enable_warnings: bool = True):
         self.ast = Ast()
         self.schema = schema
+        self.enable_warnings = enable_warnings
+    
+    def set_warnings_enabled(self, enabled: bool) -> None:
+        """Enable or disable warning messages"""
+        self.enable_warnings = enabled
+    
+    def warn(self, message: str) -> None:
+        """Issue a warning if warnings are enabled"""
+        if self.enable_warnings:
+            warnings.warn(message, UserWarning)
     
     def parse(self) -> Ast:
         paths: Dict[str, Any] = self.schema.get("paths", {})
@@ -35,6 +46,89 @@ class Parser():
             self.ast.add_controller(controller)
         return self.ast
     
+    def validate_router_completeness(self, path: str, method: str, data: Dict[Any, Any]) -> None:
+        """
+        Validate that the router has proper request/response types based on HTTP method.
+        Prints warnings for missing required components.
+        """
+        # Check for missing request body where it's expected
+        if method in ['POST', 'PUT', 'PATCH']:
+            if 'requestBody' not in data:
+                self.warn(
+                    f"Router {method} {path} is missing request body. "
+                    f"{method} methods typically require a request body."
+                )
+            elif not data.get('requestBody', {}).get('content'):
+                self.warn(
+                    f"Router {method} {path} has request body but no content schemas defined."
+                )
+            else:
+                # Check if request body has required schemas
+                content = data.get('requestBody', {}).get('content', {})
+                has_valid_schemas = False
+                for content_type, content_data in content.items():
+                    if content_data.get('schema'):
+                        has_valid_schemas = True
+                        break
+                
+                if not has_valid_schemas:
+                    self.warn(
+                        f"Router {method} {path} has request body content but no schema definitions."
+                    )
+        
+        # Check for missing responses
+        if 'responses' not in data:
+            self.warn(
+                f"Router {method} {path} is missing response definitions."
+            )
+        elif not data.get('responses'):
+            self.warn(
+                f"Router {method} {path} has empty responses object."
+            )
+        else:
+            # Check if responses have content schemas
+            has_content_schemas = False
+            has_valid_schemas = False
+            for status_code, response_data in data.get('responses', {}).items():
+                if response_data.get('content'):
+                    has_content_schemas = True
+                    # Check if any response has valid schemas
+                    for content_type, content_data in response_data.get('content', {}).items():
+                        if content_data.get('schema'):
+                            has_valid_schemas = True
+                            break
+                    if has_valid_schemas:
+                        break
+            
+            if not has_content_schemas:
+                self.warn(
+                    f"Router {method} {path} has responses but no content schemas defined."
+                )
+            elif not has_valid_schemas:
+                self.warn(
+                    f"Router {method} {path} has response content but no schema definitions."
+                )
+        
+        # Check for unexpected request body on GET/DELETE methods
+        if method in ['GET', 'DELETE'] and 'requestBody' in data:
+            self.warn(
+                f"Router {method} {path} has request body, but {method} methods typically don't require one."
+            )
+        
+        # Check for missing operationId (optional but recommended)
+        if not data.get('operationId'):
+            self.warn(
+                f"Router {method} {path} is missing operationId. "
+                "This is recommended for better code generation."
+            )
+        
+        # Check for missing summary/description
+        if not data.get('summary') and not data.get('description'):
+            self.warn(
+                f"Router {method} {path} is missing both summary and description. "
+                "At least one is recommended for documentation."
+            )
+
     def parse_controller(self, path: str, routers: Dict[Any, Any]) -> Controller:
         controller = Controller(path.split("/")[1]) # Check For correctness
 
@@ -103,6 +197,9 @@ class Parser():
         return responses
 
     def parse_router(self, path: str, method: str, data: Dict[Any, Any]) -> Router:
+        # Validate router completeness before parsing
+        self.validate_router_completeness(path, method, data)
+        
         meta = RouterMetaData(
             data.get("description", "no description"),
             data.get("tags", []), data.get("operationId"),

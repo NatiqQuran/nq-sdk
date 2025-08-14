@@ -7,12 +7,12 @@ from codegen.typescript.codegen import Codegen
 from parser.postprocessor import PostProcessor
 from dataclasses import asdict
 
-def handle_compile(file_path: str, language: str, print_ast: bool = False, output_dir=None):
+def handle_compile(file_path: str, language: str, print_ast: bool = False, output_dir=None, enable_warnings: bool = True):
     # Open file path and parse the yaml file
     with open(file_path, 'r') as file:
         file_content = yaml.safe_load(file)
     
-    parser = Parser(file_content)
+    parser = Parser(file_content, enable_warnings=enable_warnings)
     ast = parser.parse()
     # Save Ast file as json
     if print_ast:
@@ -51,7 +51,8 @@ parser.add_argument("filepath", help="File path of yaml file (open-api schema)."
 parser.add_argument("language", help="Language to be compiled to ex. typescript")
 parser.add_argument("--output-dir", "-o", help="Output directory for generated files")
 parser.add_argument("--ast", "-a", action="store_true", help="Save AST file (json)")
+parser.add_argument("--no-warnings", action="store_true", help="Disable warning messages during parsing")
 
 args = parser.parse_args()
 
-handle_compile(args.filepath, args.language, args.ast, args.output_dir)
+handle_compile(args.filepath, args.language, args.ast, args.output_dir, not args.no_warnings)
