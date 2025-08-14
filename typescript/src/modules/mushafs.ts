@@ -13,7 +13,6 @@ import {
     MushafsPartialEditResponseData,
     MushafImportRequestData,
     MushafImportResponseData,
-    MushafAyahMapResponseData,
     MushafImportBreakersRequestParams,
     MushafImportBreakersRequestData,
 } from "../types/mushafs";
@@ -113,12 +112,5 @@ export class MushafsController extends BaseController {
         return await this.axiosPost(url, formData, importConfig);
       }
     
-      /** GET /mushafs/map/{mushaf_uuid}/ */
-      async getAyahMap(
-        uuid:string,
-        config?: RequestConfig
-      ): Promise<AxiosResponse<MushafAyahMapResponseData>> {
-        return await this.axiosGet(`/mushafs/map/${uuid}/`, config);
-      } 
 }
 

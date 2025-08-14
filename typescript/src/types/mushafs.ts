@@ -51,17 +51,3 @@ export interface MushafImportBreakersRequestParams {
   }
   
   
-  // Mushaf Ayah Map
-
-  
-  export interface MushafAyahMapItem {
-    uuid: string;
-    surah: number;
-    ayah: number;
-    juz: number ;
-    hizb: number ;
-    ruku: number ;
-    page: number ;
-  }
-  
-  export type MushafAyahMapResponseData = MushafAyahMapItem[];

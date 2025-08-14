@@ -11,6 +11,7 @@ export * from "./types/words";
 export * from "./types/notifications";
 export * from "./types/profile";
 export * from "./types/recitations";
+export * from "./types/takhtits";
 
 // Client
 export * from "./client/connection";
@@ -28,6 +29,7 @@ export * from "./modules/translation";
 export * from "./modules/profile";
 export * from "./modules/recitations";
 export * from "./modules/notifications";
+export * from "./modules/takhtits";
 
 // Utils
 export * from "./utils/globalTypes";
