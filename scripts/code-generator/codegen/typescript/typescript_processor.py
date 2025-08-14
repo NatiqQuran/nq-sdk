@@ -231,13 +231,12 @@ class TypeScriptProcessor:
                 break
         if not json_content:
             return None
-        method = router.method.lower()
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}RequestData"
-        elif method == "patch":
-            type_name = f"{controller_name.capitalize()}PartialEditRequestData"
         else:
-            type_name = f"{controller_name.capitalize()}{method.capitalize()}RequestData"
+            # Use the same method name logic as controller methods
+            method_name = self.get_method_name(router)
+            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}RequestData"
         return self.create_type_definition(
             type_name,
             json_content.schema,
@@ -264,17 +263,12 @@ class TypeScriptProcessor:
                 break
         if not json_content:
             return None
-        method = router.method.lower()
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
-        elif method == "get" and self.extract_path_params(router.path):
-            type_name = f"{controller_name.capitalize()}ViewResponseData"
-        elif method == "get":
-            type_name = f"{controller_name.capitalize()}ListResponseData"
-        elif method == "patch":
-            type_name = f"{controller_name.capitalize()}PartialEditResponseData"
         else:
-            type_name = f"{controller_name.capitalize()}{method.capitalize()}ResponseData"
+            # Use the same method name logic as controller methods
+            method_name = self.get_method_name(router)
+            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}ResponseData"
         return self.create_type_definition(
             type_name,
             json_content.schema,
@@ -301,15 +295,12 @@ class TypeScriptProcessor:
                 required.append(param.name)
         if not properties:
             return None
-        method = router.method.lower()
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}RequestParams"
-        elif method == "get" and self.extract_path_params(router.path):
-            type_name = f"{controller_name.capitalize()}ViewRequestParams"
-        elif method == "get":
-            type_name = f"{controller_name.capitalize()}ListRequestParams"
         else:
-            type_name = f"{controller_name.capitalize()}{method.capitalize()}RequestParams"
+            # Use the same method name logic as controller methods
+            method_name = self.get_method_name(router)
+            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}RequestParams"
         # Create a schema-like structure for params to enable deduplication
         params_schema = {
             "type": "object",
