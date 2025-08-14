@@ -79,10 +79,6 @@ class TypeScriptProcessor:
                 existing_type.required_properties == required):
                 return existing_type
         return None
-    
-
-    
-
 
     def extract_action_type(self, action, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
         """Extract response type for an action (if available)"""
