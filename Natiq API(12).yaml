@@ -453,6 +453,7 @@ paths:
         schema:
           type: string
       tags:
+      - general
       - mushafs
       security:
       - knoxApiToken: []
@@ -509,6 +510,7 @@ paths:
           format: uuid
         required: true
       tags:
+      - general
       - mushafs
       security:
       - knoxApiToken: []
@@ -613,6 +615,57 @@ paths:
       responses:
         '204':
           description: No response body
+  /mushafs/{uuid}/import_breakers/:
+    post:
+      operationId: mushafs_import_breakers_create
+      description: |-
+        Accepts a JSON array of strings with the format "{surah}:{ayah}" that denote the ayah at which a new breaker (page by default) begins. Existing breakers whose names start with the provided breaker type (default: 'page') will be removed before importing the new ones.
+
+        Example request body (application/json):
+
+        [
+          "2:1",
+          "2:6",
+          "2:17"
+        ]
+      summary: Import Ayah Breakers for the specified Mushaf
+      parameters:
+      - in: query
+        name: type
+        schema:
+          type: string
+        description: Breaker type (e.g., page, juz, hizb, ruku). Defaults to 'page'.
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - mushafs
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Text/JSON file containing a list of breakers (e.g.
+                    ['2:1', '2:6']).
+              required:
+              - file
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
   /mushafs/import/:
     post:
       operationId: mushafs_import_create
@@ -1151,11 +1204,11 @@ paths:
       summary: List all Recitations (audio recordings)
       parameters:
       - in: query
-        name: mushaf_uuid
+        name: mushaf
         schema:
           type: string
-          format: uuid
-        description: UUID of the Mushaf to filter Recitations by.
+        description: Short name of the Mushaf to filter Recitations by.
+        required: true
       - name: ordering
         required: false
         in: query
@@ -1195,7 +1248,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedRecitationList'
+                $ref: '#/components/schemas/PaginatedRecitationListList'
           description: ''
     post:
       operationId: recitations_create
@@ -1342,6 +1395,53 @@ paths:
       responses:
         '204':
           description: No response body
+  /recitations/{uuid}/upload/{surah_uuid}/:
+    post:
+      operationId: recitations_upload_create
+      description: |-
+        Accepts a multipart/form-data request with the following parts:
+        • file: The MP3 audio file for the surah.
+        • word_timestamps (optional): JSON string array of objects with start, end, word_uuid.
+      summary: Upload a surah audio file and optional word-level timestamps for a
+        Recitation
+      parameters:
+      - in: path
+        name: surah_uuid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - recitations
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                word_timestamps:
+                  type: string
+                  description: JSON list, optional
+              required:
+              - file
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
   /surahs/:
     get:
       operationId: surahs_list
@@ -1355,6 +1455,7 @@ paths:
         schema:
           type: string
         description: Short name of the Mushaf to filter Surahs by.
+        required: true
       - name: ordering
         required: false
         in: query
@@ -1380,6 +1481,7 @@ paths:
         schema:
           type: string
       tags:
+      - general
       - surahs
       security:
       - knoxApiToken: []
@@ -1434,6 +1536,7 @@ paths:
           format: uuid
         required: true
       tags:
+      - general
       - surahs
       security:
       - knoxApiToken: []
@@ -1535,6 +1638,391 @@ paths:
       responses:
         '204':
           description: No response body
+  /takhtits/:
+    get:
+      operationId: takhtits_list
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: List all Takhtits (text annotations/notes)
+      parameters:
+      - in: query
+        name: mushaf
+        schema:
+          type: string
+        description: Short name of the Mushaf to filter Takhtits by.
+      tags:
+      - general
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Takhtit'
+          description: ''
+    post:
+      operationId: takhtits_create
+      description: Create a new Takhtit. Requires mushaf_uuid and account_uuid in
+        the request body.
+      summary: Create a new Takhtit record
+      tags:
+      - takhtits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mushaf_uuid:
+                  type: string
+                  format: uuid
+                  description: UUID of the mushaf to link.
+                account_uuid:
+                  type: string
+                  format: uuid
+                  description: UUID of the account to link.
+              required:
+              - mushaf_uuid
+              - account_uuid
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Takhtit'
+          description: ''
+  /takhtits/{uuid}/:
+    get:
+      operationId: takhtits_retrieve
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: Retrieve a specific Takhtit by UUID
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - general
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Takhtit'
+          description: ''
+    put:
+      operationId: takhtits_update
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: Update an existing Takhtit record
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Takhtit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Takhtit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Takhtit'
+        required: true
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Takhtit'
+          description: ''
+    patch:
+      operationId: takhtits_partial_update
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: Partially update a Takhtit record
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTakhtit'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTakhtit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTakhtit'
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Takhtit'
+          description: ''
+    delete:
+      operationId: takhtits_destroy
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: Delete a Takhtit record
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '204':
+          description: No response body
+  /takhtits/{uuid}/ayahs_breakers/:
+    get:
+      operationId: takhtits_ayahs_breakers_retrieve
+      description: Returns a flat list containing an entry for every ayah in this
+        takhtit, with breaker info similar to the mushaf ayah_map action.
+      summary: List all ayahs_breakers for this takhtit (ayahs map style)
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: takhtits_ayahs_breakers_create
+      description: Add a new ayahs_breaker to this takhtit. Requires ayah_uuid in
+        the request body.
+      summary: Add an ayahs_breaker to this takhtit
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ayah_uuid:
+                  type: string
+                  format: uuid
+                  description: UUID of the ayah to link.
+                type:
+                  type: string
+                  description: Breaker type (see AyahBreakerType).
+              required:
+              - ayah_uuid
+              - type
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahBreaker'
+          description: ''
+  /takhtits/{uuid}/ayahs_breakers/{breaker_uuid}/:
+    get:
+      operationId: takhtits_ayahs_breakers_retrieve_2
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: Retrieve a specific ayahs_breaker for this takhtit
+      parameters:
+      - in: path
+        name: breaker_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the ayahs_breaker.
+        required: true
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahBreaker'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /takhtits/{uuid}/words_breakers/:
+    get:
+      operationId: takhtits_words_breakers_retrieve
+      description: Returns a flat list containing an entry for every word with a breaker
+        for this takhtit, with a line counter (incremented for each breaker).
+      summary: List all words_breakers for this takhtit (with line counters)
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+    post:
+      operationId: takhtits_words_breakers_create
+      description: Add a new words_breaker to this takhtit. Requires word_uuid in
+        the request body. Only type 'line' is allowed.
+      summary: Add a words_breaker to this takhtit
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word_uuid:
+                  type: string
+                  format: uuid
+                  description: UUID of the word to link.
+                type:
+                  type: string
+                  description: Breaker type (must be 'line').
+              required:
+              - word_uuid
+              - type
+      security:
+      - knoxApiToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /takhtits/{uuid}/words_breakers/{breaker_uuid}/:
+    get:
+      operationId: takhtits_words_breakers_retrieve_2
+      description: |-
+        ViewSet for managing Takhtit objects.
+        Supports listing, creating, updating, and retrieving Takhtit records.
+      summary: Retrieve a specific words_breaker for this takhtit
+      parameters:
+      - in: path
+        name: breaker_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the words_breaker.
+        required: true
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - takhtits
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
   /translations/:
     get:
       operationId: translations_list
@@ -1549,11 +2037,11 @@ paths:
           type: string
         description: Language code to filter Translations by.
       - in: query
-        name: mushaf_uuid
+        name: mushaf
         schema:
           type: string
-          format: uuid
-        description: UUID of the Mushaf to filter Translations by.
+        description: Short name of the Mushaf to filter Translations by.
+        required: true
       - name: ordering
         required: false
         in: query
@@ -1579,6 +2067,7 @@ paths:
         schema:
           type: string
       tags:
+      - general
       - translations
       security:
       - knoxApiToken: []
@@ -1626,12 +2115,6 @@ paths:
         Supports filtering by Mushaf and language, and restricts editing of published translations.
       summary: Retrieve a specific Translation by UUID
       parameters:
-      - in: query
-        name: surah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: UUID of the Surah to filter ayahs_translations by.
       - in: path
         name: uuid
         schema:
@@ -1639,6 +2122,7 @@ paths:
           format: uuid
         required: true
       tags:
+      - general
       - translations
       security:
       - knoxApiToken: []
@@ -1740,9 +2224,91 @@ paths:
       responses:
         '204':
           description: No response body
-  /translations/{uuid}/ayah/{ayah_uuid}/:
+  /translations/{uuid}/ayahs/:
+    get:
+      operationId: translations_ayahs_list
+      description: Returns a paginated list of all AyahTranslation objects for the
+        given Translation UUID. Optionally filter by surah_uuid (query param).
+      summary: List all AyahTranslations for this Translation
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: surah_uuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the Surah to filter AyahTranslations by.
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - translations
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAyahTranslationList'
+          description: ''
+  /translations/{uuid}/ayahs/{ayah_uuid}/:
+    get:
+      operationId: translations_ayahs_retrieve
+      description: 'Returns a single AyahTranslation object for the given Translation
+        UUID and Ayah UUID. URL: /translations/{translation_uuid}/ayahs/{ayah_uuid}/'
+      summary: Retrieve a single AyahTranslation for this Translation
+      parameters:
+      - in: path
+        name: ayah_uuid
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - translations
+      security:
+      - knoxApiToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AyahTranslation'
+          description: ''
     post:
-      operationId: translations_ayah_create_2
+      operationId: translations_ayahs_create
       description: Provide the ayah's UUID in the URL path and the translation's UUID
         as the primary resource path. Body requires only `text` (and optional `bismillah`).
         If an AyahTranslation already exists it will be updated, otherwise it will
@@ -1766,14 +2332,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-        required: true
+              type: object
+              properties:
+                text:
+                  type: string
+                bismillah:
+                  type: boolean
+              required:
+              - text
       security:
       - knoxApiToken: []
       responses:
@@ -1790,7 +2356,7 @@ paths:
                 $ref: '#/components/schemas/AyahTranslation'
           description: ''
     put:
-      operationId: translations_ayah_update
+      operationId: translations_ayahs_update
       description: Provide the ayah's UUID in the URL path and the translation's UUID
         as the primary resource path. Body requires only `text` (and optional `bismillah`).
         If an AyahTranslation already exists it will be updated, otherwise it will
@@ -1814,14 +2380,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-        required: true
+              type: object
+              properties:
+                text:
+                  type: string
+                bismillah:
+                  type: boolean
+              required:
+              - text
       security:
       - knoxApiToken: []
       responses:
@@ -1837,68 +2403,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/AyahTranslation'
           description: ''
-  /translations/ayah/:
-    get:
-      operationId: translations_ayah_retrieve
-      description: |-
-        List AyahTranslation instances filtered by `translation_uuid`, `ayah_uuid`, or `surah_uuid`.
-        Mirrors the functionality previously provided by the AyahTranslationViewSet list endpoint.
-      summary: List Ayah Translations related to Translations
-      parameters:
-      - in: query
-        name: ayah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Ayah UUID
-      - in: query
-        name: surah_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Surah UUID
-      - in: query
-        name: translation_uuid
-        schema:
-          type: string
-          format: uuid
-        description: Translation UUID
-      tags:
-      - translations
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TranslationList'
-          description: ''
-    post:
-      operationId: translations_ayah_create
-      description: |-
-        Create a new AyahTranslation or update it if it already exists (upsert behaviour).
-        Expects `translation_uuid`, `ayah_uuid`, and `text` in the payload (or corresponding query parameters).
-      summary: Create or update (upsert) an Ayah Translation
-      tags:
-      - translations
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/AyahTranslation'
-        required: true
-      security:
-      - knoxApiToken: []
-      responses:
-        '201':
-          description: No response body
   /translations/import/:
     post:
       operationId: translations_import_create
@@ -1928,66 +2432,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TranslationList'
-          description: ''
-  /upload/:
-    post:
-      operationId: upload_file
-      description: Uploads a file to S3 with public access, categorizing it based
-        on the
-      summary: Upload a file to S3 with subject-based categorization
-      parameters:
-      - in: query
-        name: subject
-        schema:
-          type: string
-        description: 'Subject of the file to be uploaded. Allowed subjects: recitations'
-      tags:
-      - upload
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-                  description: Max upload size depends on the subject
-              required:
-              - file
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          description: No response body
-  /upload/subjects/:
-    get:
-      operationId: upload_subjects_list
-      description: Returns a list of allowed subjects and their file types for file
-        uploads. max size format is in bytes
-      summary: List allowed upload subjects
-      tags:
-      - upload
-      security:
-      - knoxApiToken: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UploadSubjectListResponse'
-              examples:
-                AllowedUploadSubjects:
-                  value:
-                  - subject: recitations
-                    type: mp3
-                    description: Audio recitations of Quran
-                    max_size: 26214400
-                  summary: Allowed upload subjects
-                  description: Example response showing allowed subjects and their
-                    file types.
           description: ''
   /users/:
     get:
@@ -2395,6 +2839,18 @@ components:
       required:
       - surah_uuid
       - text
+    AyahBreaker:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+      required:
+      - type
+      - uuid
     AyahInSurah:
       type: object
       properties:
@@ -2608,6 +3064,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Ayah'
+    PaginatedAyahTranslationList:
+      type: array
+      items:
+        $ref: '#/components/schemas/AyahTranslation'
     PaginatedMushafList:
       type: array
       items:
@@ -2616,10 +3076,10 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Notification'
-    PaginatedRecitationList:
+    PaginatedRecitationListList:
       type: array
       items:
-        $ref: '#/components/schemas/Recitation'
+        $ref: '#/components/schemas/RecitationList'
     PaginatedSurahList:
       type: array
       items:
@@ -2741,18 +3201,12 @@ components:
         get_mushaf_uuid:
           type: string
           readOnly: true
-        surah_uuid:
-          type: string
-          format: uuid
-          writeOnly: true
-        get_surah_uuid:
-          type: string
-          readOnly: true
         status:
           $ref: '#/components/schemas/Status115Enum'
         reciter_account_uuid:
           type: string
-          readOnly: true
+          format: uuid
+          writeOnly: true
         recitation_date:
           type: string
           format: date
@@ -2760,10 +3214,6 @@ components:
           type: string
         duration:
           type: string
-        file:
-          type: object
-          additionalProperties: {}
-          writeOnly: true
         recitation_type:
           type: string
         created_at:
@@ -2775,12 +3225,8 @@ components:
           format: date-time
           readOnly: true
         words_timestamps:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-          writeOnly: true
+          type: string
+          readOnly: true
         ayahs_timestamps:
           type: string
           readOnly: true
@@ -2820,6 +3266,24 @@ components:
           nullable: true
         number_of_ayahs:
           type: string
+          readOnly: true
+    PatchedTakhtit:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        creator:
+          type: integer
+          readOnly: true
+        mushaf:
+          type: integer
+        account:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
           readOnly: true
     PatchedTranslationList:
       type: object
@@ -2951,18 +3415,12 @@ components:
         get_mushaf_uuid:
           type: string
           readOnly: true
-        surah_uuid:
-          type: string
-          format: uuid
-          writeOnly: true
-        get_surah_uuid:
-          type: string
-          readOnly: true
         status:
           $ref: '#/components/schemas/Status115Enum'
         reciter_account_uuid:
           type: string
-          readOnly: true
+          format: uuid
+          writeOnly: true
         recitation_date:
           type: string
           format: date
@@ -2970,10 +3428,6 @@ components:
           type: string
         duration:
           type: string
-        file:
-          type: object
-          additionalProperties: {}
-          writeOnly: true
         recitation_type:
           type: string
         created_at:
@@ -2985,12 +3439,8 @@ components:
           format: date-time
           readOnly: true
         words_timestamps:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-          writeOnly: true
+          type: string
+          readOnly: true
         ayahs_timestamps:
           type: string
           readOnly: true
@@ -2998,18 +3448,59 @@ components:
       - ayahs_timestamps
       - created_at
       - duration
-      - file
       - get_mushaf_uuid
-      - get_surah_uuid
       - mushaf_uuid
       - recitation_date
       - recitation_location
       - recitation_type
       - reciter_account_uuid
-      - surah_uuid
       - updated_at
       - uuid
       - words_timestamps
+    RecitationList:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/Status115Enum'
+        recitation_date:
+          type: string
+          format: date
+        recitation_location:
+          type: string
+        duration:
+          type: string
+        recitation_type:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        reciter_account_uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        mushaf_uuid:
+          type: string
+          format: uuid
+          readOnly: true
+      required:
+      - created_at
+      - duration
+      - mushaf_uuid
+      - recitation_date
+      - recitation_location
+      - recitation_type
+      - reciter_account_uuid
+      - updated_at
+      - uuid
     SajdahEnum:
       enum:
       - none
@@ -3134,6 +3625,30 @@ components:
       required:
       - names
       - uuid
+    Takhtit:
+      type: object
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        creator:
+          type: integer
+          readOnly: true
+        mushaf:
+          type: integer
+        account:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - account
+      - created_at
+      - creator
+      - mushaf
+      - uuid
     Translation:
       type: object
       properties:
@@ -3196,22 +3711,22 @@ components:
       - mushaf_uuid
       - translator_uuid
       - uuid
-    UploadSubjectListResponse:
-      type: object
-      properties:
-        subject:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-        max_size:
-          type: integer
-      required:
-      - description
-      - max_size
-      - subject
-      - type
+    TypeEnum:
+      enum:
+      - page
+      - juz
+      - hizb
+      - rub
+      - manzil
+      - ruku
+      type: string
+      description: |-
+        * `page` - Page
+        * `juz` - Juz
+        * `hizb` - Hizb
+        * `rub` - Rub
+        * `manzil` - Manzil
+        * `ruku` - Ruku
     User:
       type: object
       properties:
@@ -3267,6 +3782,8 @@ components:
       name: Authorization
       description: Token-based authentication with required prefix "Token"
 tags:
+- name: general
+  description: General purpose endpoints
 - name: auth
   description: Authentication and authorization endpoints (login, logout, register,
     token management)
@@ -3288,9 +3805,9 @@ tags:
   description: Create, update and list Quran translations and their verse/ayah translations
 - name: recitations
   description: Manage audio recitations of the Quran
+- name: takhtits
+  description: Manage takhtits (textual annotations) for Quranic verses
 - name: phrases
   description: Create and maintain phrases for the application
 - name: notifications
   description: Endpoints related to user notifications
-- name: upload
-  description: Generic file-upload endpoints (JSON imports, subject uploads, etc.)
