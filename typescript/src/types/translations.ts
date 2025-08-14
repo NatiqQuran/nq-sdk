@@ -20,14 +20,14 @@ interface TranslationsDefaultResponseData {
 //Translations List
 export interface TranslationsListRequestParams extends FilterQueryParams {
     language?: string;
-    mushaf_uuid: string;
+    mushaf: string;
 }
 export type TranslationsListResponseItem = TranslationsDefaultResponseData;
 export type TranslationsListResponseData = TranslationsListResponseItem[];
 
 //Translations View
 export interface TranslationsViewRequestParams extends FilterQueryParams {
-    surah_uuid?: string; 
+    uuid?: string; 
 }
 export interface TranslationsViewAyah {
     uuid: string;
@@ -66,11 +66,26 @@ interface AyahsTranslationDefaultResponseData {
     text: string;
     bismillah?: string;
   }
-  
+
+  // AyahsTranslation List
+  export interface AyahsTranslationListRequestParams extends FilterQueryParams {
+    uuid:string;
+    surah_uuid?:string;
+  }
+  export type AyahsTranslationListResponseData = AyahsTranslationDefaultResponseData[];
+
+  // AyahsTranslation View 
+  export type AyahsTranslationViewRequestParams = AyahsTranslationDefaultParams;
+  export type AyahsTranslationViewResponseData = AyahsTranslationDefaultResponseData;
+
   // AyahsTranslation Add
   export type AyahsTranslationAddRequestParams = AyahsTranslationDefaultParams;
   export type AyahsTranslationAddRequestData = AyahsTranslationDefaultRequestData;
   export type AyahsTranslationAddResponseData = AyahsTranslationDefaultResponseData;
+
+  // AyahsTranslation Edit
+  export type AyahsTranslationEditRequestParams = AyahsTranslationDefaultParams;
+  export type AyahsTranslationEditResponseData = AyahsTranslationDefaultResponseData;
 
   // Translation Import
   export interface TranslationImportRequestData {

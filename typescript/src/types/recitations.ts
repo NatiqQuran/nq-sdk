@@ -12,7 +12,6 @@ import { FilterQueryParams } from "../utils/globalTypes";
 }
  interface RecitationsDefaultResponseData {
     uuid: string;
-    get_mushaf_uuid: string;
     status?: Status;
     recitation_date: string;
     recitation_location: string;
@@ -20,14 +19,14 @@ import { FilterQueryParams } from "../utils/globalTypes";
     recitation_type: string;
     created_at: string;
     updated_at: string;
-    words_timestamps: WordsTimestampsItem[];
-    ayahs_timestamps: string[];
+    reciter_account_uuid:string;
+    mushaf_uuid:string;
 }
 //Recitations List
 
 
 export interface RecitationsListRequestParams extends FilterQueryParams {
-    mushaf_uuid: string;
+    mushaf: string;
     reciter_uuid?: string;
 }
 
