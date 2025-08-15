@@ -1,17 +1,34 @@
-
 import re
 from typing import Dict, List, Optional
 from dataclasses import dataclass
 from parser.ast import Ast, Controller, Router
 
 
-@dataclass
+@dataclass(frozen=True)
 class TypeScriptTypeDefinition:
     """TypeScript-specific type definition"""
     name: str
-    properties: Dict[str, str]  # property_name -> typescript_type
-    required_properties: List[str]
+    properties: tuple  # property_name -> typescript_type as (name, type) pairs
+    required_properties: tuple  # as tuple for immutability
     description: Optional[str] = None
+    
+    @classmethod
+    def create(cls, name: str, properties: Dict[str, str], required: List[str], description: str = None):
+        """Factory method to create from dict/list inputs"""
+        return cls(
+            name=name,
+            properties=tuple(sorted(properties.items())),
+            required_properties=tuple(sorted(required)),
+            description=description
+        )
+    
+    def get_properties_dict(self) -> Dict[str, str]:
+        """Get properties as dictionary for template compatibility"""
+        return dict(self.properties)
+    
+    def get_required_list(self) -> List[str]:
+        """Get required properties as list for template compatibility"""
+        return list(self.required_properties)
 
 
 @dataclass
@@ -40,12 +57,29 @@ class TypeScriptController:
 class TypeScriptAst:
     """TypeScript-specific AST with type information"""
     controllers: List[TypeScriptController]
+    # Add deduplicated types set
+    unique_types: set = None
+
+    def __post_init__(self):
+        if self.unique_types is None:
+            self.unique_types = set()
 
 class TypeScriptProcessor:
     """Processes the generic AST and adds TypeScript-specific information"""
 
     def __init__(self, ast: Ast):
         self.ast = ast
+        # Simple set to track unique types and prevent duplicates
+        self.unique_types: set = set()
+        
+    def _is_duplicate_type(self, properties: Dict[str, str], required: List[str]) -> Optional[TypeScriptTypeDefinition]:
+        """Check if a type with the same properties already exists"""
+        for existing_type in self.unique_types:
+            if (existing_type.properties == properties and 
+                existing_type.required_properties == required):
+                return existing_type
+        return None
+
     def extract_action_type(self, action, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
         """Extract response type for an action (if available)"""
         # This is a placeholder; adjust as per your AST structure for actions
@@ -101,9 +135,28 @@ class TypeScriptProcessor:
         """Convert path to TypeScript template string format"""
         return re.sub(r"\{([a-zA-Z0-9_\-]+)\}", r"${\1}", path)
 
-    def extract_schema_type(self, schema: dict) -> str:
+    def extract_schema_type(self, schema) -> str:
         """Extract TypeScript type from OpenAPI schema"""
         if not schema:
+            return "any"
+        
+        # Handle case where schema is a string (simple type)
+        if isinstance(schema, str):
+            if schema == "string":
+                return "string"
+            elif schema in ["integer", "number"]:
+                return "number"
+            elif schema == "boolean":
+                return "boolean"
+            elif schema == "array":
+                return "any[]"
+            elif schema == "object":
+                return "object"
+            else:
+                return "any"
+        
+        # Handle case where schema is a dictionary
+        if not isinstance(schema, dict):
             return "any"
         
         schema_type = schema.get("type", "object")
@@ -129,12 +182,12 @@ class TypeScriptProcessor:
         else:
             return "any"
 
-    def extract_properties_from_schema(self, schema: dict) -> tuple[Dict[str, str], List[str]]:
+    def extract_properties_from_schema(self, schema) -> tuple[Dict[str, str], List[str]]:
         """Extract properties and required fields from OpenAPI schema"""
         properties = {}
         required = []
         
-        if not schema or "properties" not in schema:
+        if not schema or not isinstance(schema, dict) or "properties" not in schema:
             return properties, required
         
         required_fields = schema.get("required", [])
@@ -147,15 +200,24 @@ class TypeScriptProcessor:
         
         return properties, required
 
-    def create_type_definition(self, name: str, schema: dict, description: str = None) -> TypeScriptTypeDefinition:
+    def create_type_definition(self, name: str, schema, description: str = None) -> TypeScriptTypeDefinition:
         """Create a TypeScript type definition from OpenAPI schema"""
         properties, required = self.extract_properties_from_schema(schema)
-        return TypeScriptTypeDefinition(
+        
+        # Check if we already have a type with the same properties
+        existing_type = self._is_duplicate_type(properties, required)
+        if existing_type:
+            return existing_type
+        
+        # Create new type and add to unique set
+        new_type = TypeScriptTypeDefinition.create(
             name=name,
             properties=properties,
-            required_properties=required,
+            required=required,
             description=description
         )
+        self.unique_types.add(new_type)
+        return new_type
 
     def extract_request_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
         """Extract request type from router or action"""
@@ -169,13 +231,12 @@ class TypeScriptProcessor:
                 break
         if not json_content:
             return None
-        method = router.method.lower()
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}RequestData"
-        elif method == "patch":
-            type_name = f"{controller_name.capitalize()}PartialEditRequestData"
         else:
-            type_name = f"{controller_name.capitalize()}{method.capitalize()}RequestData"
+            # Use the same method name logic as controller methods
+            method_name = self.get_method_name(router)
+            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}RequestData"
         return self.create_type_definition(
             type_name,
             json_content.schema,
@@ -202,17 +263,12 @@ class TypeScriptProcessor:
                 break
         if not json_content:
             return None
-        method = router.method.lower()
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
-        elif method == "get" and self.extract_path_params(router.path):
-            type_name = f"{controller_name.capitalize()}ViewResponseData"
-        elif method == "get":
-            type_name = f"{controller_name.capitalize()}ListResponseData"
-        elif method == "patch":
-            type_name = f"{controller_name.capitalize()}PartialEditResponseData"
         else:
-            type_name = f"{controller_name.capitalize()}{method.capitalize()}ResponseData"
+            # Use the same method name logic as controller methods
+            method_name = self.get_method_name(router)
+            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}ResponseData"
         return self.create_type_definition(
             type_name,
             json_content.schema,
@@ -239,24 +295,27 @@ class TypeScriptProcessor:
                 required.append(param.name)
         if not properties:
             return None
-        method = router.method.lower()
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}RequestParams"
-        elif method == "get" and self.extract_path_params(router.path):
-            type_name = f"{controller_name.capitalize()}ViewRequestParams"
-        elif method == "get":
-            type_name = f"{controller_name.capitalize()}ListRequestParams"
         else:
-            type_name = f"{controller_name.capitalize()}{method.capitalize()}RequestParams"
-        return TypeScriptTypeDefinition(
-            name=type_name,
-            properties=properties,
-            required_properties=required,
-            description=f"Query parameters for {router.method} {router.path}"
+            # Use the same method name logic as controller methods
+            method_name = self.get_method_name(router)
+            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}RequestParams"
+        # Create a schema-like structure for params to enable deduplication
+        params_schema = {
+            "type": "object",
+            "properties": properties,
+            "required": required
+        }
+        
+        return self.create_type_definition(
+            type_name,
+            params_schema,
+            f"Query parameters for {router.method} {router.path}"
         )
 
     def process(self) -> TypeScriptAst:
-        """Process the AST and create TypeScript-specific AST, including actions"""
+        """Process the AST and create TypeScript-specific AST, including actions and deduped type definitions"""
         ts_controllers = []
 
         for controller in self.ast.controllers:
@@ -312,8 +371,15 @@ class TypeScriptProcessor:
             ts_controller = TypeScriptController(
                 controller=controller,
                 routers=ts_routers,
-                actions=ts_actions
+                actions=ts_actions,
             )
             ts_controllers.append(ts_controller)
 
-        return TypeScriptAst(controllers=ts_controllers)
+        return TypeScriptAst(
+            controllers=ts_controllers,
+            unique_types=self.unique_types
+        )
+    
+    def get_unique_types(self) -> List[TypeScriptTypeDefinition]:
+        """Get all unique types without duplicates"""
+        return list(self.unique_types)

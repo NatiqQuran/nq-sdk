@@ -2,8 +2,8 @@
 {%- for action in controller.actions %}
 {%- if action.request_type %}
 export interface {{ action.request_type.name }} {
-{%- for prop_name, prop_type in action.request_type.properties.items() %}
-    {%- if prop_name in action.request_type.required_properties %}
+{%- for prop_name, prop_type in action.request_type.get_properties_dict().items() %}
+    {%- if prop_name in action.request_type.get_required_list() %}
     {{ prop_name }}: {{ prop_type }};
     {%- else %}
     {{ prop_name }}?: {{ prop_type }};
@@ -13,8 +13,8 @@ export interface {{ action.request_type.name }} {
 {%- endif %}
 {%- if action.response_type %}
 export interface {{ action.response_type.name }} {
-{%- for prop_name, prop_type in action.response_type.properties.items() %}
-    {%- if prop_name in action.response_type.required_properties %}
+{%- for prop_name, prop_type in action.response_type.get_properties_dict().items() %}
+    {%- if prop_name in action.response_type.get_required_list() %}
     {{ prop_name }}: {{ prop_type }};
     {%- else %}
     {{ prop_name }}?: {{ prop_type }};
@@ -24,8 +24,8 @@ export interface {{ action.response_type.name }} {
 {%- endif %}
 {%- if action.params_type %}
 export interface {{ action.params_type.name }} {
-{%- for prop_name, prop_type in action.params_type.properties.items() %}
-    {%- if prop_name in action.params_type.required_properties %}
+{%- for prop_name, prop_type in action.params_type.get_properties_dict().items() %}
+    {%- if prop_name in action.params_type.get_required_list() %}
     {{ prop_name }}: {{ prop_type }};
     {%- else %}
     {{ prop_name }}?: {{ prop_type }};
@@ -38,8 +38,8 @@ export interface {{ action.params_type.name }} {
 {%- for router in controller.routers %}
 {%- if router.request_type %}
 export interface {{ router.request_type.name }} {
-{%- for prop_name, prop_type in router.request_type.properties.items() %}
-    {%- if prop_name in router.request_type.required_properties %}
+{%- for prop_name, prop_type in router.request_type.get_properties_dict().items() %}
+    {%- if prop_name in router.request_type.get_required_list() %}
     {{ prop_name }}: {{ prop_type }};
     {%- else %}
     {{ prop_name }}?: {{ prop_type }};
@@ -49,8 +49,8 @@ export interface {{ router.request_type.name }} {
 {%- endif %}
 {%- if router.response_type %}
 export interface {{ router.response_type.name }} {
-{%- for prop_name, prop_type in router.response_type.properties.items() %}
-    {%- if prop_name in router.response_type.required_properties %}
+{%- for prop_name, prop_type in router.response_type.get_properties_dict().items() %}
+    {%- if prop_name in router.response_type.get_required_list() %}
     {{ prop_name }}: {{ prop_type }};
     {%- else %}
     {{ prop_name }}?: {{ prop_type }};
@@ -60,8 +60,8 @@ export interface {{ router.response_type.name }} {
 {%- endif %}
 {%- if router.params_type %}
 export interface {{ router.params_type.name }} {
-{%- for prop_name, prop_type in router.params_type.properties.items() %}
-    {%- if prop_name in router.params_type.required_properties %}
+{%- for prop_name, prop_type in router.params_type.get_properties_dict().items() %}
+    {%- if prop_name in router.params_type.get_required_list() %}
     {{ prop_name }}: {{ prop_type }};
     {%- else %}
     {{ prop_name }}?: {{ prop_type }};
