@@ -35,7 +35,7 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
         super(connection, token);
     }
 
-    {%- for router in controller.routers %}
+    {% for router in controller.routers %}
     /** {{ router.router.method.upper() }} {{ router.router.path }} */
     async {{ router.method_name }}(
         {%- if router.path_params %}
@@ -52,7 +52,7 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
     ): Promise<AxiosResponse<{% if router.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{% else %}any{% endif %}>> {
         return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{% if router.request_type %}, data{% endif %}, config);
     }
-    {%- endfor %}
+    {% endfor %}
     {%- if controller.actions %}
     // --- Action methods ---
     {%- for action in controller.actions %}

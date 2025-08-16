@@ -52,7 +52,7 @@ class Parser():
         Prints warnings for missing required components.
         """
         # Check for missing request body where it's expected
-        if method in ['POST', 'PUT', 'PATCH']:
+        if method in ['post', 'put', 'patch']:
             if 'requestBody' not in data:
                 self.warn(
                     f"Router {method} {path} is missing request body. "
@@ -100,17 +100,19 @@ class Parser():
                     if has_valid_schemas:
                         break
             
-            if not has_content_schemas:
-                self.warn(
-                    f"Router {method} {path} has responses but no content schemas defined."
-                )
-            elif not has_valid_schemas:
-                self.warn(
-                    f"Router {method} {path} has response content but no schema definitions."
-                )
+            # For DELETE methods, it's normal to have no content schemas (204 responses)
+            if method != 'delete':
+                if not has_content_schemas:
+                    self.warn(
+                        f"Router {method} {path} has responses but no content schemas defined."
+                    )
+                elif not has_valid_schemas:
+                    self.warn(
+                        f"Router {method} {path} has response content but no schema definitions."
+                    )
         
         # Check for unexpected request body on GET/DELETE methods
-        if method in ['GET', 'DELETE'] and 'requestBody' in data:
+        if method in ['get', 'delete'] and 'requestBody' in data:
             self.warn(
                 f"Router {method} {path} has request body, but {method} methods typically don't require one."
             )
