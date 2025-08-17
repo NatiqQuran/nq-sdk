@@ -139,7 +139,7 @@ class TypeScriptProcessor:
         """Extract TypeScript type from OpenAPI schema"""
         if not schema:
             return "any"
-        
+
         # Handle case where schema is a string (simple type)
         if isinstance(schema, str):
             if schema == "string":
@@ -163,7 +163,7 @@ class TypeScriptProcessor:
         
         if schema_type == "string":
             if "enum" in schema:
-                return f"'{' | '.join(schema['enum'])}'"
+                return f"{' | '.join(f"'{i}'" for i in schema['enum'])}"
             if schema.get("format") == "uuid":
                 return "string"  # UUID type
             return "string"

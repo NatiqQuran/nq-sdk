@@ -22,7 +22,7 @@
     },
     "homepage": "https://developer.natiq.net",
     "scripts": {
-        "build": "tsc ",
+        "build": "tsc",
         "generate": "cd ../scripts/code-generator && python main.py ../../Schema.yaml typescript --output-dir ../../typescript/src"
     },
     "dependencies": {

@@ -154,8 +154,15 @@ class Parser():
         if '$ref' in schema:
             ref = schema['$ref']
             resolved = self.resolve_schema_ref(ref)
+
             # Merge any additional properties from the original schema
             resolved.update({k: v for k, v in schema.items() if k != '$ref'})
+            props = resolved.get("properties") or {}
+            for k, v in props.items():
+                if '$ref' in v:
+                    ref = v["$ref"]
+                    new_data = self.resolve_schema_ref(ref)
+                    props[k] = new_data
             return resolved
         return schema
 
