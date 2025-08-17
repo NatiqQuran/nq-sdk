@@ -4,12 +4,13 @@ import { Connection } from "../client/connection";
 import { BaseController } from "../utils/baseController";
 import { RequestConfig } from "../utils/globalTypes";
 
-{% if controller.actions %}
-{% for action in controller.actions %}
+{%- if controller.actions %}
+{%- for action in controller.actions %}
 export class {{ controller.controller.name.capitalize() }}{{ action.action_name }} extends BaseController {
     constructor(conn: Connection, token?: string) {
         super(conn, token);
     }
+
     /** {{ action.router.method.upper() }} {{ action.router.path }} */
     async {{ action.method_name }}(
         {%- if action.path_params %}
@@ -19,40 +20,41 @@ export class {{ controller.controller.name.capitalize() }}{{ action.action_name 
         {%- if action.path_params %}, {% endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ action.request_type.name }}
         {%- endif %}
         {%- if action.params_type %}
-        {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ action.params_type.name }}>
+        {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig<{{ action.params_type.name }}>
         {%- else %}
         {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig
         {%- endif %}
-    ): Promise<AxiosResponse<{% if action.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ action.response_type.name }}{% else %}any{% endif %}>> {
-        return await this.axios{{ action.router.method.capitalize() }}(`{{ action.ts_path }}`{% if action.request_type %}, data{% endif %}, config);
+    ): Promise<AxiosResponse<{%- if action.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ action.response_type.name }}{%- else %}any{%- endif %}>> {
+        return await this.axios{{ action.router.method.capitalize() }}(`{{ action.ts_path }}`{%- if action.request_type %}, data{%- endif %}, config);
     }
 }
-{% endfor %}
-{% endif %}
+
+{%- endfor %}
+{%- endif %}
 
 export class {{ controller.controller.name.capitalize() }}Controller extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
-
-    {%- for router in controller.routers %}
+    {% for router in controller.routers %}
     /** {{ router.router.method.upper() }} {{ router.router.path }} */
     async {{ router.method_name }}(
         {%- if router.path_params %}
         {{ router.path_params | join(', ') }}: string
         {%- endif %}
         {%- if router.request_type %}
-        {%- if router.path_params %}, {% endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ router.request_type.name }}
+        {%- if router.path_params %}, {%- endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ router.request_type.name }}
         {%- endif %}
         {%- if router.params_type %}
-        {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ router.params_type.name }}>
+        {%- if router.path_params or router.request_type %}, {%- endif %}config?: RequestConfig<{{ router.params_type.name }}>
         {%- else %}
-        {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig
+        {%- if router.path_params or router.request_type %}, {%- endif %}config?: RequestConfig
         {%- endif %}
-    ): Promise<AxiosResponse<{% if router.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{% else %}any{% endif %}>> {
-        return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{% if router.request_type %}, data{% endif %}, config);
+    ): Promise<AxiosResponse<{%- if router.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{%- else %}any{%- endif %}>> {
+        return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{%- if router.request_type %}, data{%- endif %}, config);
     }
-    {%- endfor %}
+    {% endfor %}
+
     {%- if controller.actions %}
     // --- Action methods ---
     {%- for action in controller.actions %}

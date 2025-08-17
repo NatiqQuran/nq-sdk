@@ -25,12 +25,13 @@ def handle_compile(file_path: str, language: str, print_ast: bool = False, outpu
         result = codegen.generate()
 
         if output_dir:
-            # Create output directory if it doesn't exist
+            # Create output directories if they don't exist
             os.makedirs(f'{output_dir}/types', exist_ok=True)
+            os.makedirs(f'{output_dir}/modules', exist_ok=True)
             
-            # Write controllers file
+            # Write controllers file to modules folder
             for controller in result["controllers"]:
-                controllers_file = os.path.join(output_dir, f"{controller['name']}.ts")
+                controllers_file = os.path.join(output_dir, 'modules', f"{controller['name']}.ts")
                 with open(controllers_file, 'w') as f:
                     f.write(controller['content'])
                 

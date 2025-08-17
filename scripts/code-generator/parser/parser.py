@@ -52,7 +52,7 @@ class Parser():
         Prints warnings for missing required components.
         """
         # Check for missing request body where it's expected
-        if method in ['POST', 'PUT', 'PATCH']:
+        if method in ['post', 'put', 'patch']:
             if 'requestBody' not in data:
                 self.warn(
                     f"Router {method} {path} is missing request body. "
@@ -100,17 +100,19 @@ class Parser():
                     if has_valid_schemas:
                         break
             
-            if not has_content_schemas:
-                self.warn(
-                    f"Router {method} {path} has responses but no content schemas defined."
-                )
-            elif not has_valid_schemas:
-                self.warn(
-                    f"Router {method} {path} has response content but no schema definitions."
-                )
+            # For DELETE methods, it's normal to have no content schemas (204 responses)
+            if method != 'delete':
+                if not has_content_schemas:
+                    self.warn(
+                        f"Router {method} {path} has responses but no content schemas defined."
+                    )
+                elif not has_valid_schemas:
+                    self.warn(
+                        f"Router {method} {path} has response content but no schema definitions."
+                    )
         
         # Check for unexpected request body on GET/DELETE methods
-        if method in ['GET', 'DELETE'] and 'requestBody' in data:
+        if method in ['get', 'delete'] and 'requestBody' in data:
             self.warn(
                 f"Router {method} {path} has request body, but {method} methods typically don't require one."
             )
@@ -147,14 +149,27 @@ class Parser():
         schemas = self.schema.get('components', {}).get('schemas', {})
         return schemas.get(schema_name, {})
     
-    def resolve_schema(self, schema: Dict[Any, Any]) -> Dict[Any, Any]:
+    def resolve_schema(self, schema: Dict[Any, Any] | list) -> Dict[Any, Any]:
         """Resolve a schema, handling $ref references"""
-        if '$ref' in schema:
+        print(schema)
+        if isinstance(schema, dict) and '$ref' in schema:
             ref = schema['$ref']
             resolved = self.resolve_schema_ref(ref)
+
             # Merge any additional properties from the original schema
             resolved.update({k: v for k, v in schema.items() if k != '$ref'})
+
+            props = resolved.get("properties") or {}
+            for k, v in props.items():
+                if '$ref' in v:
+                    ref = v["$ref"]
+                    new_data = self.resolve_schema_ref(ref)
+                    props[k] = new_data
+                if isinstance(v, dict) or isinstance(v, list):
+                    self.resolve_schema(v)
             return resolved
+        elif isinstance(schema, list):
+            print(schema)
         return schema
 
     def parse_request_body(self, data: Dict[Any, Any]) -> RouterRequestBody | None:
