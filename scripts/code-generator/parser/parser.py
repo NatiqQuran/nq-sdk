@@ -149,21 +149,27 @@ class Parser():
         schemas = self.schema.get('components', {}).get('schemas', {})
         return schemas.get(schema_name, {})
     
-    def resolve_schema(self, schema: Dict[Any, Any]) -> Dict[Any, Any]:
+    def resolve_schema(self, schema: Dict[Any, Any] | list) -> Dict[Any, Any]:
         """Resolve a schema, handling $ref references"""
-        if '$ref' in schema:
+        print(schema)
+        if isinstance(schema, dict) and '$ref' in schema:
             ref = schema['$ref']
             resolved = self.resolve_schema_ref(ref)
 
             # Merge any additional properties from the original schema
             resolved.update({k: v for k, v in schema.items() if k != '$ref'})
+
             props = resolved.get("properties") or {}
             for k, v in props.items():
                 if '$ref' in v:
                     ref = v["$ref"]
                     new_data = self.resolve_schema_ref(ref)
                     props[k] = new_data
+                if isinstance(v, dict) or isinstance(v, list):
+                    self.resolve_schema(v)
             return resolved
+        elif isinstance(schema, list):
+            print(schema)
         return schema
 
     def parse_request_body(self, data: Dict[Any, Any]) -> RouterRequestBody | None:
