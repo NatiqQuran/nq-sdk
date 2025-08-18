@@ -160,10 +160,37 @@ class TypeScriptProcessor:
             return "any"
         
         schema_type = schema.get("type", "object")
-        
+    # Handle oneOf with enums (union type)
+        if "oneOf" in schema and isinstance(schema["oneOf"], list):
+            union_values = []
+            for sub_schema in schema["oneOf"]:
+                # If sub_schema is enum, add all values except None, 'none', or ''
+                if isinstance(sub_schema, dict) and "enum" in sub_schema:
+                    for val in sub_schema["enum"]:
+                        if val is None or (isinstance(val, str) and (val.lower() == 'none' or val == '')):
+                            continue
+                        else:
+                            union_values.append(f"'{val}'")
+                else:
+                    # Fallback to type extraction
+                    t = self.extract_schema_type(sub_schema)
+                    if t != "''":
+                        union_values.append(t)
+            # Remove duplicates
+            union_values = list(dict.fromkeys(union_values))
+            return " | ".join(union_values) if union_values else "any"
+
+        schema_type = schema.get("type", "object")
+
+        if "enum" in schema:
+            # Only include values that are not None, not 'none', and not '' (case-insensitive)
+            filtered = [i for i in schema['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
+            return f"{' | '.join(f"'{i}'" for i in filtered)}"
+
         if schema_type == "string":
             if "enum" in schema:
-                return f"{' | '.join(f"'{i}'" for i in schema['enum'])}"
+                if schema["enum"] != [''] and schema["enum"] != [None] and schema["enum"] != ['none']:
+                    return f"{' | '.join(f"'{i}'" for i in schema['enum'])}"
             if schema.get("format") == "uuid":
                 return "string"  # UUID type
             return "string"
