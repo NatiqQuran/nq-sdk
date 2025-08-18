@@ -149,28 +149,27 @@ class Parser():
         schemas = self.schema.get('components', {}).get('schemas', {})
         return schemas.get(schema_name, {})
     
-    def resolve_schema(self, schema: Dict[Any, Any] | list) -> Dict[Any, Any]:
-        """Resolve a schema, handling $ref references"""
-        print(schema)
-        if isinstance(schema, dict) and '$ref' in schema:
-            ref = schema['$ref']
-            resolved = self.resolve_schema_ref(ref)
-
-            # Merge any additional properties from the original schema
-            resolved.update({k: v for k, v in schema.items() if k != '$ref'})
-
-            props = resolved.get("properties") or {}
-            for k, v in props.items():
-                if '$ref' in v:
-                    ref = v["$ref"]
-                    new_data = self.resolve_schema_ref(ref)
-                    props[k] = new_data
-                if isinstance(v, dict) or isinstance(v, list):
-                    self.resolve_schema(v)
-            return resolved
+    def resolve_schema(self, schema: Any) -> Any:
+        """Recursively resolve all $ref in dicts and lists, including nested children."""
+        if isinstance(schema, dict):
+            # If this dict is a $ref, resolve it and merge with other keys
+            if "$ref" in schema:
+                ref = schema["$ref"]
+                resolved = self.resolve_schema_ref(ref)
+                # Merge any additional properties from the original schema (except $ref)
+                merged = {**resolved, **{k: v for k, v in schema.items() if k != "$ref"}}
+                # Recursively resolve children
+                for k, v in merged.items():
+                    merged[k] = self.resolve_schema(v)
+                return merged
+            else:
+                # Recursively resolve all dict values
+                return {k: self.resolve_schema(v) for k, v in schema.items()}
         elif isinstance(schema, list):
-            print(schema)
-        return schema
+            # Recursively resolve all items in the list
+            return [self.resolve_schema(item) for item in schema]
+        else:
+            return schema
 
     def parse_request_body(self, data: Dict[Any, Any]) -> RouterRequestBody | None:
         if "requestBody" not in data:
