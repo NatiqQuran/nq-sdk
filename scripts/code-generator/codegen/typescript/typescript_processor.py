@@ -40,6 +40,8 @@ class TypeScriptRouter:
     request_type: Optional[TypeScriptTypeDefinition] = None
     response_type: Optional[TypeScriptTypeDefinition] = None
     params_type: Optional[TypeScriptTypeDefinition] = None
+    # Optional grouping key for sub-resource routers (e.g., 'ayahs')
+    group_name: Optional[str] = None
 
 # Action dataclass after TypeScriptRouter
 @dataclass
@@ -352,6 +354,19 @@ class TypeScriptProcessor:
                 path_params = self.extract_path_params(router.path)
                 ts_path = self.typescript_path(router.path)
 
+                # Derive subresource group name from path (first non-param segment after controller base)
+                group_name: Optional[str] = None
+                try:
+                    segments = router.path.strip('/').split('/')
+                    if segments and segments[0] == controller.name:
+                        # Find first static segment after base
+                        for seg in segments[1:]:
+                            if not seg.startswith('{') and seg != '':
+                                group_name = seg
+                                break
+                except Exception:
+                    group_name = None
+
                 # Extract types
                 request_type = self.extract_request_type(router, controller.name)
                 response_type = self.extract_response_type(router, controller.name)
@@ -364,7 +379,8 @@ class TypeScriptProcessor:
                     ts_path=ts_path,
                     request_type=request_type,
                     response_type=response_type,
-                    params_type=params_type
+                    params_type=params_type,
+                    group_name=group_name
                 )
                 ts_routers.append(ts_router)
 

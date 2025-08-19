@@ -1,32 +1,37 @@
-import * as {{ controller.controller.name.capitalize() }}Type from "./types/{{controller.controller.name}}.ts";
+import * as {{ controller.controller.name.capitalize() }}Type from "../types/{{controller.controller.name}}";
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { BaseController } from "../utils/baseController";
 import { RequestConfig } from "../utils/globalTypes";
 
 {%- if controller.actions %}
-{%- for action in controller.actions %}
-export class {{ controller.controller.name.capitalize() }}{{ action.action_name }} extends BaseController {
+{%- for action_group in controller.actions | groupby('action_name') %}
+
+export class {{ controller.controller.name.capitalize() }}{{ action_group.grouper }} extends BaseController {
     constructor(conn: Connection, token?: string) {
         super(conn, token);
     }
 
+    {%- for action in action_group.list %}
     /** {{ action.router.method.upper() }} {{ action.router.path }} */
     async {{ action.method_name }}(
         {%- if action.path_params %}
-        {{ action.path_params | join(', ') }}: string
+        {%- for p in action.path_params -%}
+        {{ p }}: string{%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
         {%- endif %}
         {%- if action.request_type %}
         {%- if action.path_params %}, {% endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ action.request_type.name }}
         {%- endif %}
         {%- if action.params_type %}
-        {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig<{{ action.params_type.name }}>
+        {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ action.params_type.name }}>
         {%- else %}
         {%- if action.path_params or action.request_type %}, {% endif %}config?: RequestConfig
         {%- endif %}
     ): Promise<AxiosResponse<{%- if action.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ action.response_type.name }}{%- else %}any{%- endif %}>> {
         return await this.axios{{ action.router.method.capitalize() }}(`{{ action.ts_path }}`{%- if action.request_type %}, data{%- endif %}, config);
     }
+    {%- endfor %}
 }
 
 {%- endfor %}
@@ -36,17 +41,19 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
-    {% for router in controller.routers %}
+    {% for router in controller.routers if not router.group_name %}
     /** {{ router.router.method.upper() }} {{ router.router.path }} */
     async {{ router.method_name }}(
         {%- if router.path_params %}
-        {{ router.path_params | join(', ') }}: string
+        {%- for p in router.path_params -%}
+        {{ p }}: string{%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
         {%- endif %}
         {%- if router.request_type %}
         {%- if router.path_params %}, {%- endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ router.request_type.name }}
         {%- endif %}
         {%- if router.params_type %}
-        {%- if router.path_params or router.request_type %}, {%- endif %}config?: RequestConfig<{{ router.params_type.name }}>
+        {%- if router.path_params or router.request_type %}, {%- endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ router.params_type.name }}>
         {%- else %}
         {%- if router.path_params or router.request_type %}, {%- endif %}config?: RequestConfig
         {%- endif %}
@@ -56,10 +63,9 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
     {% endfor %}
 
     {%- if controller.actions %}
-    // --- Action methods ---
-    {%- for action in controller.actions %}
-    {{ action.action_name|lower }}() {
-        return new {{ controller.controller.name.capitalize() }}{{ action.action_name }}(this.conn);
+    {%- for action_group in controller.actions | groupby('action_name') %}
+    {{ action_group.grouper|lower }}() {
+        return new {{ controller.controller.name.capitalize() }}{{ action_group.grouper }}(this.conn);
     }
     {%- endfor %}
     {%- endif %}
