@@ -1,32 +1,59 @@
-// Users 
- interface UsersDefaultRequestData {
-    username: string;
+
+export interface UsersListResponseData {
+}
+export interface UsersCreateRequestData {
+    email: string;
+    first_name?: string;
+    last_name?: string;
     password: string;
     password2: string;
-    email: string;
-    first_name?: string;
-    last_name?: string;
-}
- interface UsersDefaultResponseData {
     username: string;
+}
+export interface UsersCreateResponseData {
     email: string;
     first_name?: string;
     last_name?: string;
+    password: string;
+    password2: string;
+    username: string;
 }
-// Users List
-export type UsersListResponseData = UsersDefaultResponseData[];
-
-//Users View
-export type UsersViewResponseData = UsersDefaultResponseData;
-
-//Users Add
-export type UsersAddRequestData = UsersDefaultRequestData;
-export type UsersAddResponseData = UsersDefaultResponseData;
-
-//Users Edit
-export type UsersEditRequestData = UsersDefaultRequestData;
-export type UsersEditResponseData = UsersDefaultResponseData;
-
-//Users Partial Edit
-export type UsersPartialEditRequestData = Partial<UsersDefaultRequestData>;
-export type UsersPartialEditResponseData = UsersDefaultResponseData;
+export interface UsersRetrieveResponseData {
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    password: string;
+    password2: string;
+    username: string;
+}
+export interface UsersUpdateRequestData {
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    password: string;
+    password2: string;
+    username: string;
+}
+export interface UsersUpdateResponseData {
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    password: string;
+    password2: string;
+    username: string;
+}
+export interface UsersPartialupdateRequestData {
+    email?: string;
+    first_name?: string;
+    last_name?: string;
+    password?: string;
+    password2?: string;
+    username?: string;
+}
+export interface UsersPartialupdateResponseData {
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    password: string;
+    password2: string;
+    username: string;
+}

@@ -1,68 +1,88 @@
-import {
-    Sajdah,
-    Period,
-    Status,
-    FilterQueryParams,
-} from "../utils/globalTypes.js";
 
-//Surahs
-interface SurahsDefaultRequestData {
+export interface SurahsListResponseData {
+}
+export interface SurahsListRequestParams {
+    mushaf?: string;
+    ordering?: string;
+    page?: number;
+    page_size?: number;
+    search?: string;
+}
+export interface SurahsCreateRequestData {
+    mushaf: object;
     mushaf_uuid: string;
     name: string;
+    names: string;
     number: number;
-    period?: Period;
-    search_terms?: string[];
-}
-interface SurahsDefaultResponseMushaf {
+    number_of_ayahs: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
     uuid: string;
-    short_name: string;
-    name: string;
-    source?: string;
-    Status?: Status;
 }
-interface SurahsDefaultResponseNames {
+export interface SurahsCreateResponseData {
+    mushaf: object;
+    mushaf_uuid: string;
     name: string;
-    name_pronunciation: string | null;
-    name_translation: string | null;
-    name_transliteration: string | null;
-}
-interface SurahsDefaultResponseData {
-    uuid: string;
-    mushaf: SurahsDefaultResponseMushaf[];
-    names: SurahsDefaultResponseNames[];
+    names: string;
     number: number;
-    period?: Period;
-    search_terms?: string[];
-    number_of_ayahs: number;
-}
-//Surahs List
-export interface SurahsListRequestParams extends FilterQueryParams {
-    mushaf: string;
-}
-export type SurahsListResponseItem = SurahsDefaultResponseData;
-export type SurahsListResponseData = SurahsListResponseItem[];
-
-//Surahs View
-export interface SurahsViewResponseAyah {
+    number_of_ayahs: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
     uuid: string;
-    number: string;
-    sajdah: Sajdah;
-    is_bismillah: boolean;
-    bismillah_text: string;
-    text: string;
 }
-export interface SurahsViewResponseData extends SurahsDefaultResponseData {
-    ayahs: SurahsViewResponseAyah[];
+export interface SurahsRetrieveResponseData {
+    ayahs: object[];
+    mushaf: object;
+    mushaf_uuid: string;
+    name: string;
+    names: string;
+    number: number;
+    number_of_ayahs: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
+    uuid: string;
 }
-
-//Surahs Add
-export type SurahsAddRequestData = SurahsDefaultRequestData;
-export type SurahsAddResponseData = SurahsDefaultResponseData;
-
-//Surahs Edit
-export type SurahsEditRequestData = SurahsDefaultRequestData;
-export type SurahsEditResponseData = SurahsDefaultResponseData;
-
-//Surahs PartialEdit
-export type SurahsPartialEditRequestData = Partial<SurahsDefaultRequestData>;
-export type SurahsPartialEditResponseData = SurahsDefaultResponseData;
+export interface SurahsUpdateRequestData {
+    mushaf: object;
+    mushaf_uuid: string;
+    name: string;
+    names: string;
+    number: number;
+    number_of_ayahs: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
+    uuid: string;
+}
+export interface SurahsUpdateResponseData {
+    mushaf: object;
+    mushaf_uuid: string;
+    name: string;
+    names: string;
+    number: number;
+    number_of_ayahs: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
+    uuid: string;
+}
+export interface SurahsPartialupdateRequestData {
+    mushaf?: object;
+    mushaf_uuid?: string;
+    name?: string;
+    names?: string;
+    number?: number;
+    number_of_ayahs?: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
+    uuid?: string;
+}
+export interface SurahsPartialupdateResponseData {
+    mushaf: object;
+    mushaf_uuid: string;
+    name: string;
+    names: string;
+    number: number;
+    number_of_ayahs: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
+    uuid: string;
+}

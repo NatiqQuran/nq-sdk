@@ -1,45 +1,40 @@
-//Phrases
 
- interface PhrasesDefaultRequestData  { 
-    phrase: string;
-
+export interface PhrasesModifyRequestData {
+    phrases: object;
 }
- interface PhrasesDefaultResponseData  { 
-    uuid:string;
-    phrase: string;
-
+export interface PhrasesModifyResponseData {
+    phrases: object;
 }
-
-//Phrases List
-
-export type PhrasesListResponseData = PhrasesDefaultResponseData
-
-//Phrases View
-export type PhrasesViewResponseData = PhrasesDefaultResponseData
-
-//Pharses Add
-export type PhrasesAddRequestData = PhrasesDefaultRequestData
-export type PhrasesAddResponseData = PhrasesDefaultResponseData
-
-//Phrases Edit
-export type PhrasesEditRequestData = PhrasesDefaultRequestData
-export type PhrasesEditResponseData = PhrasesDefaultResponseData
-
-//Phrases Partial Edit
-export type PhrasesPartialEditRequestData = PhrasesDefaultRequestData
-export type PhrasesPartialEditResponseData = PhrasesDefaultResponseData
-
-// Phrases Modify
 export interface PhrasesModifyRequestParams {
     language: string;
 }
-export interface PhrasesModifyRequestData {
-    phrases: {
-        [key: string]: string;
-    };
+export interface PhrasesListResponseData {
 }
-export interface PhrasesModifyResponseData {
-    phrases: {
-        [key: string]: string;
-    };
+export interface PhrasesCreateRequestData {
+    phrase: string;
+    uuid: string;
+}
+export interface PhrasesCreateResponseData {
+    phrase: string;
+    uuid: string;
+}
+export interface PhrasesRetrieveResponseData {
+    phrase: string;
+    uuid: string;
+}
+export interface PhrasesUpdateRequestData {
+    phrase: string;
+    uuid: string;
+}
+export interface PhrasesUpdateResponseData {
+    phrase: string;
+    uuid: string;
+}
+export interface PhrasesPartialupdateRequestData {
+    phrase?: string;
+    uuid?: string;
+}
+export interface PhrasesPartialupdateResponseData {
+    phrase: string;
+    uuid: string;
 }

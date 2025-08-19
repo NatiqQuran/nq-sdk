@@ -1,67 +1,65 @@
-import { FilterQueryParams, MushafShortName } from "../utils/globalTypes";
 
-// Mushafs
-type Status = "draft" | "pending_review" | "published";
- interface MushafsDefaultRequestData {
-    short_name: MushafShortName;
+export interface MushafsImportResponseData {
     name: string;
+    short_name: string;
     source?: string;
-    status?: Status;
-}
- interface MushafsDefaultResponseData {
+    status?: 'draft' | 'pending_review' | 'published';
     uuid: string;
-    short_name: MushafShortName;
+}
+export interface MushafsListResponseData {
+}
+export interface MushafsListRequestParams {
+    ordering?: string;
+    page?: number;
+    page_size?: number;
+    search?: string;
+}
+export interface MushafsCreateRequestData {
     name: string;
+    short_name: string;
     source?: string;
-    status?: Status;
-}
-
-//Mushaf List
-export interface MushafsListRequestParams extends FilterQueryParams {}
-export type MushafsListResponseData = MushafsDefaultResponseData[];
-
-//Mushaf View
-export type MushafsViewResponseData = MushafsDefaultResponseData;
-
-//Mushaf Add
-export type MushasfAddRequestData = MushafsDefaultRequestData;
-export type MushafAddResponseData = MushafsDefaultResponseData;
-
-//Mushaf Edit
-export type MushafsEditRequestData = MushafsDefaultRequestData;
-export type MushafEditResponseData = MushafsDefaultResponseData;
-
-//Mushaf Partial Edit
-export type MushafsPartialEditRequestData = Partial<MushafsDefaultRequestData>;
-export type MushafsPartialEditResponseData = MushafsDefaultResponseData;
-
-//Mushaf Import
-export interface MushafImportRequestData {
-    file: File | Blob;
-}
-export type MushafImportResponseData = MushafsDefaultResponseData;
-
-// Mushaf Import Breakers
-export interface MushafImportBreakersRequestParams {
-    type?: "page" | "juz" | "hizb" | "ruku";
-  }
-  
-  export interface MushafImportBreakersRequestData {
-    file: File | Blob;
-  }
-  
-  
-  // Mushaf Ayah Map
-
-  
-  export interface MushafAyahMapItem {
+    status?: 'draft' | 'pending_review' | 'published';
     uuid: string;
-    surah: number;
-    ayah: number;
-    juz: number ;
-    hizb: number ;
-    ruku: number ;
-    page: number ;
-  }
-  
-  export type MushafAyahMapResponseData = MushafAyahMapItem[];
+}
+export interface MushafsCreateResponseData {
+    name: string;
+    short_name: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    uuid: string;
+}
+export interface MushafsRetrieveResponseData {
+    name: string;
+    short_name: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    uuid: string;
+}
+export interface MushafsUpdateRequestData {
+    name: string;
+    short_name: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    uuid: string;
+}
+export interface MushafsUpdateResponseData {
+    name: string;
+    short_name: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    uuid: string;
+}
+export interface MushafsPartialupdateRequestData {
+    name?: string;
+    short_name?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    uuid?: string;
+}
+export interface MushafsPartialupdateResponseData {
+    name: string;
+    short_name: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    uuid: string;
+}

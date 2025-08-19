@@ -1,124 +1,62 @@
+import * as MushafsType from "../types/mushafs";
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { BaseController } from "../utils/baseController";
-import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
-import {
-    MushafsListResponseData,
-    MushafsViewResponseData,
-    MushasfAddRequestData,
-    MushafAddResponseData,
-    MushafsEditRequestData,
-    MushafEditResponseData,
-    MushafsPartialEditRequestData,
-    MushafsPartialEditResponseData,
-    MushafImportRequestData,
-    MushafImportResponseData,
-    MushafAyahMapResponseData,
-    MushafImportBreakersRequestParams,
-    MushafImportBreakersRequestData,
-} from "../types/mushafs";
+import { RequestConfig } from "../utils/globalTypes";
+
+export class MushafsImport extends BaseController {
+    constructor(conn: Connection, token?: string) {
+        super(conn, token);
+    }
+    /** POST /mushafs/import/ */
+    async mushafs_import_create(config?: RequestConfig
+    ): Promise<AxiosResponse<MushafsType.MushafsImportResponseData>> {
+        return await this.axiosPost(`/mushafs/import/`, config);
+    }
+}
 
 export class MushafsController extends BaseController {
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
-
+    
     /** GET /mushafs/ */
-    async list(
-        config?: RequestConfig
-    ): Promise<AxiosResponse<MushafsListResponseData>> {
+    async list(config?: RequestConfig<MushafsType.MushafsListRequestParams>
+    ): Promise<AxiosResponse<MushafsType.MushafsListResponseData>> {
         return await this.axiosGet(`/mushafs/`, config);
     }
-
-    /** GET /mushafs/{uuid}/ */
-    async retrieve(
-        uuid: string,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<MushafsViewResponseData>> {
-        return await this.axiosGet(`/mushafs/${uuid}/`, config);
-    }
-
+    
     /** POST /mushafs/ */
-    async create(
-        data: MushasfAddRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<MushafAddResponseData>> {
+    async create(data: MushafsType.MushafsCreateRequestData,config?: RequestConfig
+    ): Promise<AxiosResponse<MushafsType.MushafsCreateResponseData>> {
         return await this.axiosPost(`/mushafs/`, data, config);
     }
-
+    
+    /** GET /mushafs/{uuid}/ */
+    async retrieve(uuid: string,config?: RequestConfig
+    ): Promise<AxiosResponse<MushafsType.MushafsRetrieveResponseData>> {
+        return await this.axiosGet(`/mushafs/${uuid}/`, config);
+    }
+    
     /** PUT /mushafs/{uuid}/ */
-    async update(
-        uuid: string,
-        data: MushafsEditRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<MushafEditResponseData>> {
+    async update(uuid: string,data: MushafsType.MushafsUpdateRequestData,config?: RequestConfig
+    ): Promise<AxiosResponse<MushafsType.MushafsUpdateResponseData>> {
         return await this.axiosPut(`/mushafs/${uuid}/`, data, config);
     }
-
+    
     /** PATCH /mushafs/{uuid}/ */
-    async partialUpdate(
-        uuid: string,
-        data: MushafsPartialEditRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<MushafsPartialEditResponseData>> {
+    async partialUpdate(uuid: string,data: MushafsType.MushafsPartialupdateRequestData,config?: RequestConfig
+    ): Promise<AxiosResponse<MushafsType.MushafsPartialupdateResponseData>> {
         return await this.axiosPatch(`/mushafs/${uuid}/`, data, config);
     }
-
+    
     /** DELETE /mushafs/{uuid}/ */
-    async delete(
-        uuid: string,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<DefaultResponseData>> {
+    async delete(uuid: string,config?: RequestConfig
+    ): Promise<AxiosResponse<any>> {
         return await this.axiosDelete(`/mushafs/${uuid}/`, config);
     }
-
-    /** POST /mushafs/import/ */
-  async import (
-    data: MushafImportRequestData,
-    config?: RequestConfig
-  ): Promise<AxiosResponse<MushafImportResponseData>> {
-    const formData = new FormData();
-    formData.append("file", data.file);
-
-    const importConfig = {
-      ...config,
-      headers: {
-        ...(config?.headers || {}),
-        "Content-Type": "multipart/form-data",
-      },
-    };
-
-    return await this.axiosPost(`/mushafs/import/`, formData, importConfig);
-  }
-    /** POST /mushafs/import_breakers/{mushaf_uuid}/?type=page */
-    async importBreakers(
-        uuid: string,
-        data: MushafImportBreakersRequestData,
-        config?: RequestConfig<MushafImportBreakersRequestParams>
-      ): Promise<AxiosResponse> {
-        const formData = new FormData();
-        formData.append("file", data.file);
     
-        const query = config?.params?.type ? `?type=${config.params.type}` : "";
-        const url = `/mushafs/import_breakers/${uuid}/${query}`;
-    
-        const importConfig = {
-          ...config,
-          headers: {
-            ...(config?.headers || {}),
-            "Content-Type": "multipart/form-data",
-          },
-        };
-    
-        return await this.axiosPost(url, formData, importConfig);
-      }
-    
-      /** GET /mushafs/map/{mushaf_uuid}/ */
-      async getAyahMap(
-        uuid:string,
-        config?: RequestConfig
-      ): Promise<AxiosResponse<MushafAyahMapResponseData>> {
-        return await this.axiosGet(`/mushafs/map/${uuid}/`, config);
-      } 
+    import() {
+        return new MushafsImport(this.conn);
+    }
 }
-

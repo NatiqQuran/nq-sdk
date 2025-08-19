@@ -1,66 +1,137 @@
-import { FilterQueryParams } from "../utils/globalTypes";
-//Recitations
- type Status = "draft" | "pending_review" | "published";
- interface RecitationsDefaultRequestData {
-    mushaf_uuid: string;
-    status?: Status;
-    reciter_account_uuid:string
-    recitation_date: string;
-    recitation_location: string;
-    duration: string;
-    recitation_type: string;
-}
- interface RecitationsDefaultResponseData {
-    uuid: string;
-    get_mushaf_uuid: string;
-    status?: Status;
-    recitation_date: string;
-    recitation_location: string;
-    duration: string;
-    recitation_type: string;
-    created_at: string;
-    updated_at: string;
-    words_timestamps: WordsTimestampsItem[];
-    ayahs_timestamps: string[];
-}
-//Recitations List
 
-
-export interface RecitationsListRequestParams extends FilterQueryParams {
-    mushaf_uuid: string;
+export interface RecitationsListResponseData {
+}
+export interface RecitationsListRequestParams {
+    mushaf_uuid?: string;
+    ordering?: string;
+    page?: number;
+    page_size?: number;
     reciter_uuid?: string;
+    search?: string;
 }
-
-export type RecitationsListResponseData = RecitationsDefaultResponseData[];
-
-//Recitations View
-export type RecitationsViewResponseData = RecitationsDefaultResponseData;
-
-//Pharses Add
-interface WordsTimestampsItem {
-    start: string;
-    end: string;
-    word_uuid: string;
+export interface RecitationsCreateRequestData {
+    ayahs_timestamps: string;
+    created_at: string;
+    duration: string;
+    file: object;
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    mushaf_uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    reciter_account_uuid: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid: string;
+    updated_at: string;
+    uuid: string;
+    words_timestamps: object[];
 }
-interface FileObject {
-    s3_uuid: string;
+export interface RecitationsCreateResponseData {
+    ayahs_timestamps: string;
+    created_at: string;
+    duration: string;
+    file: object;
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    mushaf_uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    reciter_account_uuid: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid: string;
+    updated_at: string;
+    uuid: string;
+    words_timestamps: object[];
 }
-
-export type RecitationsAddRequestData = RecitationsDefaultRequestData;
-export type RecitationsAddResponseData = RecitationsDefaultResponseData;
-
-//Recitations Edit
-export type RecitationsEditRequestData = RecitationsDefaultRequestData;
-export type RecitationsEditResponseData = RecitationsDefaultResponseData;
-
-//Recitations Partial Edit
-export type RecitationsPartialEditRequestData = Partial<RecitationsDefaultRequestData>;
-export type RecitationsPartialEditResponseData = RecitationsDefaultResponseData;
-
-//Recitations Upload
-export interface RecitationsUploadRequestParams{
-    surah_uuid:string
+export interface RecitationsRetrieveResponseData {
+    ayahs_timestamps: string;
+    created_at: string;
+    duration: string;
+    file: object;
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    mushaf_uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    reciter_account_uuid: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid: string;
+    updated_at: string;
+    uuid: string;
+    words_timestamps: object[];
 }
-export interface RecitationsUploadRequestData {
-    file: File | Blob;
-  }
+export interface RecitationsUpdateRequestData {
+    ayahs_timestamps: string;
+    created_at: string;
+    duration: string;
+    file: object;
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    mushaf_uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    reciter_account_uuid: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid: string;
+    updated_at: string;
+    uuid: string;
+    words_timestamps: object[];
+}
+export interface RecitationsUpdateResponseData {
+    ayahs_timestamps: string;
+    created_at: string;
+    duration: string;
+    file: object;
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    mushaf_uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    reciter_account_uuid: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid: string;
+    updated_at: string;
+    uuid: string;
+    words_timestamps: object[];
+}
+export interface RecitationsPartialupdateRequestData {
+    ayahs_timestamps?: string;
+    created_at?: string;
+    duration?: string;
+    file?: object;
+    get_mushaf_uuid?: string;
+    get_surah_uuid?: string;
+    mushaf_uuid?: string;
+    recitation_date?: string;
+    recitation_location?: string;
+    recitation_type?: string;
+    reciter_account_uuid?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid?: string;
+    updated_at?: string;
+    uuid?: string;
+    words_timestamps?: object[];
+}
+export interface RecitationsPartialupdateResponseData {
+    ayahs_timestamps: string;
+    created_at: string;
+    duration: string;
+    file: object;
+    get_mushaf_uuid: string;
+    get_surah_uuid: string;
+    mushaf_uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    reciter_account_uuid: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    surah_uuid: string;
+    updated_at: string;
+    uuid: string;
+    words_timestamps: object[];
+}
