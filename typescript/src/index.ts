@@ -27,6 +27,7 @@ export * from "./modules/words";
 export * from "./modules/profile";
 export * from "./modules/recitations";
 export * from "./modules/notifications";
+export * from "./modules/translations";
 
 // Utils
 export * from "./utils/globalTypes";
