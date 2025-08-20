@@ -1,70 +1,49 @@
+import * as AyahsType from "../types/ayahs";
 import { AxiosResponse } from "axios";
 import { Connection } from "../client/connection";
 import { BaseController } from "../utils/baseController";
-import { RequestConfig, DefaultResponseData } from "../utils/globalTypes";
-import {
-    AyahsListRequestParams,
-    AyahsListResponseData,
-    AyahsViewResponseData,
-    AyahsAddRequestData,
-    AyahsAddResponseData,
-    AyahsEditRequestData,
-    AyahsEditResponseData,
-    AyahsPartialEditRequestData,
-    AyahsPartialEditResponseData,
-} from "../types/ayahs";
+import { RequestConfig } from "../utils/globalTypes";
 
 export class AyahsController extends BaseController {
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }
-
+    
     /** GET /ayahs/ */
-    async list(
-        config?: RequestConfig<AyahsListRequestParams>
-    ): Promise<AxiosResponse<AyahsListResponseData>> {
-        return this.axiosGet(`/ayahs/`, config);
+    async list(config?: RequestConfig<AyahsType.AyahsListRequestParams>
+    ): Promise<AxiosResponse<AyahsType.AyahsListResponseData>> {
+        return await this.axiosGet(`/ayahs/`, config);
     }
-
-    /** GET /ayahs/{uuid}/ */
-    async retrieve(
-        uuid: string,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsViewResponseData>> {
-        return this.axiosGet(`/ayahs/${uuid}/`, config);
-    }
-
+    
     /** POST /ayahs/ */
-    async create(
-        data: AyahsAddRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsAddResponseData>> {
-        return this.axiosPost(`/ayahs/`, data, config);
+    async create(data: AyahsType.AyahsCreateRequestData,config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsType.AyahsCreateResponseData>> {
+        return await this.axiosPost(`/ayahs/`, data, config);
     }
-
+    
+    /** GET /ayahs/{uuid}/ */
+    async retrieve(uuid: string,config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsType.AyahsRetrieveResponseData>> {
+        return await this.axiosGet(`/ayahs/${uuid}/`, config);
+    }
+    
     /** PUT /ayahs/{uuid}/ */
-    async update(
-        uuid: string,
-        data: AyahsEditRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsEditResponseData>> {
-        return this.axiosPut(`/ayahs/${uuid}/`, data, config);
+    async update(uuid: string,data: AyahsType.AyahsUpdateRequestData,config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsType.AyahsUpdateResponseData>> {
+        return await this.axiosPut(`/ayahs/${uuid}/`, data, config);
     }
-
+    
     /** PATCH /ayahs/{uuid}/ */
-    async partialUpdate(
-        uuid: string,
-        data: AyahsPartialEditRequestData,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<AyahsPartialEditResponseData>> {
-        return this.axiosPatch(`/ayahs/${uuid}/`, data, config);
+    async partialUpdate(uuid: string,data: AyahsType.AyahsPartialupdateRequestData,config?: RequestConfig
+    ): Promise<AxiosResponse<AyahsType.AyahsPartialupdateResponseData>> {
+        return await this.axiosPatch(`/ayahs/${uuid}/`, data, config);
     }
-
+    
     /** DELETE /ayahs/{uuid}/ */
-    async delete(
-        uuid: string,
-        config?: RequestConfig
-    ): Promise<AxiosResponse<DefaultResponseData>> {
-        return this.axiosDelete(`/ayahs/${uuid}/`, config);
+    async delete(uuid: string,config?: RequestConfig
+    ): Promise<AxiosResponse<any>> {
+        return await this.axiosDelete(`/ayahs/${uuid}/`, config);
     }
+    
 }

@@ -1,40 +1,52 @@
-import { FilterQueryParams } from "../utils/globalTypes";
 
-//Word
-interface WordDefaultRequestData {
+export interface WordsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
+}
+export interface WordsListRequestParams {
+    ayah_uuid?: string;
+    limit?: number;
+    offset?: number;
+    ordering?: string;
+    search?: string;
+}
+export interface WordsCreateRequestData {
     ayah_uuid: string;
     text: string;
-}
-
-interface WordDefaultResponseData {
     uuid: string;
-    text: string;
 }
-
-
-//Word List
-export interface WordViewRequestParams extends FilterQueryParams {
-    ayah_uuid?: string;
-}
-export type WordListResponseData = WordDefaultResponseData[];
-
-//Word View
-export type WordViewResponseData = WordDefaultResponseData;
-
-//Word Add
-export interface WordAddRequestParams {
-    ayah_uuid?: string;
-}
-export type WordAddRequestData = WordDefaultRequestData;
-export type WordAddResponseData = WordDefaultResponseData;
-
-//Word Edit
-export type WordEditRequestData = WordDefaultRequestData;
-export type WordEditResponseData = WordDefaultResponseData;
-//Word Partial Edit
-export type WordPartialEditRequestData = Partial<WordDefaultRequestData>;
-export interface WordPartialEditResponseData {
-    uuid: string;
+export interface WordsCreateResponseData {
     ayah_uuid: string;
     text: string;
+    uuid: string;
+}
+export interface WordsCreateRequestParams {
+    ayah_uuid?: string;
+}
+export interface WordsRetrieveResponseData {
+    ayah_uuid: string;
+    text: string;
+    uuid: string;
+}
+export interface WordsUpdateRequestData {
+    ayah_uuid: string;
+    text: string;
+    uuid: string;
+}
+export interface WordsUpdateResponseData {
+    ayah_uuid: string;
+    text: string;
+    uuid: string;
+}
+export interface WordsPartialupdateRequestData {
+    ayah_uuid?: string;
+    text?: string;
+    uuid?: string;
+}
+export interface WordsPartialupdateResponseData {
+    ayah_uuid: string;
+    text: string;
+    uuid: string;
 }

@@ -1,95 +1,129 @@
-import { FilterQueryParams, Status } from "../utils/globalTypes";
 
-//Translations
-interface TranslationsDefaultRequestData {
+export interface TranslationsImportResponseData {
     language: string;
-    release_date?: string;
-    source?: string;
-    status?: Status;
-}
-interface TranslationsDefaultResponseData {
-    uuid: string;
     mushaf_uuid: string;
-    translator_uuid: string;
-    language: string;
     release_date?: string;
     source?: string;
-    status?: Status;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
+    uuid: string;
 }
-
-//Translations List
-export interface TranslationsListRequestParams extends FilterQueryParams {
+export interface TranslationsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
+}
+export interface TranslationsListRequestParams {
     language?: string;
+    limit?: number;
     mushaf: string;
+    offset?: number;
+    ordering?: string;
+    search?: string;
 }
-export type TranslationsListResponseItem = TranslationsDefaultResponseData;
-export type TranslationsListResponseData = TranslationsListResponseItem[];
-
-//Translations View
-export interface TranslationsViewRequestParams extends FilterQueryParams {
-    uuid?: string; 
-}
-export interface TranslationsViewAyah {
+export interface TranslationsCreateRequestData {
+    language: string;
+    mushaf_uuid: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
     uuid: string;
-    ayah_uuid: string;
-    text: string;
-    bismillah?: string;
 }
-export interface TranslationsViewResponseData
-    extends TranslationsDefaultResponseData {
-    ayahs: TranslationsViewAyah[];
-}
-
-//Translations Add
-export type TranslationsAddRequestData = TranslationsDefaultRequestData;
-export type TranslationsAddResponseData = TranslationsDefaultResponseData;
-
-//Translations Edit
-export type TranslationsEditRequestData = TranslationsDefaultRequestData;
-export type TranslationsEditResponseData = TranslationsDefaultResponseData;
-
-//Translations PartialEdit
-export type TranslationsPartialEditRequestData = TranslationsDefaultRequestData;
-export type TranslationsPartialEditResponseData =
-    Partial<TranslationsDefaultResponseData>;
-
-// AyahsTranslation 
-interface AyahsTranslationDefaultParams {
-    ayah_uuid: string;
-}
-interface AyahsTranslationDefaultRequestData {
-    text: string;
-    bismillah?: string;
-}
-interface AyahsTranslationDefaultResponseData {
+export interface TranslationsCreateResponseData {
+    language: string;
+    mushaf_uuid: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
     uuid: string;
-    text: string;
+}
+export interface TranslationsRetrieveResponseData {
+    language: 'ar' | 'en' | 'fr' | 'ur' | 'tr' | 'id' | 'fa' | 'ru' | 'es' | 'de' | 'bn' | 'zh' | 'ms' | 'hi' | 'sw' | 'ps' | 'ku' | 'az' | 'ha' | 'so' | 'ta' | 'te' | 'ml' | 'pa' | 'sd' | 'ug' | 'uz' | 'kk' | 'ky' | 'tk' | 'tg' | 'syr' | 'ber' | 'am' | 'om' | 'wo' | 'yo' | 'other';
+    mushaf_uuid: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
+    uuid: string;
+}
+export interface TranslationsUpdateRequestData {
+    language: string;
+    mushaf_uuid: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
+    uuid: string;
+}
+export interface TranslationsUpdateResponseData {
+    language: string;
+    mushaf_uuid: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
+    uuid: string;
+}
+export interface TranslationsPartialupdateRequestData {
+    language?: string;
+    mushaf_uuid?: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid?: string;
+    uuid?: string;
+}
+export interface TranslationsPartialupdateResponseData {
+    language: string;
+    mushaf_uuid: string;
+    release_date?: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
+    uuid: string;
+}
+export interface TranslationsTranslations_ayahs_listResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
+}
+export interface TranslationsTranslations_ayahs_listRequestParams {
+    limit?: number;
+    offset?: number;
+    ordering?: string;
+    search?: string;
+    surah_uuid?: string;
+}
+export interface TranslationsTranslations_ayahs_retrieveResponseData {
+    ayah_uuid: string;
     bismillah?: string;
-  }
-
-  // AyahsTranslation List
-  export interface AyahsTranslationListRequestParams extends FilterQueryParams {
-    uuid:string;
-    surah_uuid?:string;
-  }
-  export type AyahsTranslationListResponseData = AyahsTranslationDefaultResponseData[];
-
-  // AyahsTranslation View 
-  export type AyahsTranslationViewRequestParams = AyahsTranslationDefaultParams;
-  export type AyahsTranslationViewResponseData = AyahsTranslationDefaultResponseData;
-
-  // AyahsTranslation Add
-  export type AyahsTranslationAddRequestParams = AyahsTranslationDefaultParams;
-  export type AyahsTranslationAddRequestData = AyahsTranslationDefaultRequestData;
-  export type AyahsTranslationAddResponseData = AyahsTranslationDefaultResponseData;
-
-  // AyahsTranslation Edit
-  export type AyahsTranslationEditRequestParams = AyahsTranslationDefaultParams;
-  export type AyahsTranslationEditResponseData = AyahsTranslationDefaultResponseData;
-
-  // Translation Import
-  export interface TranslationImportRequestData {
-    file: File;
-  }
-  export type TranslationImportResponseData = TranslationsDefaultResponseData;
-
+    text: string;
+    translation_uuid: string;
+    uuid: string;
+}
+export interface TranslationsTranslations_ayahs_createRequestData {
+    bismillah?: boolean;
+    text: string;
+}
+export interface TranslationsTranslations_ayahs_createResponseData {
+    ayah_uuid: string;
+    bismillah?: string;
+    text: string;
+    translation_uuid: string;
+    uuid: string;
+}
+export interface TranslationsTranslations_ayahs_updateRequestData {
+    bismillah?: boolean;
+    text: string;
+}
+export interface TranslationsTranslations_ayahs_updateResponseData {
+    ayah_uuid: string;
+    bismillah?: string;
+    text: string;
+    translation_uuid: string;
+    uuid: string;
+}

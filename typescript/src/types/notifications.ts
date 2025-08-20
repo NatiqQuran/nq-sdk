@@ -1,78 +1,105 @@
-import { FilterQueryParams } from "../utils/globalTypes";
 
-// Notifications
- type NotificationStatus =
-    | "nothing_happened"
-    | "got_notification"
-    | "viewed_notification"
-    | "opened_notification";
-
- type NotificationMessageType =
-    | "success"
-    | "failed"
-    | "warning"
-    | "pending";
-
- interface NotificationsDefaultRequestData {
-    resource_controller?: string;
-    resource_action?: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
-    description?: string;
-    message?: string;
-    message_type?: NotificationMessageType;
+export interface NotificationsMeResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
- interface NotificationsDefaultResponseData {
+export interface NotificationsMeRequestParams {
+    limit?: number;
+    offset?: number;
+}
+export interface NotificationsOpenedResponseData {
+}
+export interface NotificationsOpenedRequestParams {
     uuid: string;
-    resource_controller: string;
-    resource_action: string;
-    resource_uuid?: string;
-    status?: NotificationStatus;
+}
+export interface NotificationsViewedResponseData {
+}
+export interface NotificationsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
+}
+export interface NotificationsListRequestParams {
+    limit?: number;
+    offset?: number;
+}
+export interface NotificationsCreateRequestData {
+    created_at: string;
     description?: string;
     message?: string;
-    message_type?: NotificationMessageType;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action: string;
+    resource_controller: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid: string;
+}
+export interface NotificationsCreateResponseData {
     created_at: string;
-    
+    description?: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action: string;
+    resource_controller: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid: string;
 }
-
-
-// Notifications List
-export interface NotificationsListRequestParams {
-    page: number;
-    page_size: number;
+export interface NotificationsRetrieveResponseData {
+    created_at: string;
+    description?: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action: string;
+    resource_controller: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid: string;
 }
-
-export type NotificationsListResponseItem = NotificationsDefaultResponseData;
-
-export type NotificationsListResponseData = NotificationsListResponseItem[];
-
-// Notifications View
-export type NotificationsViewResponseData = NotificationsDefaultResponseData;
-
-// Notifications Add
-export type NotificationsAddRequestData = NotificationsDefaultRequestData;
-export type NotificationsAddResponseData = NotificationsDefaultResponseData;
-
-// Notifications Edit
-export type NotificationsEditRequestData = NotificationsDefaultRequestData;
-
-export type NotificationsEditResponseData = NotificationsDefaultResponseData;
-
-// Notification Partial Edit
-export type NotificationsPartialEditRequestData = Partial<NotificationsDefaultRequestData>;
-
-export type NotificationsPartialEditResponseData = NotificationsDefaultResponseData;
-
-
-
-
-// /notifications/me/
-export type NotificationsMeListRequestParams = FilterQueryParams;
-export type NotificationsMeListResponseData = NotificationsDefaultResponseData[];
-
-
-// /notifications/opened/
-export type NotificationsOpenedResponseData = NotificationsDefaultResponseData;
-
-// /notifications/viewed/
-export type NotificationsViewedResponseData = Record<string, unknown>;
+export interface NotificationsUpdateRequestData {
+    created_at: string;
+    description?: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action: string;
+    resource_controller: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid: string;
+}
+export interface NotificationsUpdateResponseData {
+    created_at: string;
+    description?: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action: string;
+    resource_controller: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid: string;
+}
+export interface NotificationsPartialupdateRequestData {
+    created_at?: string;
+    description?: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action?: string;
+    resource_controller?: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid?: string;
+}
+export interface NotificationsPartialupdateResponseData {
+    created_at: string;
+    description?: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    resource_action: string;
+    resource_controller: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    uuid: string;
+}

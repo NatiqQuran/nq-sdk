@@ -1,44 +1,75 @@
-import { Sajdah, FilterQueryParams } from "../utils/globalTypes";
 
-// Ayahs
-interface AyahsDefaultRequestData {
-    surah_uuid: string;
-    text: string;
-    is_bismillah?: boolean;
-    bismillah_text?: string;
-    sajdah?: Sajdah;
+export interface AyahsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
-interface AyahsDefaultResponseData {
-    uuid: string;
-    number: number;
-    sajdah: Sajdah;
-    text: string;
-    breakers: string;
-    bismillah: string;
-    surah: string;
-}
-
-// Ayahs List
-export interface AyahsListRequestParams extends FilterQueryParams {
+export interface AyahsListRequestParams {
+    limit?: number;
+    offset?: number;
+    ordering?: string;
+    search?: string;
     surah_uuid?: string;
 }
-export type AyahsListResponseItem = AyahsDefaultResponseData;
-export type AyahsListResponseData = AyahsListResponseItem[];
-
-// Ayahs View
-export type AyahsViewResponseData = AyahsDefaultResponseData & {
+export interface AyahsCreateRequestData {
+    bismillah_text?: string;
+    is_bismillah?: boolean;
+    sajdah?: string;
+    surah_uuid: string;
+    text: string;
+}
+export interface AyahsCreateResponseData {
+    bismillah_text?: string;
+    is_bismillah?: boolean;
+    sajdah?: string;
+    surah_uuid: string;
+    text: string;
+}
+export interface AyahsRetrieveResponseData {
+    bismillah: string;
+    breakers: string;
     mushaf: string;
-    words: { uuid: string; text: string }[];
-};
-
-// Ayahs Add
-export type AyahsAddRequestData = AyahsDefaultRequestData;
-export type AyahsAddResponseData = AyahsDefaultResponseData;
-
-// Ayahs Edit
-export type AyahsEditRequestData = AyahsDefaultRequestData;
-export type AyahsEditResponseData = AyahsDefaultResponseData;
-
-// Ayahs PartialEdit
-export type AyahsPartialEditRequestData = Partial<AyahsDefaultRequestData>;
-export type AyahsPartialEditResponseData = AyahsDefaultResponseData;
+    number: number;
+    sajdah?: any;
+    surah: object;
+    text: string;
+    uuid: string;
+    words: object[];
+}
+export interface AyahsUpdateRequestData {
+    bismillah: string;
+    breakers: string;
+    number: number;
+    sajdah?: any;
+    surah: string;
+    text: string;
+    uuid: string;
+}
+export interface AyahsUpdateResponseData {
+    bismillah: string;
+    breakers: string;
+    number: number;
+    sajdah?: any;
+    surah: string;
+    text: string;
+    uuid: string;
+}
+export interface AyahsPartialupdateRequestData {
+    bismillah?: string;
+    breakers?: string;
+    number?: number;
+    sajdah?: any;
+    surah?: string;
+    text?: string;
+    uuid?: string;
+}
+export interface AyahsPartialupdateResponseData {
+    bismillah: string;
+    breakers: string;
+    number: number;
+    sajdah?: any;
+    surah: string;
+    text: string;
+    uuid: string;
+}

@@ -1,27 +1,31 @@
-// Groups
- interface GroupsDefaultRequestData {
-    name: string;
+
+export interface GroupsListResponseData {
 }
- interface GroupsDefaultResponseData {
+export interface GroupsCreateRequestData {
+    name: string;
     url: string;
-    name: string;
 }
-
-// Groups List
-export type GroupsListResponseData = GroupsDefaultResponseData[];
-
-// Groups View
-export type GroupsViewResponseData = GroupsDefaultResponseData;
-
-// Groups Add
-export type GroupsAddRequestData = GroupsDefaultRequestData;
-export type GroupsAddResponseData = GroupsDefaultResponseData;
-
-// Groups Edit
-export type GroupsEditRequestData = GroupsDefaultRequestData;
-export type GroupsEditResponseData = GroupsDefaultResponseData;
-
-// Groups Partial Edit  
-export type GroupsPartialEditRequestData = Partial<GroupsDefaultRequestData>;
-export type GroupsPartialEditResponseData = GroupsDefaultResponseData;
-
+export interface GroupsCreateResponseData {
+    name: string;
+    url: string;
+}
+export interface GroupsRetrieveResponseData {
+    name: string;
+    url: string;
+}
+export interface GroupsUpdateRequestData {
+    name: string;
+    url: string;
+}
+export interface GroupsUpdateResponseData {
+    name: string;
+    url: string;
+}
+export interface GroupsPartialupdateRequestData {
+    name?: string;
+    url?: string;
+}
+export interface GroupsPartialupdateResponseData {
+    name: string;
+    url: string;
+}
