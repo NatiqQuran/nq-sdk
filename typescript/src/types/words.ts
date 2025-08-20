@@ -1,11 +1,15 @@
 
 export interface WordsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface WordsListRequestParams {
     ayah_uuid?: string;
+    limit?: number;
+    offset?: number;
     ordering?: string;
-    page?: number;
-    page_size?: number;
     search?: string;
 }
 export interface WordsCreateRequestData {

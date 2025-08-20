@@ -5,6 +5,7 @@ import { BaseController } from "../utils/baseController";
 import { RequestConfig } from "../utils/globalTypes";
 
 export class GroupsController extends BaseController {
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
     }

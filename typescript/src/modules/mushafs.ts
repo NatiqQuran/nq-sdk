@@ -16,8 +16,11 @@ export class MushafsImport extends BaseController {
 }
 
 export class MushafsController extends BaseController {
+    public readonly import: MushafsImport;
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+        this.import = new MushafsImport(this.conn);
     }
     
     /** GET /mushafs/ */
@@ -56,7 +59,4 @@ export class MushafsController extends BaseController {
         return await this.axiosDelete(`/mushafs/${uuid}/`, config);
     }
     
-    import() {
-        return new MushafsImport(this.conn);
-    }
 }

@@ -1,14 +1,19 @@
 
 export interface SurahsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface SurahsListRequestParams {
-    mushaf?: string;
+    limit?: number;
+    mushaf: string;
+    offset?: number;
     ordering?: string;
-    page?: number;
-    page_size?: number;
     search?: string;
 }
 export interface SurahsCreateRequestData {
+    bismillah: string;
     mushaf: object;
     mushaf_uuid: string;
     name: string;
@@ -20,6 +25,7 @@ export interface SurahsCreateRequestData {
     uuid: string;
 }
 export interface SurahsCreateResponseData {
+    bismillah: string;
     mushaf: object;
     mushaf_uuid: string;
     name: string;
@@ -32,6 +38,7 @@ export interface SurahsCreateResponseData {
 }
 export interface SurahsRetrieveResponseData {
     ayahs: object[];
+    bismillah: string;
     mushaf: object;
     mushaf_uuid: string;
     name: string;
@@ -43,6 +50,7 @@ export interface SurahsRetrieveResponseData {
     uuid: string;
 }
 export interface SurahsUpdateRequestData {
+    bismillah: string;
     mushaf: object;
     mushaf_uuid: string;
     name: string;
@@ -54,6 +62,7 @@ export interface SurahsUpdateRequestData {
     uuid: string;
 }
 export interface SurahsUpdateResponseData {
+    bismillah: string;
     mushaf: object;
     mushaf_uuid: string;
     name: string;
@@ -65,6 +74,7 @@ export interface SurahsUpdateResponseData {
     uuid: string;
 }
 export interface SurahsPartialupdateRequestData {
+    bismillah?: string;
     mushaf?: object;
     mushaf_uuid?: string;
     name?: string;
@@ -76,6 +86,7 @@ export interface SurahsPartialupdateRequestData {
     uuid?: string;
 }
 export interface SurahsPartialupdateResponseData {
+    bismillah: string;
     mushaf: object;
     mushaf_uuid: string;
     name: string;

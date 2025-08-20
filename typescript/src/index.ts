@@ -11,6 +11,7 @@ export * from "./types/words";
 export * from "./types/notifications";
 export * from "./types/profile";
 export * from "./types/recitations";
+export * from "./types/takhtits";
 
 // Client
 export * from "./client/connection";

@@ -1,25 +1,4 @@
 
-export interface TranslationsAyahResponseData {
-    language: string;
-    mushaf_uuid: string;
-    release_date?: string;
-    source?: string;
-    status?: 'draft' | 'pending_review' | 'published';
-    translator_uuid: string;
-    uuid: string;
-}
-export interface TranslationsAyahRequestParams {
-    ayah_uuid?: string;
-    surah_uuid?: string;
-    translation_uuid?: string;
-}
-export interface TranslationsAyahRequestData {
-    ayah_uuid: string;
-    bismillah?: string;
-    text: string;
-    translation_uuid: string;
-    uuid: string;
-}
 export interface TranslationsImportResponseData {
     language: string;
     mushaf_uuid: string;
@@ -30,13 +9,17 @@ export interface TranslationsImportResponseData {
     uuid: string;
 }
 export interface TranslationsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface TranslationsListRequestParams {
     language?: string;
-    mushaf_uuid?: string;
+    limit?: number;
+    mushaf: string;
+    offset?: number;
     ordering?: string;
-    page?: number;
-    page_size?: number;
     search?: string;
 }
 export interface TranslationsCreateRequestData {
@@ -58,16 +41,13 @@ export interface TranslationsCreateResponseData {
     uuid: string;
 }
 export interface TranslationsRetrieveResponseData {
-    language: string;
+    language: 'ar' | 'en' | 'fr' | 'ur' | 'tr' | 'id' | 'fa' | 'ru' | 'es' | 'de' | 'bn' | 'zh' | 'ms' | 'hi' | 'sw' | 'ps' | 'ku' | 'az' | 'ha' | 'so' | 'ta' | 'te' | 'ml' | 'pa' | 'sd' | 'ug' | 'uz' | 'kk' | 'ky' | 'tk' | 'tg' | 'syr' | 'ber' | 'am' | 'om' | 'wo' | 'yo' | 'other';
     mushaf_uuid: string;
     release_date?: string;
     source?: string;
     status?: 'draft' | 'pending_review' | 'published';
     translator_uuid: string;
     uuid: string;
-}
-export interface TranslationsRetrieveRequestParams {
-    surah_uuid?: string;
 }
 export interface TranslationsUpdateRequestData {
     language: string;
@@ -105,28 +85,42 @@ export interface TranslationsPartialupdateResponseData {
     translator_uuid: string;
     uuid: string;
 }
-export interface TranslationsTranslations_ayah_create_2RequestData {
+export interface TranslationsTranslations_ayahs_listResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
+}
+export interface TranslationsTranslations_ayahs_listRequestParams {
+    limit?: number;
+    offset?: number;
+    ordering?: string;
+    search?: string;
+    surah_uuid?: string;
+}
+export interface TranslationsTranslations_ayahs_retrieveResponseData {
     ayah_uuid: string;
     bismillah?: string;
     text: string;
     translation_uuid: string;
     uuid: string;
 }
-export interface TranslationsTranslations_ayah_create_2ResponseData {
+export interface TranslationsTranslations_ayahs_createRequestData {
+    bismillah?: boolean;
+    text: string;
+}
+export interface TranslationsTranslations_ayahs_createResponseData {
     ayah_uuid: string;
     bismillah?: string;
     text: string;
     translation_uuid: string;
     uuid: string;
 }
-export interface TranslationsTranslations_ayah_updateRequestData {
-    ayah_uuid: string;
-    bismillah?: string;
+export interface TranslationsTranslations_ayahs_updateRequestData {
+    bismillah?: boolean;
     text: string;
-    translation_uuid: string;
-    uuid: string;
 }
-export interface TranslationsTranslations_ayah_updateResponseData {
+export interface TranslationsTranslations_ayahs_updateResponseData {
     ayah_uuid: string;
     bismillah?: string;
     text: string;

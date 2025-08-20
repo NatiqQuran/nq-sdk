@@ -4,22 +4,6 @@ import { Connection } from "../client/connection";
 import { BaseController } from "../utils/baseController";
 import { RequestConfig } from "../utils/globalTypes";
 
-export class TranslationsAyah extends BaseController {
-    constructor(conn: Connection, token?: string) {
-        super(conn, token);
-    }
-    /** GET /translations/ayah/ */
-    async translations_ayah_retrieve(config?: RequestConfig<TranslationsType.TranslationsAyahRequestParams>
-    ): Promise<AxiosResponse<TranslationsType.TranslationsAyahResponseData>> {
-        return await this.axiosGet(`/translations/ayah/`, config);
-    }
-    /** POST /translations/ayah/ */
-    async translations_ayah_create(data: TranslationsType.TranslationsAyahRequestData, config?: RequestConfig
-    ): Promise<AxiosResponse<any>> {
-        return await this.axiosPost(`/translations/ayah/`, data, config);
-    }
-}
-
 export class TranslationsImport extends BaseController {
     constructor(conn: Connection, token?: string) {
         super(conn, token);
@@ -32,8 +16,11 @@ export class TranslationsImport extends BaseController {
 }
 
 export class TranslationsController extends BaseController {
+    public readonly import: TranslationsImport;
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+        this.import = new TranslationsImport(this.conn);
     }
     
     /** GET /translations/ */
@@ -49,7 +36,7 @@ export class TranslationsController extends BaseController {
     }
     
     /** GET /translations/{uuid}/ */
-    async retrieve(uuid: string,config?: RequestConfig<TranslationsType.TranslationsRetrieveRequestParams>
+    async retrieve(uuid: string,config?: RequestConfig
     ): Promise<AxiosResponse<TranslationsType.TranslationsRetrieveResponseData>> {
         return await this.axiosGet(`/translations/${uuid}/`, config);
     }
@@ -72,10 +59,4 @@ export class TranslationsController extends BaseController {
         return await this.axiosDelete(`/translations/${uuid}/`, config);
     }
     
-    ayah() {
-        return new TranslationsAyah(this.conn);
-    }
-    import() {
-        return new TranslationsImport(this.conn);
-    }
 }

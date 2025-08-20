@@ -16,8 +16,11 @@ export class PhrasesModify extends BaseController {
 }
 
 export class PhrasesController extends BaseController {
+    public readonly modify: PhrasesModify;
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+        this.modify = new PhrasesModify(this.conn);
     }
     
     /** GET /phrases/ */
@@ -56,7 +59,4 @@ export class PhrasesController extends BaseController {
         return await this.axiosDelete(`/phrases/${uuid}/`, config);
     }
     
-    modify() {
-        return new PhrasesModify(this.conn);
-    }
 }

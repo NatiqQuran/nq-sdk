@@ -21,8 +21,11 @@ export class ProfileMe extends BaseController {
 }
 
 export class ProfileController extends BaseController {
+    public readonly me: ProfileMe;
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+        this.me = new ProfileMe(this.conn);
     }
     
     /** GET /profile/{uuid}/ */
@@ -31,7 +34,4 @@ export class ProfileController extends BaseController {
         return await this.axiosGet(`/profile/${uuid}/`, config);
     }
     
-    me() {
-        return new ProfileMe(this.conn);
-    }
 }

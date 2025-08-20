@@ -38,8 +38,15 @@ export class NotificationsViewed extends BaseController {
 }
 
 export class NotificationsController extends BaseController {
+    public readonly me: NotificationsMe;
+    public readonly opened: NotificationsOpened;
+    public readonly viewed: NotificationsViewed;
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+        this.me = new NotificationsMe(this.conn);
+        this.opened = new NotificationsOpened(this.conn);
+        this.viewed = new NotificationsViewed(this.conn);
     }
     
     /** GET /notifications/ */
@@ -78,13 +85,4 @@ export class NotificationsController extends BaseController {
         return await this.axiosDelete(`/notifications/${id}/`, config);
     }
     
-    me() {
-        return new NotificationsMe(this.conn);
-    }
-    opened() {
-        return new NotificationsOpened(this.conn);
-    }
-    viewed() {
-        return new NotificationsViewed(this.conn);
-    }
 }

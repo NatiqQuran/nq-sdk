@@ -7,11 +7,15 @@ export interface MushafsImportResponseData {
     uuid: string;
 }
 export interface MushafsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface MushafsListRequestParams {
+    limit?: number;
+    offset?: number;
     ordering?: string;
-    page?: number;
-    page_size?: number;
     search?: string;
 }
 export interface MushafsCreateRequestData {

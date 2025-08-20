@@ -1,10 +1,14 @@
 
 export interface AyahsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface AyahsListRequestParams {
+    limit?: number;
+    offset?: number;
     ordering?: string;
-    page?: number;
-    page_size?: number;
     search?: string;
     surah_uuid?: string;
 }

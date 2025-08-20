@@ -1,9 +1,13 @@
 
 export interface NotificationsMeResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface NotificationsMeRequestParams {
-    page?: number;
-    page_size?: number;
+    limit?: number;
+    offset?: number;
 }
 export interface NotificationsOpenedResponseData {
 }
@@ -13,10 +17,14 @@ export interface NotificationsOpenedRequestParams {
 export interface NotificationsViewedResponseData {
 }
 export interface NotificationsListResponseData {
+    count: number;
+    next?: string;
+    previous?: string;
+    results: object[];
 }
 export interface NotificationsListRequestParams {
-    page?: number;
-    page_size?: number;
+    limit?: number;
+    offset?: number;
 }
 export interface NotificationsCreateRequestData {
     created_at: string;
