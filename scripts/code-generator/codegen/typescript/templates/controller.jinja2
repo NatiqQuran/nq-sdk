@@ -38,8 +38,19 @@ export class {{ controller.controller.name.capitalize() }}{{ action_group.groupe
 {%- endif %}
 
 export class {{ controller.controller.name.capitalize() }}Controller extends BaseController {
+    {%- if controller.actions %}
+    {%- for action_group in controller.actions | groupby('action_name') %}
+    public readonly {{ action_group.grouper|lower }}: {{ controller.controller.name.capitalize() }}{{ action_group.grouper }};
+    {%- endfor %}
+    {%- endif %}
+
     constructor(connection: Connection, token?: string) {
         super(connection, token);
+        {%- if controller.actions %}
+        {%- for action_group in controller.actions | groupby('action_name') %}
+        this.{{ action_group.grouper|lower }} = new {{ controller.controller.name.capitalize() }}{{ action_group.grouper }}(this.conn);
+        {%- endfor %}
+        {%- endif %}
     }
     {% for router in controller.routers if not router.group_name %}
     /** {{ router.router.method.upper() }} {{ router.router.path }} */
@@ -61,12 +72,4 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
         return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{%- if router.request_type %}, data{%- endif %}, config);
     }
     {% endfor %}
-
-    {%- if controller.actions %}
-    {%- for action_group in controller.actions | groupby('action_name') %}
-    {{ action_group.grouper|lower }}() {
-        return new {{ controller.controller.name.capitalize() }}{{ action_group.grouper }}(this.conn);
-    }
-    {%- endfor %}
-    {%- endif %}
 }
