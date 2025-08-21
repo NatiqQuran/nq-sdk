@@ -1,0 +1,29 @@
+##[pylyzer] failed /home/yakuza/projects/nq-sdk/scripts/code-generator/parser/parser.py 1754657198 4317
+.___v_desugar_1 = pyimport "ast"
+.ast = pyimport "ast"
+.Ast: {ast.Ast}
+.Controller: {ast.Controller}
+.Router: {ast.Router}
+.RouterMetaData: {ast.RouterMetaData}
+.RouterParamenterSchema: {ast.RouterParamenterSchema}
+.RouterParameter: {ast.RouterParameter}
+.RouterRequestBody: {ast.RouterRequestBody}
+.BodyContent: {ast.BodyContent}
+.RouterResponse: {ast.RouterResponse}
+.___v_desugar_2: Never
+.Dict: Never
+.Any: Never
+.List: Never
+.Parser: ClassType
+.Parser.ast: Never
+.Parser.schema: Never
+.Parser.__call__: Never
+.Parser.parse: (self: parser.parser.Parser) -> ast.Ast
+.Parser.parse_controller: Never
+.Parser.resolve_schema_ref: Never
+.Parser.resolve_schema: Never
+.Parser.parse_request_body: Never
+.Parser.parse_router_parameters: Never
+.Parser.parse_router_responses: Never
+.Parser.parse_router: Never
+

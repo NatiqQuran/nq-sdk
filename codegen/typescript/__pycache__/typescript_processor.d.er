@@ -1,0 +1,54 @@
+##[pylyzer] failed /home/yakuza/projects/nq-sdk/scripts/code-generator/codegen/typescript/typescript_processor.py 1754580512 10250
+.re: Never
+
+.___v_desugar_1: Never
+.Dict: Never
+.Any: Never
+.List: Never
+.Optional: Never
+.___v_desugar_2: Never
+.dataclass: Never
+.___v_desugar_3: Never
+.Ast: Never
+.Controller: Never
+.Router: Never
+.TypeScriptTypeDefinition: ClassType
+.TypeScriptTypeDefinition.required_properties: global::List!(Str, _: Nat)
+.TypeScriptTypeDefinition.properties: Never
+.TypeScriptTypeDefinition.name: Str
+.TypeScriptTypeDefinition.__call__: () -> typescript_processor.TypeScriptTypeDefinition
+.TypeScriptTypeDefinition.description: NoneType or Str
+
+.TypeScriptRouter: ClassType
+.TypeScriptRouter.ts_path: Str
+.TypeScriptRouter.router: Never
+.TypeScriptRouter.method_name: Str
+.TypeScriptRouter.path_params: global::List!(Str, _: Nat)
+.TypeScriptRouter.__call__: () -> typescript_processor.TypeScriptRouter
+.TypeScriptRouter.request_type: NoneType or typescript_processor.TypeScriptTypeDefinition
+.TypeScriptRouter.response_type: NoneType or typescript_processor.TypeScriptTypeDefinition
+.TypeScriptRouter.params_type: NoneType or typescript_processor.TypeScriptTypeDefinition
+
+.TypeScriptController: ClassType
+.TypeScriptController.controller: Never
+.TypeScriptController.routers: global::List!(typescript_processor.TypeScriptRouter, _: Nat)
+.TypeScriptController.__call__: () -> typescript_processor.TypeScriptController
+
+.TypeScriptAst: ClassType
+.TypeScriptAst.controllers: global::List!(typescript_processor.TypeScriptController, _: Nat)
+.TypeScriptAst.__call__: () -> typescript_processor.TypeScriptAst
+
+.TypeScriptProcessor: ClassType
+.TypeScriptProcessor.ast: Never
+.TypeScriptProcessor.__call__: (ast: Obj) -> typescript_processor.TypeScriptProcessor
+.TypeScriptProcessor.get_method_name: (self: typescript_processor.TypeScriptProcessor, router: Obj) -> Str
+.TypeScriptProcessor.extract_path_params: (self: typescript_processor.TypeScriptProcessor, path: Str) -> global::List!(Str, _: Nat)
+.TypeScriptProcessor.typescript_path: (self: typescript_processor.TypeScriptProcessor, path: Str) -> Str
+.TypeScriptProcessor.extract_schema_type: (self: typescript_processor.TypeScriptProcessor, schema: global::Dict!({Obj: Obj})) -> Str
+.TypeScriptProcessor.extract_properties_from_schema: (self: typescript_processor.TypeScriptProcessor, schema: global::Dict!({Obj: Obj})) -> global::Tuple([global::Dict!({Str: Str}), global::List!(Str, _: Nat)])
+.TypeScriptProcessor.create_type_definition: (self: typescript_processor.TypeScriptProcessor, name: Str, schema: global::Dict!({Obj: Obj}), description: Str := Str) -> typescript_processor.TypeScriptTypeDefinition
+.TypeScriptProcessor.extract_request_type: (self: typescript_processor.TypeScriptProcessor, router: Obj, controller_name: Str) -> NoneType or typescript_processor.TypeScriptTypeDefinition
+.TypeScriptProcessor.extract_response_type: (self: typescript_processor.TypeScriptProcessor, router: Obj, controller_name: Str) -> NoneType or typescript_processor.TypeScriptTypeDefinition
+.TypeScriptProcessor.extract_params_type: (self: typescript_processor.TypeScriptProcessor, router: Obj, controller_name: Str) -> NoneType or typescript_processor.TypeScriptTypeDefinition
+.TypeScriptProcessor.process: (self: typescript_processor.TypeScriptProcessor) -> typescript_processor.TypeScriptAst
+

@@ -1,0 +1,24 @@
+##[pylyzer] failed /home/yakuza/projects/nq-sdk/scripts/code-generator/codegen/typescript/codegen.py 1754662331 1458
+.___v_desugar_1: Never
+.Ast: Never
+.Controller: Never
+.___v_desugar_2 = pyimport "typescript_processor"
+.typescript_processor = pyimport "typescript_processor"
+.TypeScriptProcessor: {typescript_processor.TypeScriptProcessor}
+.TypeScriptAst: {typescript_processor.TypeScriptAst}
+.___v_desugar_3 = pyimport "__init__"
+.__init__ = pyimport "__init__"
+.Template: Never
+.os: Never
+
+.Codegen: ClassType
+.Codegen.ts_ast: Never
+.Codegen.ast: Never
+.Codegen.ts_processor: Never
+.Codegen.controller_template: Never
+.Codegen.types_template: Never
+.Codegen.__call__: (ast: Obj) -> codegen.typescript.codegen.Codegen
+.Codegen.generate_controller: (self: codegen.typescript.codegen.Codegen, controller: Obj) -> Str
+.Codegen.generate_types: (self: codegen.typescript.codegen.Codegen, controller: Obj) -> Str
+.Codegen.generate: (self: codegen.typescript.codegen.Codegen) -> global::Dict!({Obj: Obj})
+
