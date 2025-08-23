@@ -11,15 +11,17 @@ class TypeScriptTypeDefinition:
     properties: tuple  # property_name -> typescript_type as (name, type) pairs
     required_properties: tuple  # as tuple for immutability
     description: Optional[str] = None
+    custom_type: Optional[str] = None  # For custom types like arrays
     
     @classmethod
-    def create(cls, name: str, properties: Dict[str, str], required: List[str], description: str = None):
+    def create(cls, name: str, properties: Dict[str, str], required: List[str], description: str = None, custom_type: str = None):
         """Factory method to create from dict/list inputs"""
         return cls(
             name=name,
             properties=tuple(sorted(properties.items())),
             required_properties=tuple(sorted(required)),
-            description=description
+            description=description,
+            custom_type=custom_type
         )
     
     def get_properties_dict(self) -> Dict[str, str]:
@@ -73,6 +75,10 @@ class TypeScriptProcessor:
         self.ast = ast
         # Simple set to track unique types and prevent duplicates
         self.unique_types: set = set()
+        # Dictionary to store enum types
+        self.enum_types: dict = {}
+        # Set to track which schema types are actually referenced
+        self.referenced_schemas: set = set()
         
     def _is_duplicate_type(self, properties: Dict[str, str], required: List[str]) -> Optional[TypeScriptTypeDefinition]:
         """Check if a type with the same properties already exists"""
@@ -161,8 +167,33 @@ class TypeScriptProcessor:
         if not isinstance(schema, dict):
             return "any"
         
+        # Handle $ref references first
+        if "$ref" in schema:
+            ref = schema["$ref"]
+            if ref.startswith("#/components/schemas/"):
+                # Extract the type name from the reference
+                type_name = ref.replace("#/components/schemas/", "")
+                # Format the type name to be a valid TypeScript type
+                return self.format_schema_name(type_name)
+            else:
+                return "any"
+        
+        # Handle enum types first (before checking schema matches)
+        if "enum" in schema:
+            # Only include values that are not None, not 'none', and not '' (case-insensitive)
+            filtered = [i for i in schema['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
+            if filtered:
+                return f"{' | '.join(f"'{i}'" for i in filtered)}"
+        
+        # Check if this schema matches any of the known schemas
+        # This handles cases where $ref was already resolved
+        if hasattr(self, 'ast') and hasattr(self.ast, 'schemas'):
+            for schema_name, schema_data in self.ast.schemas.items():
+                if schema == schema_data:
+                    return self.format_schema_name(schema_name)
+        
         schema_type = schema.get("type", "object")
-    # Handle oneOf with enums (union type)
+        # Handle oneOf with enums (union type)
         if "oneOf" in schema and isinstance(schema["oneOf"], list):
             union_values = []
             for sub_schema in schema["oneOf"]:
@@ -182,17 +213,7 @@ class TypeScriptProcessor:
             union_values = list(dict.fromkeys(union_values))
             return " | ".join(union_values) if union_values else "any"
 
-        schema_type = schema.get("type", "object")
-
-        if "enum" in schema:
-            # Only include values that are not None, not 'none', and not '' (case-insensitive)
-            filtered = [i for i in schema['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
-            return f"{' | '.join(f"'{i}'" for i in filtered)}"
-
         if schema_type == "string":
-            if "enum" in schema:
-                if schema["enum"] != [''] and schema["enum"] != [None] and schema["enum"] != ['none']:
-                    return f"{' | '.join(f"'{i}'" for i in schema['enum'])}"
             if schema.get("format") == "uuid":
                 return "string"  # UUID type
             return "string"
@@ -216,7 +237,26 @@ class TypeScriptProcessor:
         properties = {}
         required = []
         
-        if not schema or not isinstance(schema, dict) or "properties" not in schema:
+        if not schema or not isinstance(schema, dict):
+            return properties, required
+        
+        # Handle array schemas (like paginated responses)
+        if schema.get("type") == "array" and "items" in schema:
+            # This is likely a paginated response, generate standard pagination structure
+            items_schema = schema["items"]
+            item_type = self.extract_schema_type(items_schema)
+            
+            properties = {
+                "count": "number",
+                "next": "string | null",
+                "previous": "string | null", 
+                "results": f"{item_type}[]"
+            }
+            required = ["count", "results"]
+            return properties, required
+        
+        # Handle regular object schemas
+        if "properties" not in schema:
             return properties, required
         
         required_fields = schema.get("required", [])
@@ -229,7 +269,7 @@ class TypeScriptProcessor:
         
         return properties, required
 
-    def create_type_definition(self, name: str, schema, description: str = None) -> TypeScriptTypeDefinition:
+    def create_type_definition(self, name: str, schema, description: str = None, custom_type: Optional[str] = None) -> TypeScriptTypeDefinition:
         """Create a TypeScript type definition from OpenAPI schema"""
         properties, required = self.extract_properties_from_schema(schema)
         
@@ -243,7 +283,8 @@ class TypeScriptProcessor:
             name=name,
             properties=properties,
             required=required,
-            description=description
+            description=description,
+            custom_type=custom_type
         )
         self.unique_types.add(new_type)
         return new_type
@@ -292,6 +333,30 @@ class TypeScriptProcessor:
                 break
         if not json_content:
             return None
+        
+        # Handle array responses directly (like PaginatedMushafList)
+        if json_content.schema.get("type") == "array" and "items" in json_content.schema:
+            # For array responses, return the array type directly
+            items_schema = json_content.schema["items"]
+            item_type = self.extract_schema_type(items_schema)
+            # Generate the array type directly since types are now local
+            array_type = f"{item_type}[]"
+            
+            if action_name:
+                type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
+            else:
+                # Use the same method name logic as controller methods
+                method_name = self.get_method_name(router)
+                type_name = f"{controller_name.capitalize()}{method_name.capitalize()}ResponseData"
+            
+            return self.create_type_definition(
+                type_name,
+                {"type": "array", "items": {"type": "any"}},  # Simplified schema for array type
+                f"Response data for {router.method} {router.path}",
+                custom_type=array_type  # Use the actual array type
+            )
+        
+        # Handle regular object responses
         if action_name:
             type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
         else:
@@ -346,6 +411,9 @@ class TypeScriptProcessor:
     def process(self) -> TypeScriptAst:
         """Process the AST and create TypeScript-specific AST, including actions and deduped type definitions"""
         ts_controllers = []
+
+        # First, extract all types from schemas
+        self.extract_schema_types()
 
         for controller in self.ast.controllers:
             ts_routers = []
@@ -422,6 +490,122 @@ class TypeScriptProcessor:
             controllers=ts_controllers,
             unique_types=self.unique_types
         )
+    
+    def track_referenced_schemas(self):
+        """Track which schemas are actually referenced in $ref statements"""
+        if not hasattr(self.ast, 'schemas') or not self.ast.schemas:
+            return
+        
+        # Look through all schemas to find $ref references
+        for schema_name, schema_data in self.ast.schemas.items():
+            if isinstance(schema_data, dict):
+                self._find_refs_in_schema(schema_data)
+        
+        # Only include core schema types that are commonly referenced
+        # These are the actual OpenAPI schema types, not controller-specific ones
+        core_schemas = {
+            'Mushaf', 'Surah', 'Ayah', 'AyahTranslation', 'RecitationList', 
+            'Notification', 'TranslationList', 'Word', 'Phrase', 'Group', 'User'
+        }
+        
+        # Clear the referenced_schemas set and only add core schemas
+        self.referenced_schemas.clear()
+        for core_schema in core_schemas:
+            if core_schema in self.ast.schemas:
+                self.referenced_schemas.add(core_schema)
+        
+        # Extract enum types from object properties
+        self._extract_enum_types_from_properties()
+    
+    def _find_refs_in_schema(self, schema):
+        """Recursively find $ref statements in a schema"""
+        if isinstance(schema, dict):
+            for key, value in schema.items():
+                if key == "$ref" and isinstance(value, str):
+                    if value.startswith("#/components/schemas/"):
+                        ref_name = value.replace("#/components/schemas/", "")
+                        self.referenced_schemas.add(ref_name)
+                elif isinstance(value, (dict, list)):
+                    self._find_refs_in_schema(value)
+        elif isinstance(schema, list):
+            for item in schema:
+                if isinstance(item, (dict, list)):
+                    self._find_refs_in_schema(item)
+    
+    def _extract_enum_types_from_properties(self):
+        """Extract enum types from object properties and create type aliases"""
+        if not hasattr(self.ast, 'schemas') or not self.ast.schemas:
+            return
+        
+        for schema_name, schema_data in self.ast.schemas.items():
+            if isinstance(schema_data, dict) and "properties" in schema_data:
+                for prop_name, prop_schema in schema_data["properties"].items():
+                    if isinstance(prop_schema, dict) and "enum" in prop_schema:
+                        # Create a type name for this enum
+                        enum_type_name = f"{schema_name}{prop_name.capitalize()}Enum"
+                        enum_values = [i for i in prop_schema['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
+                        if enum_values:
+                            enum_type = " | ".join(f"'{i}'" for i in enum_values)
+                            self.enum_types[enum_type_name] = enum_type
+                            # Add to referenced schemas so it gets generated
+                            self.referenced_schemas.add(enum_type_name)
+
+    def extract_schema_types(self):
+        """Extract all types from schemas stored in the AST"""
+        if not hasattr(self.ast, 'schemas') or not self.ast.schemas:
+            return
+
+        # Define only the actual OpenAPI schema types (not controller-specific ones)
+        core_schema_names = {
+            'Mushaf', 'Surah', 'Ayah', 'AyahTranslation', 'RecitationList', 
+            'Notification', 'TranslationList', 'Word', 'Phrase', 'Group', 'User'
+        }
+        
+        # Only process core schema types
+        for schema_name, schema_data in self.ast.schemas.items():
+            if schema_name not in core_schema_names:
+                continue
+                
+            # Check if this is an enum schema
+            if isinstance(schema_data, dict) and "enum" in schema_data and "type" in schema_data:
+                enum_values = [i for i in schema_data['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
+                if enum_values:
+                    enum_type = " | ".join(f"'{i}'" for i in enum_values)
+                    self.enum_types[schema_name] = enum_type
+                continue
+
+            # Create a type definition for each regular schema
+            type_name = self.format_schema_name(schema_name)
+            self.create_type_definition(
+                type_name,
+                schema_data,
+                f"Schema definition for {schema_name}"
+            )
+        
+        # Extract enum types from object properties
+        self._extract_enum_types_from_properties()
+    
+    def format_schema_name(self, schema_name: str) -> str:
+        """Format schema name to be a valid TypeScript type name"""
+        # Remove common suffixes and format as PascalCase
+        if schema_name.endswith('SerializerView'):
+            schema_name = schema_name[:-16]  # Remove 'SerializerView'
+        elif schema_name.endswith('Serializer'):
+            schema_name = schema_name[:-11]  # Remove 'Serializer'
+        elif schema_name.endswith('View'):
+            schema_name = schema_name[:-4]   # Remove 'View'
+        
+        # Convert to PascalCase - handle camelCase properly
+        # Split by underscores first, then handle camelCase
+        if '_' in schema_name:
+            words = schema_name.split('_')
+            return ''.join(word.capitalize() for word in words)
+        else:
+            # Handle camelCase: split on capital letters and capitalize each part
+            import re
+            # Use positive lookahead to split on capital letters
+            words = re.findall(r'[A-Z][a-z]*|[a-z]+', schema_name)
+            return ''.join(word.capitalize() for word in words)
     
     def get_unique_types(self) -> List[TypeScriptTypeDefinition]:
         """Get all unique types without duplicates"""

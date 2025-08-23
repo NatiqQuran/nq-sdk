@@ -19,6 +19,11 @@ class PostProcessor:
                 controllers_by_name[name].actions.extend(controller.actions)
         
         new_ast = type(self.ast)()
+        # Preserve schemas from the original AST
+        if hasattr(self.ast, 'schemas'):
+            for schema_name, schema_data in self.ast.schemas.items():
+                new_ast.add_schema(schema_name, schema_data)
+        
         for controller in controllers_by_name.values():
             new_ast.add_controller(controller)
         return new_ast

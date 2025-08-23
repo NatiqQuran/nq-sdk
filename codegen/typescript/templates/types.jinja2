@@ -1,0 +1,230 @@
+{%- if controller.actions %}
+{%- for action in controller.actions %}
+{%- if action.request_type %}
+export interface {{ action.request_type.name }} {
+{%- for prop_name, prop_type in action.request_type.get_properties_dict().items() %}
+    {%- if prop_name in action.request_type.get_required_list() %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+
+{%- endif %}
+{%- if action.response_type %}
+{%- if action.response_type.custom_type %}
+export type {{ action.response_type.name }} = {{ action.response_type.custom_type }};
+{%- else %}
+export interface {{ action.response_type.name }} {
+{%- for prop_name, prop_type in action.response_type.get_properties_dict().items() %}
+    {%- if prop_name in action.response_type.get_required_list() %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+{%- endif %}
+
+{%- endif %}
+{%- if action.params_type %}
+export interface {{ action.params_type.name }} {
+{%- for prop_name, prop_type in action.params_type.get_properties_dict().items() %}
+    {%- if prop_name in action.params_type.get_required_list() %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+{%- for router in controller.routers %}
+{%- if router.request_type %}
+export interface {{ router.request_type.name }} {
+{%- for prop_name, prop_type in router.request_type.get_properties_dict().items() %}
+    {%- if prop_name in router.request_type.get_required_list() %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+
+{%- endif %}
+{%- if router.response_type %}
+{%- if router.response_type.custom_type %}
+export type {{ router.response_type.name }} = {{ router.response_type.custom_type }};
+{%- else %}
+export interface {{ router.response_type.name }} {
+{%- for prop_name, prop_type in router.response_type.get_properties_dict().items() %}
+    {%- if prop_name in router.response_type.get_required_list() %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+{%- endif %}
+
+{%- endif %}
+{%- if router.params_type %}
+export interface {{ router.params_type.name }} {
+{%- for prop_name, prop_type in router.params_type.get_properties_dict().items() %}
+    {%- if prop_name in router.params_type.get_required_list() %}
+    {{ prop_name }}: {{ prop_type }};
+    {%- else %}
+    {{ prop_name }}?: {{ prop_type }};
+    {%- endif %}
+{%- endfor %}
+}
+
+{%- endif %}
+{%- endfor %}
+
+{# Generate required schema types directly in this file #}
+{%- if controller.controller.name == 'mushafs' %}
+export interface Mushaf {
+    uuid: string;
+    name: string;
+    short_name: string;
+    source?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+}
+
+{%- elif controller.controller.name == 'surahs' %}
+export interface Surah {
+    uuid: string;
+    name: string;
+    names: string;
+    number: number;
+    number_of_ayahs: string;
+    bismillah: string;
+    period?: 'makki' | 'madani';
+    search_terms?: string;
+    mushaf: object;
+    mushaf_uuid: string;
+}
+
+export interface Ayah {
+    uuid: string;
+    number: number;
+    text: string;
+    bismillah?: string;
+    breakers?: string;
+    sajdah?: string;
+    surah?: string;
+}
+
+{%- elif controller.controller.name == 'ayahs' %}
+export interface Ayah {
+    uuid: string;
+    number: number;
+    text: string;
+    bismillah?: string;
+    breakers?: string;
+    sajdah?: string;
+    surah?: string;
+}
+
+export interface AyahTranslation {
+    uuid: string;
+    text: string;
+    ayah_uuid: string;
+    translation_uuid: string;
+    bismillah?: string;
+}
+
+{%- elif controller.controller.name == 'translations' %}
+export interface TranslationList {
+    uuid: string;
+    language: string;
+    source?: string;
+    release_date?: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    translator_uuid: string;
+    mushaf_uuid: string;
+}
+
+{%- elif controller.controller.name == 'recitations' %}
+export interface RecitationList {
+    uuid: string;
+    recitation_date: string;
+    recitation_location: string;
+    recitation_type: string;
+    duration: string;
+    status?: 'draft' | 'pending_review' | 'published';
+    reciter_account_uuid: string;
+    mushaf_uuid: string;
+    created_at: string;
+    updated_at: string;
+}
+
+{%- elif controller.controller.name == 'words' %}
+export interface Word {
+    uuid: string;
+    text: string;
+    ayah_uuid: string;
+}
+
+{%- elif controller.controller.name == 'phrases' %}
+export interface Phrase {
+    uuid: string;
+    phrase: string;
+}
+
+{%- elif controller.controller.name == 'groups' %}
+export interface Group {
+    uuid: string;
+    name: string;
+    url?: string;
+}
+
+{%- elif controller.controller.name == 'users' %}
+export interface User {
+    uuid: string;
+    username: string;
+    email: string;
+    first_name?: string;
+    last_name?: string;
+    password: string;
+    password2: string;
+}
+
+{%- elif controller.controller.name == 'takhtits' %}
+export interface Takhtit {
+    uuid: string;
+    account: number;
+    creator: number;
+    mushaf: number;
+    created_at: string;
+}
+
+export interface AyahBreakersResponse {
+    uuid: string;
+    type: 'page' | 'juz' | 'hizb' | 'rub' | 'manzil' | 'ruku';
+    ayah_uuid: string;
+}
+
+export interface WordBreakersResponse {
+    uuid: string;
+    type: string;
+    word_uuid: string;
+}
+
+{%- elif controller.controller.name == 'notifications' %}
+export interface Notification {
+    uuid: string;
+    message?: string;
+    message_type?: 'success' | 'failed' | 'warning' | 'pending';
+    description?: string;
+    resource_controller: string;
+    resource_action: string;
+    resource_uuid?: string;
+    status?: 'nothing_happened' | 'got_notification' | 'viewed_notification' | 'opened_notification';
+    created_at: string;
+}
+{%- endif %}

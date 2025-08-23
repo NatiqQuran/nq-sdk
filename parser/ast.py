@@ -1,4 +1,4 @@
-from typing import List, Optional 
+from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
 
 @dataclass
@@ -73,10 +73,16 @@ class Controller:
 @dataclass
 class Ast:
     controllers: List[Controller] = None
+    schemas: Dict[str, Any] = None
     
     def __post_init__(self):
         if self.controllers is None:
             self.controllers = []
+        if self.schemas is None:
+            self.schemas = {}
     
     def add_controller(self, controller: Controller):
         self.controllers.append(controller)
+    
+    def add_schema(self, name: str, schema: Any):
+        self.schemas[name] = schema

@@ -35,11 +35,11 @@ def handle_compile(file_path: str, language: str, print_ast: bool = False, outpu
                 with open(controllers_file, 'w') as f:
                     f.write(controller['content'])
                 
-            for type in result["types"]:
-                # Write types file
-                types_file = os.path.join(output_dir, f"types/{type['name']}.ts")
+            # Write types file
+            for type_file in result["types"]:
+                types_file = os.path.join(output_dir, f"types/{type_file['name']}.ts")
                 with open(types_file, 'w') as f:
-                    f.write(type["content"])
+                    f.write(type_file["content"])
         else:
             print("Total Controllers parsed:", len(result["controllers"]))
             print("Total Types parsed:", len(result["types"]))

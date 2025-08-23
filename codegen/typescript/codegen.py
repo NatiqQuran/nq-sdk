@@ -23,17 +23,21 @@ class Codegen():
         """Generate both controllers and types"""
         controllers = []
         types = []
+        
+        # Generate controller files
         for controller in self.ts_ast.controllers:
             controllers.append({
                 'name': controller.controller.name,
                 'content': self.generate_controller(controller)
             })
         
+        # Generate types for each controller (original approach)
         for controller in self.ts_ast.controllers:
             types.append({
                 'name': controller.controller.name,
                 'content': self.generate_types(controller)
             })
+        
         return {
             "controllers": controllers,
             "types": types

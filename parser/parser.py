@@ -41,10 +41,22 @@ class Parser():
                 # Normal router
                 for method, router_data in routers.items():
                     controller.add_router(self.parse_router(path, method, router_data))
+        
+        # Parse all schemas from components/schemas
+        self.parse_all_schemas()
+        
         # Add all controllers to AST
         for controller in controllers_by_name.values():
             self.ast.add_controller(controller)
         return self.ast
+    
+    def parse_all_schemas(self):
+        """Parse all schemas from components/schemas and store them in the AST"""
+        schemas = self.schema.get("components", {}).get("schemas", {})
+        for schema_name, schema_data in schemas.items():
+            # Store the resolved schema in the AST for later use
+            resolved_schema = self.resolve_schema(schema_data)
+            self.ast.add_schema(schema_name, resolved_schema)
     
     def validate_router_completeness(self, path: str, method: str, data: Dict[Any, Any]) -> None:
         """
