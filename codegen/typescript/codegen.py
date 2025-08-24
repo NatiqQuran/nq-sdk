@@ -1,4 +1,4 @@
-from parser.ast import Ast, Controller
+from parser.typed_schema_model import TypedSchemaModel, TypedController
 from .typescript_processor import TypeScriptProcessor, TypeScriptAst
 from jinja2 import Template
 import os
@@ -6,7 +6,7 @@ import os
 class Codegen():
     """Typescript code generation
     """
-    def __init__(self, ast: Ast):
+    def __init__(self, ast: TypedSchemaModel):
         self.ast = ast
         self.ts_processor = TypeScriptProcessor(ast)
         self.ts_ast = self.ts_processor.process()

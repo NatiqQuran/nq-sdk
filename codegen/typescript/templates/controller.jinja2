@@ -37,10 +37,52 @@ export class {{ controller.controller.name.capitalize() }}{{ action_group.groupe
 {%- endfor %}
 {%- endif %}
 
+{%- if controller.routers %}
+{%- for router_group in controller.routers | selectattr('group_name', 'defined') | selectattr('group_name') | groupby('group_name') %}
+{%- if router_group.grouper %}
+
+export class {{ controller.controller.name.capitalize() }}{{ router_group.grouper }} extends BaseController {
+    constructor(conn: Connection, token?: string) {
+        super(conn, token);
+    }
+
+    {%- for router in router_group.list %}
+    /** {{ router.router.method.upper() }} {{ router.router.path }} */
+    async {{ router.method_name }}(
+        {%- if router.path_params %}
+        {%- for p in router.path_params -%}
+        {{ p }}: string{%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+        {%- endif %}
+        {%- if router.request_type %}
+        {%- if router.path_params %}, {% endif %}data: {{ controller.controller.name.capitalize() }}Type.{{ router.request_type.name }}
+        {%- endif %}
+        {%- if router.params_type %}
+        {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig<{{ controller.controller.name.capitalize() }}Type.{{ router.params_type.name }}>
+        {%- else %}
+        {%- if router.path_params or router.request_type %}, {% endif %}config?: RequestConfig
+        {%- endif %}
+    ): Promise<AxiosResponse<{%- if router.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{%- else %}any{%- endif %}>> {
+        return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{%- if router.request_type %}, data{%- endif %}, config);
+    }
+    {%- endfor %}
+}
+
+{%- endif %}
+{%- endfor %}
+{%- endif %}
+
 export class {{ controller.controller.name.capitalize() }}Controller extends BaseController {
     {%- if controller.actions %}
     {%- for action_group in controller.actions | groupby('action_name') %}
     public readonly {{ action_group.grouper|lower }}: {{ controller.controller.name.capitalize() }}{{ action_group.grouper }};
+    {%- endfor %}
+    {%- endif %}
+    {%- if controller.routers %}
+    {%- for router_group in controller.routers | selectattr('group_name', 'defined') | selectattr('group_name') | groupby('group_name') %}
+    {%- if router_group.grouper %}
+    public readonly {{ router_group.grouper|lower }}: {{ controller.controller.name.capitalize() }}{{ router_group.grouper }};
+    {%- endif %}
     {%- endfor %}
     {%- endif %}
 
@@ -48,7 +90,14 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
         super(connection, token);
         {%- if controller.actions %}
         {%- for action_group in controller.actions | groupby('action_name') %}
-        this.{{ action_group.grouper|lower }} = new {{ controller.controller.name.capitalize() }}{{ action_group.grouper }}(this.conn);
+        this.{{ action_group.grouper|lower }} = new {{ controller.controller.name.capitalize() }}{{ action_group.grouper }}(connection);
+        {%- endfor %}
+        {%- endif %}
+        {%- if controller.routers %}
+        {%- for router_group in controller.routers | selectattr('group_name', 'defined') | selectattr('group_name') | groupby('group_name') %}
+        {%- if router_group.grouper %}
+        this.{{ router_group.grouper|lower }} = new {{ controller.controller.name.capitalize() }}{{ router_group.grouper }}(connection);
+        {%- endif %}
         {%- endfor %}
         {%- endif %}
     }
@@ -68,7 +117,7 @@ export class {{ controller.controller.name.capitalize() }}Controller extends Bas
         {%- else %}
         {%- if router.path_params or router.request_type %}, {%- endif %}config?: RequestConfig
         {%- endif %}
-    ): Promise<AxiosResponse<{%- if router.response_type %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{%- else %}any{%- endif %}>> {
+    ): Promise<AxiosResponse<{%- if router.response_type is not none %}{{ controller.controller.name.capitalize() }}Type.{{ router.response_type.name }}{%- else %}any{%- endif %}>>{
         return await this.axios{{ router.router.method.capitalize() }}(`{{ router.ts_path }}`{%- if router.request_type %}, data{%- endif %}, config);
     }
     {% endfor %}

@@ -1,37 +1,8 @@
 import re
-from typing import Dict, List, Optional
+from typing import List, Optional, Any
 from dataclasses import dataclass
-from parser.ast import Ast, Controller, Router
-
-
-@dataclass(frozen=True)
-class TypeScriptTypeDefinition:
-    """TypeScript-specific type definition"""
-    name: str
-    properties: tuple  # property_name -> typescript_type as (name, type) pairs
-    required_properties: tuple  # as tuple for immutability
-    description: Optional[str] = None
-    custom_type: Optional[str] = None  # For custom types like arrays
-    
-    @classmethod
-    def create(cls, name: str, properties: Dict[str, str], required: List[str], description: str = None, custom_type: str = None):
-        """Factory method to create from dict/list inputs"""
-        return cls(
-            name=name,
-            properties=tuple(sorted(properties.items())),
-            required_properties=tuple(sorted(required)),
-            description=description,
-            custom_type=custom_type
-        )
-    
-    def get_properties_dict(self) -> Dict[str, str]:
-        """Get properties as dictionary for template compatibility"""
-        return dict(self.properties)
-    
-    def get_required_list(self) -> List[str]:
-        """Get required properties as list for template compatibility"""
-        return list(self.required_properties)
-
+from parser.typed_schema_model import TypedSchemaModel, TypedController, SchemaType, SchemaTypeField
+from parser.schema_model import Router
 
 @dataclass
 class TypeScriptRouter:
@@ -39,11 +10,13 @@ class TypeScriptRouter:
     method_name: str
     path_params: List[str]
     ts_path: str
-    request_type: Optional[TypeScriptTypeDefinition] = None
-    response_type: Optional[TypeScriptTypeDefinition] = None
-    params_type: Optional[TypeScriptTypeDefinition] = None
     # Optional grouping key for sub-resource routers (e.g., 'ayahs')
     group_name: Optional[str] = None
+    # Parameter types for this router
+    params_type: Optional[Any] = None  # Will be set by the processor
+    # Request and response types for this router
+    request_type: Optional[Any] = None  # Will be set by the processor
+    response_type: Optional[Any] = None  # Will be set by the processor
 
 # Action dataclass after TypeScriptRouter
 @dataclass
@@ -53,72 +26,28 @@ class TypeScriptAction(TypeScriptRouter):
 @dataclass
 class TypeScriptController:
     """TypeScript-specific controller information"""
-    controller: Controller
+    controller: TypedController
     routers: List[TypeScriptRouter]
     actions: Optional[List[TypeScriptAction]] = None
+    types: List[SchemaType] = None
 
 @dataclass
 class TypeScriptAst:
-    """TypeScript-specific AST with type information"""
+    """TypeScript-specific AST"""
     controllers: List[TypeScriptController]
-    # Add deduplicated types set
-    unique_types: set = None
-
-    def __post_init__(self):
-        if self.unique_types is None:
-            self.unique_types = set()
 
 class TypeScriptProcessor:
     """Processes the generic AST and adds TypeScript-specific information"""
 
-    def __init__(self, ast: Ast):
+    def __init__(self, ast: TypedSchemaModel):
         self.ast = ast
-        # Simple set to track unique types and prevent duplicates
-        self.unique_types: set = set()
-        # Dictionary to store enum types
-        self.enum_types: dict = {}
-        # Set to track which schema types are actually referenced
-        self.referenced_schemas: set = set()
-        
-    def _is_duplicate_type(self, properties: Dict[str, str], required: List[str]) -> Optional[TypeScriptTypeDefinition]:
-        """Check if a type with the same properties already exists"""
-        for existing_type in self.unique_types:
-            if (existing_type.properties == properties and 
-                existing_type.required_properties == required):
-                return existing_type
-        return None
-
-    def extract_action_type(self, action, controller_name: str) -> Optional[TypeScriptTypeDefinition]:
-        """Extract response type for an action (if available)"""
-        # This is a placeholder; adjust as per your AST structure for actions
-        if hasattr(action, 'response_schema') and action.response_schema:
-            type_name = f"{controller_name.capitalize()}{action.name.capitalize()}ActionResponseData"
-            return self.create_type_definition(
-                type_name,
-                action.response_schema,
-                f"Response data for action {action.name} in {controller_name}"
-            )
-        return None
-
-    def extract_action_parameters(self, action) -> tuple[Dict[str, str], List[str]]:
-        """Extract parameters and required fields from an action (if available)"""
-        # This is a placeholder; adjust as per your AST structure for actions
-        properties = {}
-        required = []
-        if hasattr(action, 'parameters') and action.parameters:
-            for param in action.parameters:
-                param_type = self.extract_schema_type(getattr(param, 'schema', {'type': 'any'}))
-                properties[param.name] = param_type
-                if getattr(param, 'required', False):
-                    required.append(param.name)
-        return properties, required
 
     def get_method_name(self, router: Router) -> str:
         """Determine the method name based on HTTP method and path"""
         path = router.path
         method = router.method.lower()
         path_clean = path.rstrip('/')
-        
+
         if method == 'get' and re.fullmatch(r"/[a-zA-Z0-9_\-]+", path_clean):
             return 'list'
         if method == 'get' and re.fullmatch(r"/[a-zA-Z0-9_\-]+/\{[a-zA-Z0-9_\-]+\}", path_clean):
@@ -128,12 +57,83 @@ class TypeScriptProcessor:
         if method == 'put' and re.fullmatch(r"/[a-zA-Z0-9_\-]+/\{[a-zA-Z0-9_\-]+\}", path_clean):
             return 'update'
         if method == 'patch' and re.fullmatch(r"/[a-zA-Z0-9_\-]+/\{[a-zA-Z0-9_\-]+\}", path_clean):
-            return 'partialUpdate'
+            return 'partial_update'
         if method == 'delete' and re.fullmatch(r"/[a-zA-Z0-9_\-]+/\{[a-zA-Z0-9_\-]+\}", path_clean):
             return 'delete'
         if router.meta.operation_id:
             return router.meta.operation_id
         return f"{method}_{path_clean.strip('/').replace('/', '_').replace('{', '').replace('}', '')}"
+
+    def get_resource_name(self, path: str) -> str:
+        """Extract the resource name from the path for type naming"""
+        path_clean = path.rstrip('/')
+        segments = path_clean.strip('/').split('/')
+
+        if not segments:
+            return 'Unknown'
+
+        # Handle different path patterns
+        if len(segments) == 1:
+            # Simple resource path like /users/
+            resource = segments[0]
+        elif len(segments) == 2 and not segments[1].startswith('{'):
+            # Nested resource path like /auth/login/
+            resource = segments[1]  # Use the second segment as the resource
+        elif len(segments) >= 3 and segments[1].startswith('{') and not segments[2].startswith('{'):
+            # Sub-resource path like /takhtits/{uuid}/ayahs_breakers/
+            # Use both the main resource and sub-resource for type naming
+            main_resource = segments[0]
+            sub_resource = segments[2]
+            resource = f"{main_resource}_{sub_resource}"
+        else:
+            # Default to first segment for complex paths
+            resource = segments[0]
+
+        # Convert to plural form following the user's convention (e.g., ayah -> ayahs)
+        if not resource.endswith('s'):
+            resource = resource + 's'
+        return resource.capitalize()
+
+    def get_operation_type_name(self, router: Router, is_request: bool = True) -> str:
+        """Generate type name following the naming convention"""
+        resource_name = self.get_resource_name(router.path)
+        method_name = self.get_method_name(router).lower()
+
+        # Handle custom operation IDs by extracting the action from the operation ID
+        if router.meta.operation_id:
+            operation_id = router.meta.operation_id.lower()
+            if '_list' in operation_id:
+                method_name = 'list'
+            elif '_retrieve' in operation_id:
+                method_name = 'retrieve'
+            elif '_create' in operation_id:
+                method_name = 'create'
+            elif '_partial_update' in operation_id or 'partialupdate' in operation_id:
+                method_name = 'partial_update'
+            elif '_update' in operation_id:
+                method_name = 'update'
+            elif '_delete' in operation_id:
+                method_name = 'delete'
+
+        # Map method names to the convention
+        operation_map = {
+            'list': 'List',
+            'retrieve': 'Retrieve',
+            'create': 'Create',
+            'update': 'Update',
+            'partial_update': 'Partialupdate',
+            'delete': 'Delete'
+        }
+
+        operation = operation_map.get(method_name, method_name.capitalize())
+
+        if is_request:
+            if method_name == 'list':
+                return f"{resource_name}ListRequestParams"
+            else:
+                return f"{resource_name}{operation}RequestData"
+        else:
+            return f"{resource_name}{operation}ResponseData"
 
     def extract_path_params(self, path: str) -> List[str]:
         """Extract path parameters from the path"""
@@ -143,277 +143,9 @@ class TypeScriptProcessor:
         """Convert path to TypeScript template string format"""
         return re.sub(r"\{([a-zA-Z0-9_\-]+)\}", r"${\1}", path)
 
-    def extract_schema_type(self, schema) -> str:
-        """Extract TypeScript type from OpenAPI schema"""
-        if not schema:
-            return "any"
-
-        # Handle case where schema is a string (simple type)
-        if isinstance(schema, str):
-            if schema == "string":
-                return "string"
-            elif schema in ["integer", "number"]:
-                return "number"
-            elif schema == "boolean":
-                return "boolean"
-            elif schema == "array":
-                return "any[]"
-            elif schema == "object":
-                return "object"
-            else:
-                return "any"
-        
-        # Handle case where schema is a dictionary
-        if not isinstance(schema, dict):
-            return "any"
-        
-        # Handle $ref references first
-        if "$ref" in schema:
-            ref = schema["$ref"]
-            if ref.startswith("#/components/schemas/"):
-                # Extract the type name from the reference
-                type_name = ref.replace("#/components/schemas/", "")
-                # Format the type name to be a valid TypeScript type
-                return self.format_schema_name(type_name)
-            else:
-                return "any"
-        
-        # Handle enum types first (before checking schema matches)
-        if "enum" in schema:
-            # Only include values that are not None, not 'none', and not '' (case-insensitive)
-            filtered = [i for i in schema['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
-            if filtered:
-                return f"{' | '.join(f"'{i}'" for i in filtered)}"
-        
-        # Check if this schema matches any of the known schemas
-        # This handles cases where $ref was already resolved
-        if hasattr(self, 'ast') and hasattr(self.ast, 'schemas'):
-            for schema_name, schema_data in self.ast.schemas.items():
-                if schema == schema_data:
-                    return self.format_schema_name(schema_name)
-        
-        schema_type = schema.get("type", "object")
-        # Handle oneOf with enums (union type)
-        if "oneOf" in schema and isinstance(schema["oneOf"], list):
-            union_values = []
-            for sub_schema in schema["oneOf"]:
-                # If sub_schema is enum, add all values except None, 'none', or ''
-                if isinstance(sub_schema, dict) and "enum" in sub_schema:
-                    for val in sub_schema["enum"]:
-                        if val is None or (isinstance(val, str) and (val.lower() == 'none' or val == '')):
-                            continue
-                        else:
-                            union_values.append(f"'{val}'")
-                else:
-                    # Fallback to type extraction
-                    t = self.extract_schema_type(sub_schema)
-                    if t != "''":
-                        union_values.append(t)
-            # Remove duplicates
-            union_values = list(dict.fromkeys(union_values))
-            return " | ".join(union_values) if union_values else "any"
-
-        if schema_type == "string":
-            if schema.get("format") == "uuid":
-                return "string"  # UUID type
-            return "string"
-        elif schema_type == "integer":
-            return "number"
-        elif schema_type == "number":
-            return "number"
-        elif schema_type == "boolean":
-            return "boolean"
-        elif schema_type == "array":
-            items = schema.get("items", {})
-            item_type = self.extract_schema_type(items)
-            return f"{item_type}[]"
-        elif schema_type == "object":
-            return "object"
-        else:
-            return "any"
-
-    def extract_properties_from_schema(self, schema) -> tuple[Dict[str, str], List[str]]:
-        """Extract properties and required fields from OpenAPI schema"""
-        properties = {}
-        required = []
-        
-        if not schema or not isinstance(schema, dict):
-            return properties, required
-        
-        # Handle array schemas (like paginated responses)
-        if schema.get("type") == "array" and "items" in schema:
-            # This is likely a paginated response, generate standard pagination structure
-            items_schema = schema["items"]
-            item_type = self.extract_schema_type(items_schema)
-            
-            properties = {
-                "count": "number",
-                "next": "string | null",
-                "previous": "string | null", 
-                "results": f"{item_type}[]"
-            }
-            required = ["count", "results"]
-            return properties, required
-        
-        # Handle regular object schemas
-        if "properties" not in schema:
-            return properties, required
-        
-        required_fields = schema.get("required", [])
-        
-        for prop_name, prop_schema in schema["properties"].items():
-            prop_type = self.extract_schema_type(prop_schema)
-            properties[prop_name] = prop_type
-            if prop_name in required_fields:
-                required.append(prop_name)
-        
-        return properties, required
-
-    def create_type_definition(self, name: str, schema, description: str = None, custom_type: Optional[str] = None) -> TypeScriptTypeDefinition:
-        """Create a TypeScript type definition from OpenAPI schema"""
-        properties, required = self.extract_properties_from_schema(schema)
-        
-        # Check if we already have a type with the same properties
-        existing_type = self._is_duplicate_type(properties, required)
-        if existing_type:
-            return existing_type
-        
-        # Create new type and add to unique set
-        new_type = TypeScriptTypeDefinition.create(
-            name=name,
-            properties=properties,
-            required=required,
-            description=description,
-            custom_type=custom_type
-        )
-        self.unique_types.add(new_type)
-        return new_type
-
-    def extract_request_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
-        """Extract request type from router or action"""
-        if not router.request_body or not router.request_body.content:
-            return None
-        # Find JSON content
-        json_content = None
-        for content in router.request_body.content:
-            if content.content_type == "application/json":
-                json_content = content
-                break
-        if not json_content:
-            return None
-        if action_name:
-            type_name = f"{controller_name.capitalize()}{action_name}RequestData"
-        else:
-            # Use the same method name logic as controller methods
-            method_name = self.get_method_name(router)
-            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}RequestData"
-        return self.create_type_definition(
-            type_name,
-            json_content.schema,
-            f"Request data for {router.method} {router.path}"
-        )
-
-    def extract_response_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
-        """Extract response type from router or action"""
-        if not router.responses:
-            return None
-        # Find 200/201 response
-        success_response = None
-        for response in router.responses:
-            if response.status_code in ["200", "201"]:
-                success_response = response
-                break
-        if not success_response or not success_response.content:
-            return None
-        # Find JSON content
-        json_content = None
-        for content in success_response.content:
-            if content.content_type == "application/json":
-                json_content = content
-                break
-        if not json_content:
-            return None
-        
-        # Handle array responses directly (like PaginatedMushafList)
-        if json_content.schema.get("type") == "array" and "items" in json_content.schema:
-            # For array responses, return the array type directly
-            items_schema = json_content.schema["items"]
-            item_type = self.extract_schema_type(items_schema)
-            # Generate the array type directly since types are now local
-            array_type = f"{item_type}[]"
-            
-            if action_name:
-                type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
-            else:
-                # Use the same method name logic as controller methods
-                method_name = self.get_method_name(router)
-                type_name = f"{controller_name.capitalize()}{method_name.capitalize()}ResponseData"
-            
-            return self.create_type_definition(
-                type_name,
-                {"type": "array", "items": {"type": "any"}},  # Simplified schema for array type
-                f"Response data for {router.method} {router.path}",
-                custom_type=array_type  # Use the actual array type
-            )
-        
-        # Handle regular object responses
-        if action_name:
-            type_name = f"{controller_name.capitalize()}{action_name}ResponseData"
-        else:
-            # Use the same method name logic as controller methods
-            method_name = self.get_method_name(router)
-            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}ResponseData"
-        return self.create_type_definition(
-            type_name,
-            json_content.schema,
-            f"Response data for {router.method} {router.path}"
-        )
-
-    def extract_params_type(self, router: Router, controller_name: str, action_name: Optional[str] = None) -> Optional[TypeScriptTypeDefinition]:
-        """Extract query parameters type from router or action"""
-        query_params = []
-        for param in router.parameters:
-            if param.position == "query":
-                query_params.append(param)
-        if not query_params:
-            return None
-        properties = {}
-        required = []
-        for param in query_params:
-            param_type = self.extract_schema_type({
-                "type": param.schema.type,
-                "format": param.schema.format
-            })
-            properties[param.name] = param_type
-            if param.required:
-                required.append(param.name)
-        if not properties:
-            return None
-        if action_name:
-            type_name = f"{controller_name.capitalize()}{action_name}RequestParams"
-        else:
-            # Use the same method name logic as controller methods
-            method_name = self.get_method_name(router)
-            type_name = f"{controller_name.capitalize()}{method_name.capitalize()}RequestParams"
-        # Create a schema-like structure for params to enable deduplication
-        params_schema = {
-            "type": "object",
-            "properties": properties,
-            "required": required
-        }
-        
-        return self.create_type_definition(
-            type_name,
-            params_schema,
-            f"Query parameters for {router.method} {router.path}"
-        )
-
     def process(self) -> TypeScriptAst:
-        """Process the AST and create TypeScript-specific AST, including actions and deduped type definitions"""
+        """Process the AST and create TypeScript-specific AST"""
         ts_controllers = []
-
-        # First, extract all types from schemas
-        self.extract_schema_types()
 
         for controller in self.ast.controllers:
             ts_routers = []
@@ -435,19 +167,11 @@ class TypeScriptProcessor:
                 except Exception:
                     group_name = None
 
-                # Extract types
-                request_type = self.extract_request_type(router, controller.name)
-                response_type = self.extract_response_type(router, controller.name)
-                params_type = self.extract_params_type(router, controller.name)
-
                 ts_router = TypeScriptRouter(
                     router=router,
                     method_name=method_name,
                     path_params=path_params,
                     ts_path=ts_path,
-                    request_type=request_type,
-                    response_type=response_type,
-                    params_type=params_type,
                     group_name=group_name
                 )
                 ts_routers.append(ts_router)
@@ -464,149 +188,232 @@ class TypeScriptProcessor:
                 method_name = getattr(action, 'name', None) or self.get_method_name(action)
                 path_params = self.extract_path_params(getattr(action, 'path', '')) if hasattr(action, 'path') else []
                 ts_path = self.typescript_path(getattr(action, 'path', '')) if hasattr(action, 'path') else ''
-                request_type = self.extract_request_type(action, controller.name, action_name) if hasattr(action, 'request_body') else None
-                response_type = self.extract_response_type(action, controller.name, action_name)
-                params_type = self.extract_params_type(action, controller.name, action_name) if hasattr(action, 'parameters') else None
                 ts_action = TypeScriptAction(
                     router=action,
                     method_name=method_name,
                     path_params=path_params,
                     ts_path=ts_path,
-                    request_type=request_type,
-                    response_type=response_type,
-                    params_type=params_type,
+                    group_name=None,  # No group name for actions
                     action_name=action_name
                 )
                 ts_actions.append(ts_action)
+
+            # Associate parameter types with routers
+            self._associate_param_types(ts_routers, controller.types)
+
+            # Associate request and response types with routers and actions
+            self._associate_request_response_types(ts_routers, ts_actions, controller.types)
 
             ts_controller = TypeScriptController(
                 controller=controller,
                 routers=ts_routers,
                 actions=ts_actions,
+                types=controller.types,
             )
             ts_controllers.append(ts_controller)
 
         return TypeScriptAst(
-            controllers=ts_controllers,
-            unique_types=self.unique_types
+            controllers=ts_controllers
         )
-    
-    def track_referenced_schemas(self):
-        """Track which schemas are actually referenced in $ref statements"""
-        if not hasattr(self.ast, 'schemas') or not self.ast.schemas:
-            return
-        
-        # Look through all schemas to find $ref references
-        for schema_name, schema_data in self.ast.schemas.items():
-            if isinstance(schema_data, dict):
-                self._find_refs_in_schema(schema_data)
-        
-        # Only include core schema types that are commonly referenced
-        # These are the actual OpenAPI schema types, not controller-specific ones
-        core_schemas = {
-            'Mushaf', 'Surah', 'Ayah', 'AyahTranslation', 'RecitationList', 
-            'Notification', 'TranslationList', 'Word', 'Phrase', 'Group', 'User'
-        }
-        
-        # Clear the referenced_schemas set and only add core schemas
-        self.referenced_schemas.clear()
-        for core_schema in core_schemas:
-            if core_schema in self.ast.schemas:
-                self.referenced_schemas.add(core_schema)
-        
-        # Extract enum types from object properties
-        self._extract_enum_types_from_properties()
-    
-    def _find_refs_in_schema(self, schema):
-        """Recursively find $ref statements in a schema"""
-        if isinstance(schema, dict):
-            for key, value in schema.items():
-                if key == "$ref" and isinstance(value, str):
-                    if value.startswith("#/components/schemas/"):
-                        ref_name = value.replace("#/components/schemas/", "")
-                        self.referenced_schemas.add(ref_name)
-                elif isinstance(value, (dict, list)):
-                    self._find_refs_in_schema(value)
-        elif isinstance(schema, list):
-            for item in schema:
-                if isinstance(item, (dict, list)):
-                    self._find_refs_in_schema(item)
-    
-    def _extract_enum_types_from_properties(self):
-        """Extract enum types from object properties and create type aliases"""
-        if not hasattr(self.ast, 'schemas') or not self.ast.schemas:
-            return
-        
-        for schema_name, schema_data in self.ast.schemas.items():
-            if isinstance(schema_data, dict) and "properties" in schema_data:
-                for prop_name, prop_schema in schema_data["properties"].items():
-                    if isinstance(prop_schema, dict) and "enum" in prop_schema:
-                        # Create a type name for this enum
-                        enum_type_name = f"{schema_name}{prop_name.capitalize()}Enum"
-                        enum_values = [i for i in prop_schema['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
-                        if enum_values:
-                            enum_type = " | ".join(f"'{i}'" for i in enum_values)
-                            self.enum_types[enum_type_name] = enum_type
-                            # Add to referenced schemas so it gets generated
-                            self.referenced_schemas.add(enum_type_name)
 
-    def extract_schema_types(self):
-        """Extract all types from schemas stored in the AST"""
-        if not hasattr(self.ast, 'schemas') or not self.ast.schemas:
-            return
+    def _associate_param_types(self, ts_routers: List[TypeScriptRouter], types: List[SchemaType]):
+        """Associate parameter types with TypeScript routers"""
+        # Create a mapping of router paths to their parameter types
+        path_to_params = {}
 
-        # Define only the actual OpenAPI schema types (not controller-specific ones)
-        core_schema_names = {
-            'Mushaf', 'Surah', 'Ayah', 'AyahTranslation', 'RecitationList', 
-            'Notification', 'TranslationList', 'Word', 'Phrase', 'Group', 'User'
-        }
-        
-        # Only process core schema types
-        for schema_name, schema_data in self.ast.schemas.items():
-            if schema_name not in core_schema_names:
-                continue
-                
-            # Check if this is an enum schema
-            if isinstance(schema_data, dict) and "enum" in schema_data and "type" in schema_data:
-                enum_values = [i for i in schema_data['enum'] if i is not None and (not (isinstance(i, str) and (i.lower() == 'none' or i == '')))]
-                if enum_values:
-                    enum_type = " | ".join(f"'{i}'" for i in enum_values)
-                    self.enum_types[schema_name] = enum_type
-                continue
+        for schema_type in types:
+            type_name = schema_type.name
+            # Check if this is a parameter type based on naming convention
+            if 'PathParams' in type_name or 'QueryParams' in type_name:
+                # Extract the base path pattern from the type name
+                # e.g., "UsersListPathParams" -> "users"
+                # e.g., "UsersRetrievePathParams" -> "users/{id}"
+                # This is a simplified approach - we match by resource name
+                if 'PathParams' in type_name:
+                    base_name = type_name.replace('PathParams', '').replace('List', '').lower()
+                elif 'QueryParams' in type_name:
+                    base_name = type_name.replace('QueryParams', '').replace('List', '').lower()
+                else:
+                    continue
 
-            # Create a type definition for each regular schema
-            type_name = self.format_schema_name(schema_name)
-            self.create_type_definition(
-                type_name,
-                schema_data,
-                f"Schema definition for {schema_name}"
-            )
-        
-        # Extract enum types from object properties
-        self._extract_enum_types_from_properties()
-    
-    def format_schema_name(self, schema_name: str) -> str:
-        """Format schema name to be a valid TypeScript type name"""
-        # Remove common suffixes and format as PascalCase
-        if schema_name.endswith('SerializerView'):
-            schema_name = schema_name[:-16]  # Remove 'SerializerView'
-        elif schema_name.endswith('Serializer'):
-            schema_name = schema_name[:-11]  # Remove 'Serializer'
-        elif schema_name.endswith('View'):
-            schema_name = schema_name[:-4]   # Remove 'View'
-        
-        # Convert to PascalCase - handle camelCase properly
-        # Split by underscores first, then handle camelCase
-        if '_' in schema_name:
-            words = schema_name.split('_')
-            return ''.join(word.capitalize() for word in words)
+                # Find routers that match this resource
+                for ts_router in ts_routers:
+                    router_resource = self._extract_resource_from_path(ts_router.router.path).lower()
+                    if router_resource == base_name:
+                        if ts_router.router.path not in path_to_params:
+                            path_to_params[ts_router.router.path] = {'path': None, 'query': None}
+
+                        if 'PathParams' in type_name:
+                            path_to_params[ts_router.router.path]['path'] = schema_type
+                        elif 'QueryParams' in type_name:
+                            path_to_params[ts_router.router.path]['query'] = schema_type
+
+        # Group routers by path pattern (ignoring the method)
+        path_patterns = {}
+        for ts_router in ts_routers:
+            # Normalize path by removing trailing slashes and parameter values
+            normalized_path = re.sub(r'/\{[^}]+\}', '/{param}', ts_router.router.path).rstrip('/')
+            if normalized_path not in path_patterns:
+                path_patterns[normalized_path] = []
+            path_patterns[normalized_path].append(ts_router)
+
+        # Create combined parameter types for each path pattern
+        combined_types = []
+        processed_paths = set()
+
+        for path_pattern, pattern_routers in path_patterns.items():
+            # Find all parameter types for this path pattern
+            all_path_params = []
+            all_query_params = []
+
+            for router in pattern_routers:
+                router_path = router.router.path
+                if router_path in path_to_params:
+                    if path_to_params[router_path]['path']:
+                        all_path_params.append(path_to_params[router_path]['path'])
+                    if path_to_params[router_path]['query']:
+                        all_query_params.append(path_to_params[router_path]['query'])
+
+            # Create combined type for this path pattern
+            path_type = all_path_params[0] if all_path_params else None
+            query_type = all_query_params[0] if all_query_params else None
+
+            if path_type or query_type:
+                # Create a single combined type for all routers with this path pattern
+                if path_type and query_type:
+                    combined_type = self._create_combined_params_type(path_type, query_type, pattern_routers[0].router)
+                    combined_types.append(combined_type)
+                elif path_type:
+                    combined_types.append(path_type)
+                elif query_type:
+                    combined_types.append(query_type)
+
+                # Assign the combined type to all routers with this pattern
+                for router in pattern_routers:
+                    router.params_type = combined_types[-1]  # Last added type
+
+                processed_paths.add(path_pattern)
+
+        # Add combined types to the types list
+        for combined_type in combined_types:
+            if combined_type not in types:  # Avoid duplicates
+                types.append(combined_type)
+
+        # Remove individual parameter types that were combined
+        types_to_remove = []
+        for path_info in path_to_params.values():
+            if path_info['path'] and path_info['query']:
+                types_to_remove.append(path_info['path'])
+                types_to_remove.append(path_info['query'])
+
+        # Filter out individual parameter types that were combined
+        filtered_types = [t for t in types if t not in types_to_remove]
+        types[:] = filtered_types
+
+    def _extract_resource_from_path(self, path: str) -> str:
+        """Extract the main resource name from a path"""
+        path_clean = path.rstrip('/')
+        segments = path_clean.strip('/').split('/')
+        if segments:
+            resource = segments[0]
+            # Convert to plural form if needed
+            if not resource.endswith('s'):
+                resource = resource + 's'
+            return resource
+        return ''
+
+    def _create_combined_params_type(self, path_type: SchemaType, query_type: SchemaType, router: Router) -> SchemaType:
+        """Create a combined parameter type that includes both path and query parameters"""
+        resource_name = self.get_resource_name(router.path)
+        method_name = self.get_method_name(router).lower()
+
+        if method_name == 'list':
+            type_name = f"{resource_name}ListParams"
         else:
-            # Handle camelCase: split on capital letters and capitalize each part
-            import re
-            # Use positive lookahead to split on capital letters
-            words = re.findall(r'[A-Z][a-z]*|[a-z]+', schema_name)
-            return ''.join(word.capitalize() for word in words)
-    
-    def get_unique_types(self) -> List[TypeScriptTypeDefinition]:
-        """Get all unique types without duplicates"""
-        return list(self.unique_types)
+            type_name = f"{resource_name}Params"
+
+        # Combine fields from both types
+        combined_fields = []
+        combined_fields.extend(path_type.fields)
+        combined_fields.extend(query_type.fields)
+
+        return SchemaType(name=type_name, fields=combined_fields)
+
+    def _associate_request_response_types(self, ts_routers: List[TypeScriptRouter], ts_actions: List[TypeScriptAction], types: List[SchemaType]):
+        """Associate request and response types with TypeScript routers and actions"""
+        # Create mappings from router paths to their request/response types
+        for schema_type in types:
+            type_name = schema_type.name
+
+            # Check if this is a request or response type based on naming convention
+            if 'RequestData' in type_name:
+                # Extract the resource and operation from the type name
+                # e.g., "PhrasesCreateRequestData" -> resource="phrases", operation="create"
+                resource_match = re.match(r'^([A-Z][a-z]+)([A-Z][a-zA-Z]*)(RequestData|ResponseData)$', type_name)
+                if resource_match:
+                    resource = resource_match.group(1).lower()
+                    operation = resource_match.group(2).lower()
+                    type_category = resource_match.group(3)
+
+                    # Find routers that match this resource and operation
+                    for ts_router in ts_routers:
+                        router_resource = self._extract_resource_from_path(ts_router.router.path).lower()
+                        router_operation = self.get_method_name(ts_router.router).lower()
+
+                        if router_resource == resource and router_operation == operation:
+                            if type_category == 'RequestData':
+                                ts_router.request_type = schema_type
+                            elif type_category == 'ResponseData':
+                                ts_router.response_type = schema_type
+
+            elif 'ResponseData' in type_name:
+                # Handle response types similarly
+                resource_match = re.match(r'^([A-Z][a-z]+)([A-Z][a-zA-Z]*)(ResponseData)$', type_name)
+                if resource_match:
+                    resource = resource_match.group(1).lower()
+                    operation = resource_match.group(2).lower()
+
+                    # Find routers that match this resource and operation
+                    for ts_router in ts_routers:
+                        router_resource = self._extract_resource_from_path(ts_router.router.path).lower()
+                        router_operation = self.get_method_name(ts_router.router).lower()
+
+                        if router_resource == resource and router_operation == operation:
+                            ts_router.response_type = schema_type
+
+        # Handle actions similarly - actions typically have custom names
+        for ts_action in ts_actions:
+            action_name = ts_action.action_name.lower()
+
+            # Find matching types for actions
+            for schema_type in types:
+                type_name = schema_type.name
+
+                if 'RequestData' in type_name:
+                    # For actions, we match by the action name
+                    if action_name in type_name.lower():
+                        ts_action.request_type = schema_type
+
+                elif 'ResponseData' in type_name:
+                    # For actions, we match by the action name
+                    if action_name in type_name.lower():
+                        ts_action.response_type = schema_type
+
+        # Handle routers with group_name (like ayahs_breakers) the same way as actions
+        for ts_router in ts_routers:
+            if ts_router.group_name:
+                group_name = ts_router.group_name.lower()
+
+                # Find matching types for grouped routers
+                for schema_type in types:
+                    type_name = schema_type.name
+
+                    if 'RequestData' in type_name:
+                        # For grouped routers, we match by the group name
+                        if group_name in type_name.lower():
+                            ts_router.request_type = schema_type
+
+                    elif 'ResponseData' in type_name:
+                        # For grouped routers, we match by the group name
+                        if group_name in type_name.lower():
+                            ts_router.response_type = schema_type
