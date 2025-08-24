@@ -1,13 +1,13 @@
-from .ast import Ast, Controller
+from .schema_model import SchemaModel, Controller
 
 class PostProcessor:
-    def __init__(self, ast: Ast):
-        self.ast = ast
+    def __init__(self, schema_model: SchemaModel):
+        self.schema_model = schema_model
 
-    def process(self) -> Ast:
+    def process(self) -> SchemaModel:
         """Process the AST to combine duplicate controllers, preserving routers and actions"""
         controllers_by_name = {}
-        for controller in self.ast.controllers:
+        for controller in self.schema_model.controllers:
             name = controller.name
             if name not in controllers_by_name:
                 controllers_by_name[name] = Controller(name)
@@ -18,12 +18,12 @@ class PostProcessor:
                     controllers_by_name[name].actions = []
                 controllers_by_name[name].actions.extend(controller.actions)
         
-        new_ast = type(self.ast)()
+        new_schema_model = type(self.schema_model)()
         # Preserve schemas from the original AST
-        if hasattr(self.ast, 'schemas'):
-            for schema_name, schema_data in self.ast.schemas.items():
-                new_ast.add_schema(schema_name, schema_data)
+        if hasattr(self.schema_model, 'schemas'):
+            for schema_name, schema_data in self.schema_model.schemas.items():
+                new_schema_model.add_schema(schema_name, schema_data)
         
         for controller in controllers_by_name.values():
-            new_ast.add_controller(controller)
-        return new_ast
+            new_schema_model.add_controller(controller)
+        return new_schema_model

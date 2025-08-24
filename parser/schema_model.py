@@ -71,7 +71,7 @@ class Controller:
         self.routers.append(router)
 
 @dataclass
-class Ast:
+class SchemaModel:
     controllers: List[Controller] = None
     schemas: Dict[str, Any] = None
     

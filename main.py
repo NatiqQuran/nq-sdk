@@ -3,25 +3,31 @@ import yaml
 import os
 import json
 from parser.parser import Parser
+from parser.typed_schema_model import TypedSchemaModelParser
 from codegen.typescript.codegen import Codegen
 from parser.postprocessor import PostProcessor
 from dataclasses import asdict
 
-def handle_compile(file_path: str, language: str, print_ast: bool = False, output_dir=None, enable_warnings: bool = True):
+def handle_compile(file_path: str, language: str, save_schema_model: bool = False, output_dir=None, enable_warnings: bool = True):
     # Open file path and parse the yaml file
     with open(file_path, 'r') as file:
         file_content = yaml.safe_load(file)
     
     parser = Parser(file_content, enable_warnings=enable_warnings)
-    ast = parser.parse()
-    # Save Ast file as json
-    if print_ast:
-        with open("ast.json", 'w') as ast_file:
-            ast_file.write(json.dumps(asdict(ast), indent=2))
-    ast = PostProcessor(ast).process()
+    schema_model = parser.parse()
+    # Save Schema-model file as json
+    if save_schema_model:
+        with open("schema_model.json", 'w') as schema_model_file:
+            schema_model_file.write(json.dumps(asdict(schema_model), indent=2))
+    schema_model = PostProcessor(schema_model).process()
+
+    typed_schema_model = TypedSchemaModelParser(schema_model).parse()
+    if save_schema_model:
+        with open("typed_schema_model.json", 'w') as typed_schema_model_file:
+            typed_schema_model_file.write(json.dumps(asdict(typed_schema_model), indent=2))
 
     if language == "typescript":
-        codegen = Codegen(ast)
+        codegen = Codegen(typed_schema_model)
         result = codegen.generate()
 
         if output_dir:
@@ -51,9 +57,9 @@ parser = argparse.ArgumentParser(prog="Code generator", description="Code genera
 parser.add_argument("filepath", help="File path of yaml file (open-api schema).")
 parser.add_argument("language", help="Language to be compiled to ex. typescript")
 parser.add_argument("--output-dir", "-o", help="Output directory for generated files")
-parser.add_argument("--ast", "-a", action="store_true", help="Save AST file (json)")
+parser.add_argument("--schema-model", "-s", action="store_true", help="Save Schema-model file (json)")
 parser.add_argument("--no-warnings", action="store_true", help="Disable warning messages during parsing")
 
 args = parser.parse_args()
 
-handle_compile(args.filepath, args.language, args.ast, args.output_dir, not args.no_warnings)
+handle_compile(args.filepath, args.language, args.schema_model, args.output_dir, not args.no_warnings)
