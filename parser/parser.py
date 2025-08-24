@@ -1,4 +1,4 @@
-from .ast import Ast, Controller, Router, RouterMetaData, RouterParamenterSchema, RouterParameter, RouterRequestBody,BodyContent,RouterResponse
+from .schema_model import SchemaModel, Controller, Router, RouterMetaData, RouterParamenterSchema, RouterParameter, RouterRequestBody,BodyContent,RouterResponse
 from typing import Dict,Any,List
 import warnings
 
@@ -7,7 +7,7 @@ class Parser():
     Parser
     """
     def __init__(self, schema: Dict[str, Any], enable_warnings: bool = True):
-        self.ast = Ast()
+        self.schema_model = SchemaModel()
         self.schema = schema
         self.enable_warnings = enable_warnings
     
@@ -20,7 +20,7 @@ class Parser():
         if self.enable_warnings:
             warnings.warn(message, UserWarning)
     
-    def parse(self) -> Ast:
+    def parse(self) -> SchemaModel:
         paths: Dict[str, Any] = self.schema.get("paths", {})
         controllers_by_name = {}
         # First pass: collect all controllers
@@ -45,18 +45,18 @@ class Parser():
         # Parse all schemas from components/schemas
         self.parse_all_schemas()
         
-        # Add all controllers to AST
+        # Add all controllers to Schema-model
         for controller in controllers_by_name.values():
-            self.ast.add_controller(controller)
-        return self.ast
+            self.schema_model.add_controller(controller)
+        return self.schema_model
     
     def parse_all_schemas(self):
-        """Parse all schemas from components/schemas and store them in the AST"""
+        """Parse all schemas from components/schemas and store them in the Schema-model"""
         schemas = self.schema.get("components", {}).get("schemas", {})
         for schema_name, schema_data in schemas.items():
             # Store the resolved schema in the AST for later use
             resolved_schema = self.resolve_schema(schema_data)
-            self.ast.add_schema(schema_name, resolved_schema)
+            self.schema_model.add_schema(schema_name, resolved_schema)
     
     def validate_router_completeness(self, path: str, method: str, data: Dict[Any, Any]) -> None:
         """
