@@ -100,9 +100,233 @@ class TypedSchemaModelParser:
         # Parse controllers
         for controller in self.schema_model.controllers:
             typed_controller = self.parse_controller(controller)
+
+            # Create schema types for this controller based on its types
+            self._create_schema_types_for_controller(typed_controller, self.schema_model.schemas)
+
             typed_model.add_controller(typed_controller)
 
         return typed_model
+
+    def _create_schema_types_for_controller(self, controller: TypedController, available_schemas: Dict[str, Any]):
+        """Create schema type definitions for a controller based on its response/request types"""
+        for schema_type in controller.types:
+            matching_schema_name = self._find_matching_schema(schema_type, available_schemas)
+            if matching_schema_name:
+                # Create the actual schema type definition
+                schema_definition = self._create_schema_definition(matching_schema_name, available_schemas)
+                if schema_definition and schema_definition not in controller.types:
+                    controller.add_type(schema_definition)
+
+        # Also check for referenced types in the schema definitions
+        self._check_for_referenced_types(controller, available_schemas)
+
+    def _check_for_referenced_types(self, controller: TypedController, available_schemas: Dict[str, Any]):
+        """Check for types referenced within schema definitions"""
+        for schema_type in controller.types:
+            for field in schema_type.fields:
+                # Check for array fields with item references
+                if field.is_array and field.array_item_type and field.array_item_type in available_schemas:
+                    # Found a referenced type that's an array item
+                    if field.array_item_type not in [t.name for t in controller.types]:
+                        schema_definition = self._create_schema_definition(field.array_item_type, available_schemas)
+                        if schema_definition:
+                            controller.add_type(schema_definition)
+
+                # Check for object fields that might have nested references
+                elif field.is_object and field.object_properties:
+                    self._check_object_field_references(field.object_properties, controller, available_schemas)
+
+    def _check_object_field_references(self, object_properties: Dict[str, Any], controller: TypedController, available_schemas: Dict[str, Any]):
+        """Check for references within object field properties"""
+        for prop_name, prop_schema in object_properties.items():
+            if isinstance(prop_schema, dict):
+                # Check for $ref in the property
+                if '$ref' in prop_schema:
+                    ref_path = prop_schema['$ref']
+                    if ref_path.startswith('#/components/schemas/'):
+                        schema_name = ref_path.split('/')[-1]
+                        if schema_name in available_schemas and schema_name not in [t.name for t in controller.types]:
+                            schema_definition = self._create_schema_definition(schema_name, available_schemas)
+                            if schema_definition:
+                                controller.add_type(schema_definition)
+
+                # Check for array items with $ref
+                elif prop_schema.get('type') == 'array' and 'items' in prop_schema:
+                    items = prop_schema['items']
+                    if isinstance(items, dict) and '$ref' in items:
+                        ref_path = items['$ref']
+                        if ref_path.startswith('#/components/schemas/'):
+                            schema_name = ref_path.split('/')[-1]
+                            if schema_name in available_schemas and schema_name not in [t.name for t in controller.types]:
+                                schema_definition = self._create_schema_definition(schema_name, available_schemas)
+                                if schema_definition:
+                                    controller.add_type(schema_definition)
+
+
+
+    def _find_matching_schema(self, schema_type: SchemaType, available_schemas: Dict[str, Any]) -> Optional[str]:
+        """Find if a schema type matches any available schema by structure"""
+        if not available_schemas:
+            return None
+
+        import re
+
+        # For retrieve responses: ExtractResourceRetrieveResponseData -> ResourceDetail or Resource
+        if 'RetrieveResponseData' in schema_type.name:
+            match = re.match(r'(.+?)RetrieveResponseData', schema_type.name)
+            if match:
+                resource_plural = match.group(1)  # e.g., "Surahs"
+                resource_singular = resource_plural.rstrip('s')  # e.g., "Surah"
+
+                # Try different schema naming patterns
+                candidates = [
+                    f"{resource_singular}Detail",  # SurahDetail
+                    resource_singular,             # Surah
+                    f"{resource_plural}",          # Surahs (less likely)
+                ]
+
+                for candidate in candidates:
+                    if candidate in available_schemas:
+                        return candidate
+
+        # For create requests: ExtractResourceCreateRequestData -> Resource or ResourceAdd
+        elif 'CreateRequestData' in schema_type.name:
+            match = re.match(r'(.+?)CreateRequestData', schema_type.name)
+            if match:
+                resource_plural = match.group(1)  # e.g., "Ayahs"
+                resource_singular = resource_plural.rstrip('s')  # e.g., "Ayah"
+
+                # Try different schema naming patterns
+                candidates = [
+                    f"{resource_singular}Add",     # AyahAdd
+                    resource_singular,             # Ayah
+                    f"{resource_plural}",          # Ayahs
+                ]
+
+                for candidate in candidates:
+                    if candidate in available_schemas:
+                        return candidate
+
+        return None
+
+    def _create_schema_definition(self, schema_name: str, available_schemas: Dict[str, Any]) -> Optional[SchemaType]:
+        """Create a SchemaType from an available schema definition"""
+        if schema_name not in available_schemas:
+            return None
+
+        schema_data = available_schemas[schema_name]
+        if not isinstance(schema_data, dict):
+            return None
+
+        # Create the schema type from the raw schema data
+        schema_type = self._create_type_from_raw_schema(schema_data, schema_name)
+
+        # After creating the schema type, check if any of its fields reference other schemas
+        if schema_type:
+            for field in schema_type.fields:
+                if field.is_array and field.array_item_type and field.array_item_type in available_schemas:
+                    # This field references another schema - we need to also create that schema
+                    # But we can't add it here because we don't have access to the controller
+                    # We'll handle this in the calling code
+                    pass
+
+        return schema_type
+
+    def _create_type_from_raw_schema(self, schema_data: Dict[str, Any], type_name: str) -> SchemaType:
+        """Create a SchemaType from raw schema data"""
+        fields = []
+
+        properties = schema_data.get('properties', {})
+        required_fields = schema_data.get('required', [])
+
+        for prop_name, prop_schema in properties.items():
+            temp_field = self._get_field_type_from_schema(prop_schema)
+            # Create a proper field with the correct name and required status
+            if temp_field.is_enum:
+                field = SchemaTypeField.create_enum(prop_name, temp_field.enum_values or [], prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+            elif temp_field.is_object:
+                field = SchemaTypeField.create_object(prop_name, temp_field.object_properties or {}, prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+            elif temp_field.is_array:
+                field = SchemaTypeField.create_array(prop_name, temp_field.array_item_type or 'any', prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+            else:
+                field = SchemaTypeField.create_simple(prop_name, temp_field.type, prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+
+            fields.append(field)
+
+        return SchemaType(name=str(type_name), fields=fields)
+
+    def _get_field_type_from_schema(self, prop_schema: Dict[str, Any]) -> SchemaTypeField:
+        """Get field type from a property schema"""
+        # Extract readOnly and writeOnly properties first
+        read_only = prop_schema.get('readOnly', False)
+        write_only = prop_schema.get('writeOnly', False)
+
+        if 'type' not in prop_schema:
+            # Handle cases like allOf with $ref where type is not directly specified
+            if 'allOf' in prop_schema:
+                return SchemaTypeField.create_simple('object', 'object', read_only=read_only, write_only=write_only)
+            elif '$ref' in prop_schema:
+                return SchemaTypeField.create_simple('object', 'object', read_only=read_only, write_only=write_only)
+            else:
+                return SchemaTypeField.create_simple('unknown', 'unknown', read_only=read_only, write_only=write_only)
+
+        prop_type = prop_schema['type']
+        has_enum = 'enum' in prop_schema
+        has_properties = 'properties' in prop_schema
+
+        if has_enum:
+            enum_values = []
+            for enum_value in prop_schema['enum']:
+                if enum_value is None:
+                    enum_values.append('null')
+                elif enum_value == '':
+                    enum_values.append('""')
+                elif isinstance(enum_value, str):
+                    enum_values.append(f'"{enum_value}"')
+                else:
+                    enum_values.append(str(enum_value))
+            return SchemaTypeField.create_enum(str('temp'), enum_values, read_only=read_only, write_only=write_only)
+
+        if prop_type == 'array':
+            items = prop_schema.get('items', {})
+            if isinstance(items, dict):
+                # Check if items has a $ref (schema reference)
+                if '$ref' in items:
+                    # Extract schema name from reference path like "#/components/schemas/AyahInSurah"
+                    ref_path = items['$ref']
+                    if ref_path.startswith('#/components/schemas/'):
+                        item_type = ref_path.split('/')[-1]  # Get the last part after '/'
+                    else:
+                        item_type = 'object'  # Fallback for other reference formats
+                elif 'properties' in items:
+                    # This is an embedded schema object, try to identify it by comparing with known schemas
+                    embedded_schema_name = self._identify_embedded_schema(items)
+                    if embedded_schema_name:
+                        item_type = embedded_schema_name
+                    else:
+                        item_type = 'object'
+                elif 'type' in items:
+                    item_type = items['type']
+                    if item_type == 'integer':
+                        item_type = 'number'
+                else:
+                    item_type = 'any'
+                return SchemaTypeField.create_array(str('temp'), item_type, read_only=read_only, write_only=write_only)
+            return SchemaTypeField.create_array(str('temp'), 'any', read_only=read_only, write_only=write_only)
+
+        if has_properties:
+            return SchemaTypeField.create_object(str('temp'), prop_schema['properties'], read_only=read_only, write_only=write_only)
+
+        # Simple type - map OpenAPI types to TypeScript types
+        type_mapping = {
+            'integer': 'number',
+            'number': 'number',
+            'string': 'string',
+            'boolean': 'boolean'
+        }
+        ts_type = type_mapping.get(prop_type, prop_type)
+        return SchemaTypeField.create_simple(str('temp'), ts_type, read_only=read_only, write_only=write_only)
 
     def parse_controller(self, controller: Controller) -> TypedController:
         """Parse a controller into a typed controller"""

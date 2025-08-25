@@ -1,31 +1,3 @@
-{# Generate schema type definitions first #}
-{%- if controller.schema_definitions %}
-{%- for schema_type in controller.schema_definitions %}
-export interface {{ schema_type.name }} {
-{%- for field in schema_type.fields %}
-    {%- if field.is_enum %}
-    {{ field.name }}{% if not field.required %}?{% endif %}: {{ field.enum_values | join(' | ') }};
-{%- elif field.is_array %}
-    {{ field.name }}{% if not field.required %}?{% endif %}: {{ field.array_item_type }}[];
-{%- elif field.is_object %}
-    {{ field.name }}{% if not field.required %}?{% endif %}: object;
-{%- else %}
-    {{ field.name }}{% if not field.required %}?{% endif %}: {{ field.type }};
-{%- endif %}{% endfor %}
-}
-{%- endfor %}
-
-{%- endif %}
-
-{# Generate type aliases for schema references #}
-{%- if controller.schema_references %}
-{%- for type_name, schema_name in controller.schema_references.items() %}
-export type {{ type_name }} = {{ schema_name }};
-{%- endfor %}
-
-{%- endif %}
-
-{# Generate regular interfaces #}
 {%- if controller.types %}
 {%- for schema_type in controller.types %}
 export interface {{ schema_type.name }} {
