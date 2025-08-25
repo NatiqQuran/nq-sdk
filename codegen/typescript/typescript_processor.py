@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict
 from dataclasses import dataclass
 from parser.typed_schema_model import TypedSchemaModel, TypedController, SchemaType, SchemaTypeField
 from parser.schema_model import Router
@@ -30,6 +30,12 @@ class TypeScriptController:
     routers: List[TypeScriptRouter]
     actions: Optional[List[TypeScriptAction]] = None
     types: List[SchemaType] = None
+    # Import statements needed for this controller
+    imports: List[str] = None
+    # Schema type references (type_name -> schema_name)
+    schema_references: Dict[str, str] = None
+    # Schema type definitions to include in this file
+    schema_definitions: List[SchemaType] = None
 
 @dataclass
 class TypeScriptAst:
@@ -204,17 +210,51 @@ class TypeScriptProcessor:
             # Associate request and response types with routers and actions
             self._associate_request_response_types(ts_routers, ts_actions, controller.types)
 
+            # Filter readOnly/writeOnly fields from types before passing to template
+            filtered_types = self._filter_readonly_writeonly_fields(controller.types)
+
+            # No need for dynamic schema processing - types are already created in parser
+
             ts_controller = TypeScriptController(
                 controller=controller,
                 routers=ts_routers,
                 actions=ts_actions,
-                types=controller.types,
+                types=filtered_types,
+                imports=[],
+                schema_references={},
+                schema_definitions=[],
             )
             ts_controllers.append(ts_controller)
 
-        return TypeScriptAst(
-            controllers=ts_controllers
-        )
+        return TypeScriptAst(controllers=ts_controllers)
+
+    def _filter_readonly_writeonly_fields(self, types: List[SchemaType]) -> List[SchemaType]:
+        """Filter out readOnly/writeOnly fields from schema types based on the type name"""
+        filtered_types = []
+
+        for schema_type in types:
+            # Create a new schema type with filtered fields
+            filtered_fields = []
+            is_request_type = schema_type.name.endswith('RequestData')
+            is_response_type = schema_type.name.endswith('ResponseData')
+
+            for field in schema_type.fields:
+                # Skip fields based on readOnly/writeOnly rules
+                if is_request_type and field.read_only:
+                    continue  # Skip readOnly fields in request types
+                elif is_response_type and field.write_only:
+                    continue  # Skip writeOnly fields in response types
+                else:
+                    filtered_fields.append(field)
+
+            # Create new schema type with filtered fields
+            filtered_schema_type = SchemaType(
+                name=schema_type.name,
+                fields=filtered_fields
+            )
+            filtered_types.append(filtered_schema_type)
+
+        return filtered_types
 
     def _associate_param_types(self, ts_routers: List[TypeScriptRouter], types: List[SchemaType]):
         """Associate parameter types with TypeScript routers"""
@@ -417,3 +457,6 @@ class TypeScriptProcessor:
                         # For grouped routers, we match by the group name
                         if group_name in type_name.lower():
                             ts_router.response_type = schema_type
+
+
+

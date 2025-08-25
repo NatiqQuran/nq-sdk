@@ -4,15 +4,13 @@ export interface {{ schema_type.name }} {
 {%- for field in schema_type.fields %}
     {%- if field.is_enum %}
     {{ field.name }}{% if not field.required %}?{% endif %}: {{ field.enum_values | join(' | ') }};
-    {%- elif field.is_array %}
+{%- elif field.is_array %}
     {{ field.name }}{% if not field.required %}?{% endif %}: {{ field.array_item_type }}[];
-    {%- elif field.is_object %}
+{%- elif field.is_object %}
     {{ field.name }}{% if not field.required %}?{% endif %}: object;
-    {%- else %}
+{%- else %}
     {{ field.name }}{% if not field.required %}?{% endif %}: {{ field.type }};
-    {%- endif %}
-{%- endfor %}
+{%- endif %}{% endfor %}
 }
-
 {%- endfor %}
 {%- endif %}
