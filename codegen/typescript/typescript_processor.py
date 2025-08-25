@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Any
+from typing import List, Optional, Any, Dict
 from dataclasses import dataclass
 from parser.typed_schema_model import TypedSchemaModel, TypedController, SchemaType, SchemaTypeField
 from parser.schema_model import Router
@@ -30,6 +30,12 @@ class TypeScriptController:
     routers: List[TypeScriptRouter]
     actions: Optional[List[TypeScriptAction]] = None
     types: List[SchemaType] = None
+    # Import statements needed for this controller
+    imports: List[str] = None
+    # Schema type references (type_name -> schema_name)
+    schema_references: Dict[str, str] = None
+    # Schema type definitions to include in this file
+    schema_definitions: List[SchemaType] = None
 
 @dataclass
 class TypeScriptAst:
@@ -204,17 +210,52 @@ class TypeScriptProcessor:
             # Associate request and response types with routers and actions
             self._associate_request_response_types(ts_routers, ts_actions, controller.types)
 
+            # Filter readOnly/writeOnly fields from types before passing to template
+            filtered_types = self._filter_readonly_writeonly_fields(controller.types)
+
+            # Process schema references dynamically
+            filtered_types, schema_references, schema_definitions = self._process_dynamic_schema_references(filtered_types, controller)
+
             ts_controller = TypeScriptController(
                 controller=controller,
                 routers=ts_routers,
                 actions=ts_actions,
-                types=controller.types,
+                types=filtered_types,
+                imports=[],
+                schema_references=schema_references,
+                schema_definitions=schema_definitions,
             )
             ts_controllers.append(ts_controller)
 
-        return TypeScriptAst(
-            controllers=ts_controllers
-        )
+        return TypeScriptAst(controllers=ts_controllers)
+
+    def _filter_readonly_writeonly_fields(self, types: List[SchemaType]) -> List[SchemaType]:
+        """Filter out readOnly/writeOnly fields from schema types based on the type name"""
+        filtered_types = []
+
+        for schema_type in types:
+            # Create a new schema type with filtered fields
+            filtered_fields = []
+            is_request_type = schema_type.name.endswith('RequestData')
+            is_response_type = schema_type.name.endswith('ResponseData')
+
+            for field in schema_type.fields:
+                # Skip fields based on readOnly/writeOnly rules
+                if is_request_type and field.read_only:
+                    continue  # Skip readOnly fields in request types
+                elif is_response_type and field.write_only:
+                    continue  # Skip writeOnly fields in response types
+                else:
+                    filtered_fields.append(field)
+
+            # Create new schema type with filtered fields
+            filtered_schema_type = SchemaType(
+                name=schema_type.name,
+                fields=filtered_fields
+            )
+            filtered_types.append(filtered_schema_type)
+
+        return filtered_types
 
     def _associate_param_types(self, ts_routers: List[TypeScriptRouter], types: List[SchemaType]):
         """Associate parameter types with TypeScript routers"""
@@ -417,3 +458,167 @@ class TypeScriptProcessor:
                         # For grouped routers, we match by the group name
                         if group_name in type_name.lower():
                             ts_router.response_type = schema_type
+
+    def _process_dynamic_schema_references(self, types: List[SchemaType], controller: TypedController) -> tuple[List[SchemaType], Dict[str, str], List[SchemaType]]:
+        """Process types to detect schema matches and create type aliases"""
+        filtered_types = []
+        schema_references = {}
+        schema_definitions = []
+
+        # Get available schemas from the schema model
+        available_schemas = getattr(self.ast, 'schemas', {})
+
+        for schema_type in types:
+            # Check if this type matches any available schema
+            matching_schema_name = self._find_matching_schema(schema_type, available_schemas)
+            if matching_schema_name:
+                # Create a type alias and also add the schema definition
+                schema_references[schema_type.name] = matching_schema_name
+
+                # Create the actual schema type definition to include in this file
+                schema_definition = self._create_schema_definition(matching_schema_name, available_schemas)
+                if schema_definition and schema_definition not in schema_definitions:
+                    schema_definitions.append(schema_definition)
+
+                # Don't add to filtered_types - we'll use a type alias instead
+            else:
+                filtered_types.append(schema_type)
+
+        return filtered_types, schema_references, schema_definitions
+
+    def _find_matching_schema(self, schema_type: SchemaType, available_schemas: Dict[str, Any]) -> Optional[str]:
+        """Find if a schema type matches any available schema by structure"""
+        if not available_schemas:
+            return None
+
+        # Dynamic approach: extract resource name from response type
+        import re
+
+        # For retrieve responses: ExtractResourceRetrieveResponseData -> ResourceDetail or Resource
+        if 'RetrieveResponseData' in schema_type.name:
+            # Extract base resource name (e.g., "Surahs" -> "Surah")
+            match = re.match(r'(.+?)RetrieveResponseData', schema_type.name)
+            if match:
+                resource_plural = match.group(1)  # e.g., "Surahs"
+                resource_singular = resource_plural.rstrip('s')  # e.g., "Surah"
+
+                # Try different schema naming patterns
+                candidates = [
+                    f"{resource_singular}Detail",  # SurahDetail
+                    resource_singular,             # Surah
+                    f"{resource_plural}",          # Surahs (less likely)
+                ]
+
+                for candidate in candidates:
+                    if candidate in available_schemas:
+                        return candidate
+
+        # For create requests: ExtractResourceCreateRequestData -> Resource or ResourceAdd
+        elif 'CreateRequestData' in schema_type.name:
+            match = re.match(r'(.+?)CreateRequestData', schema_type.name)
+            if match:
+                resource_plural = match.group(1)  # e.g., "Ayahs"
+                resource_singular = resource_plural.rstrip('s')  # e.g., "Ayah"
+
+                # Try different schema naming patterns
+                candidates = [
+                    f"{resource_singular}Add",     # AyahAdd
+                    resource_singular,             # Ayah
+                    f"{resource_plural}",          # Ayahs
+                ]
+
+                for candidate in candidates:
+                    if candidate in available_schemas:
+                        return candidate
+
+        return None
+
+    def _create_schema_definition(self, schema_name: str, available_schemas: Dict[str, Any]) -> Optional[SchemaType]:
+        """Create a SchemaType from an available schema definition"""
+        if schema_name not in available_schemas:
+            return None
+
+        schema_data = available_schemas[schema_name]
+        if not isinstance(schema_data, dict):
+            return None
+
+        # Create the schema type from the raw schema data
+        return self._create_type_from_raw_schema(schema_data, schema_name)
+
+    def _create_type_from_raw_schema(self, schema_data: Dict[str, Any], type_name: str) -> SchemaType:
+        """Create a SchemaType from raw schema data"""
+        fields = []
+
+        properties = schema_data.get('properties', {})
+        required_fields = schema_data.get('required', [])
+
+        for prop_name, prop_schema in properties.items():
+            temp_field = self._get_field_type_from_schema(prop_schema)
+            # Create a proper field with the correct name and required status
+            if temp_field.is_enum:
+                field = SchemaTypeField.create_enum(prop_name, temp_field.enum_values or [], prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+            elif temp_field.is_object:
+                field = SchemaTypeField.create_object(prop_name, temp_field.object_properties or {}, prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+            elif temp_field.is_array:
+                field = SchemaTypeField.create_array(prop_name, temp_field.array_item_type or 'any', prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+            else:
+                field = SchemaTypeField.create_simple(prop_name, temp_field.type, prop_name in required_fields, temp_field.read_only, temp_field.write_only)
+
+            fields.append(field)
+
+        return SchemaType(name=str(type_name), fields=fields)
+
+    def _get_field_type_from_schema(self, prop_schema: Dict[str, Any]) -> SchemaTypeField:
+        """Get field type from a property schema (similar to the parser's get_field_type)"""
+        # Extract readOnly and writeOnly properties first
+        read_only = prop_schema.get('readOnly', False)
+        write_only = prop_schema.get('writeOnly', False)
+
+        if 'type' not in prop_schema:
+            # Handle cases like allOf with $ref where type is not directly specified
+            if 'allOf' in prop_schema:
+                return SchemaTypeField.create_simple('object', 'object', read_only=read_only, write_only=write_only)
+            elif '$ref' in prop_schema:
+                return SchemaTypeField.create_simple('object', 'object', read_only=read_only, write_only=write_only)
+            else:
+                return SchemaTypeField.create_simple('unknown', 'unknown', read_only=read_only, write_only=write_only)
+
+        prop_type = prop_schema['type']
+        has_enum = 'enum' in prop_schema
+        has_properties = 'properties' in prop_schema
+
+        if has_enum:
+            enum_values = []
+            for enum_value in prop_schema['enum']:
+                if enum_value is None:
+                    enum_values.append('null')
+                elif enum_value == '':
+                    enum_values.append('""')
+                elif isinstance(enum_value, str):
+                    enum_values.append(f'"{enum_value}"')
+                else:
+                    enum_values.append(str(enum_value))
+            return SchemaTypeField.create_enum(str('temp'), enum_values, read_only=read_only, write_only=write_only)
+
+        if prop_type == 'array':
+            items = prop_schema.get('items', {})
+            if isinstance(items, dict):
+                item_type = items.get('type', 'any')
+                if item_type == 'integer':
+                    item_type = 'number'
+                return SchemaTypeField.create_array(str('temp'), item_type, read_only=read_only, write_only=write_only)
+            return SchemaTypeField.create_array(str('temp'), 'any', read_only=read_only, write_only=write_only)
+
+        if has_properties:
+            return SchemaTypeField.create_object(str('temp'), prop_schema['properties'], read_only=read_only, write_only=write_only)
+
+        # Simple type - map OpenAPI types to TypeScript types
+        type_mapping = {
+            'integer': 'number',
+            'number': 'number',
+            'string': 'string',
+            'boolean': 'boolean'
+        }
+        ts_type = type_mapping.get(prop_type, prop_type)
+        return SchemaTypeField.create_simple(str('temp'), ts_type, read_only=read_only, write_only=write_only)
+

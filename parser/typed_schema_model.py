@@ -10,26 +10,28 @@ class SchemaTypeField:
     enum_values: Optional[List[str]] = None
     object_properties: Optional[Dict[str, Any]] = None
     array_item_type: Optional[str] = None
+    read_only: bool = False
+    write_only: bool = False
 
     @classmethod
-    def create_simple(cls, name: str, type: str, required: bool = True) -> 'SchemaTypeField':
+    def create_simple(cls, name: str, type: str, required: bool = True, read_only: bool = False, write_only: bool = False) -> 'SchemaTypeField':
         """Create a simple type field"""
-        return cls(name=name, type=type, required=required)
+        return cls(name=name, type=type, required=required, read_only=read_only, write_only=write_only)
 
     @classmethod
-    def create_enum(cls, name: str, enum_values: List[str], required: bool = True) -> 'SchemaTypeField':
+    def create_enum(cls, name: str, enum_values: List[str], required: bool = True, read_only: bool = False, write_only: bool = False) -> 'SchemaTypeField':
         """Create an enum type field"""
-        return cls(name=name, type="enum", required=required, enum_values=enum_values)
+        return cls(name=name, type="enum", required=required, enum_values=enum_values, read_only=read_only, write_only=write_only)
 
     @classmethod
-    def create_object(cls, name: str, properties: Dict[str, Any], required: bool = True) -> 'SchemaTypeField':
+    def create_object(cls, name: str, properties: Dict[str, Any], required: bool = True, read_only: bool = False, write_only: bool = False) -> 'SchemaTypeField':
         """Create an object type field"""
-        return cls(name=name, type="object", required=required, object_properties=properties)
+        return cls(name=name, type="object", required=required, object_properties=properties, read_only=read_only, write_only=write_only)
 
     @classmethod
-    def create_array(cls, name: str, item_type: str, required: bool = True) -> 'SchemaTypeField':
+    def create_array(cls, name: str, item_type: str, required: bool = True, read_only: bool = False, write_only: bool = False) -> 'SchemaTypeField':
         """Create an array type field"""
-        return cls(name=name, type="array", required=required, array_item_type=item_type)
+        return cls(name=name, type="array", required=required, array_item_type=item_type, read_only=read_only, write_only=write_only)
 
     @property
     def is_enum(self) -> bool:
@@ -89,7 +91,11 @@ class TypedSchemaModelParser:
 
     def parse(self) -> TypedSchemaModel:
         """Parse the entire schema model into a typed schema model"""
-        typed_model = TypedSchemaModel()
+        # Create TypedSchemaModel and copy schemas from original
+        typed_model = TypedSchemaModel(
+            controllers=[],
+            schemas=self.schema_model.schemas.copy()
+        )
 
         # Parse controllers
         for controller in self.schema_model.controllers:
@@ -219,13 +225,13 @@ class TypedSchemaModelParser:
             temp_field = self.get_field_type(prop_schema)
             # Create a proper field with the correct name and required status
             if temp_field.is_enum:
-                field = SchemaTypeField.create_enum(prop_name, temp_field.enum_values or [], prop_name in required_fields)
+                field = SchemaTypeField.create_enum(prop_name, temp_field.enum_values or [], prop_name in required_fields, temp_field.read_only, temp_field.write_only)
             elif temp_field.is_object:
-                field = SchemaTypeField.create_object(prop_name, temp_field.object_properties or {}, prop_name in required_fields)
+                field = SchemaTypeField.create_object(prop_name, temp_field.object_properties or {}, prop_name in required_fields, temp_field.read_only, temp_field.write_only)
             elif temp_field.is_array:
-                field = SchemaTypeField.create_array(prop_name, temp_field.array_item_type or 'any', prop_name in required_fields)
+                field = SchemaTypeField.create_array(prop_name, temp_field.array_item_type or 'any', prop_name in required_fields, temp_field.read_only, temp_field.write_only)
             else:
-                field = SchemaTypeField.create_simple(prop_name, temp_field.type, prop_name in required_fields)
+                field = SchemaTypeField.create_simple(prop_name, temp_field.type, prop_name in required_fields, temp_field.read_only, temp_field.write_only)
 
             fields.append(field)
 
@@ -332,8 +338,20 @@ class TypedSchemaModelParser:
 
     def get_field_type(self, prop_schema: Dict[str, Any]) -> SchemaTypeField:
         """Get the field type from a property schema"""
+        # Extract readOnly and writeOnly properties first
+        read_only = prop_schema.get('readOnly', False)
+        write_only = prop_schema.get('writeOnly', False)
+
         if 'type' not in prop_schema:
-            return SchemaTypeField.create_simple('unknown', "unknown")
+            # Handle cases like allOf with $ref where type is not directly specified
+            if 'allOf' in prop_schema:
+                # For allOf, we'll use 'object' as the type since it's a reference
+                return SchemaTypeField.create_simple('object', 'object', read_only=read_only, write_only=write_only)
+            elif '$ref' in prop_schema:
+                # For direct $ref, use 'object' as the type
+                return SchemaTypeField.create_simple('object', 'object', read_only=read_only, write_only=write_only)
+            else:
+                return SchemaTypeField.create_simple('unknown', 'unknown', read_only=read_only, write_only=write_only)
 
         prop_type = prop_schema['type']
         has_enum = 'enum' in prop_schema
@@ -351,20 +369,36 @@ class TypedSchemaModelParser:
                     enum_values.append(f'"{enum_value}"')
                 else:
                     enum_values.append(str(enum_value))
-            return SchemaTypeField.create_enum(str('temp'), enum_values)
+            return SchemaTypeField.create_enum(str('temp'), enum_values, read_only=read_only, write_only=write_only)
 
         if prop_type == 'array':
             items = prop_schema.get('items', {})
             if isinstance(items, dict):
-                item_type = items.get('type', 'any')
-                # Map array item types too
-                if item_type == 'integer':
-                    item_type = 'number'
-                return SchemaTypeField.create_array(str('temp'), item_type)
-            return SchemaTypeField.create_array(str('temp'), 'any')
+                # Check if items has a $ref (schema reference)
+                if '$ref' in items:
+                    # Extract schema name from reference path like "#/components/schemas/AyahInSurah"
+                    ref_path = items['$ref']
+                    if ref_path.startswith('#/components/schemas/'):
+                        item_type = ref_path.split('/')[-1]  # Get the last part after '/'
+                    else:
+                        item_type = 'object'  # Fallback for other reference formats
+                elif 'properties' in items:
+                    # This is an embedded schema object, try to identify it by comparing with known schemas
+                    embedded_schema_name = self._identify_embedded_schema(items)
+                    if embedded_schema_name:
+                        item_type = embedded_schema_name
+                    else:
+                        item_type = 'object'  # Fallback for unidentified embedded schemas
+                else:
+                    item_type = items.get('type', 'any')
+                    # Map array item types too
+                    if item_type == 'integer':
+                        item_type = 'number'
+                return SchemaTypeField.create_array(str('temp'), item_type, read_only=read_only, write_only=write_only)
+            return SchemaTypeField.create_array(str('temp'), 'any', read_only=read_only, write_only=write_only)
 
         if has_properties:
-            return SchemaTypeField.create_object(str('temp'), prop_schema['properties'])
+            return SchemaTypeField.create_object(str('temp'), prop_schema['properties'], read_only=read_only, write_only=write_only)
 
         # Simple type - map OpenAPI types to TypeScript types
         type_mapping = {
@@ -374,4 +408,26 @@ class TypedSchemaModelParser:
             'boolean': 'boolean'
         }
         ts_type = type_mapping.get(prop_type, prop_type)
-        return SchemaTypeField.create_simple(str('temp'), ts_type)
+        return SchemaTypeField.create_simple(str('temp'), ts_type, read_only=read_only, write_only=write_only)
+
+    def _identify_embedded_schema(self, embedded_schema: Dict[str, Any]) -> Optional[str]:
+        """Try to identify an embedded schema by comparing its properties with known schemas"""
+        if not self.schema_model or not self.schema_model.schemas:
+            return None
+
+        embedded_props = set(embedded_schema.get('properties', {}).keys())
+        embedded_required = set(embedded_schema.get('required', []))
+
+        # Compare with known schemas
+        for schema_name, schema in self.schema_model.schemas.items():
+            if not isinstance(schema, dict):
+                continue
+
+            schema_props = set(schema.get('properties', {}).keys())
+            schema_required = set(schema.get('required', []))
+
+            # Check if properties match (allowing for some flexibility)
+            if embedded_props == schema_props and embedded_required == schema_required:
+                return schema_name
+
+        return None
